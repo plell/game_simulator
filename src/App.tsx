@@ -7,7 +7,12 @@ import { Level } from "./components/Level";
 
 import { Lights } from "./components/Lights";
 import { Physics } from "@react-three/rapier";
-import { Environment, EnvironmentCube, Stage } from "@react-three/drei";
+import {
+  CameraControls,
+  Environment,
+  EnvironmentCube,
+  Stage,
+} from "@react-three/drei";
 import * as THREE from "three";
 import { Suspense } from "react";
 
@@ -34,8 +39,9 @@ const App = () => {
         }}
       >
         <Suspense fallback={null}>
+          <CameraControls />
           <EnvironmentCube preset='sunset' />
-          <Lights />
+          {/* <Lights /> */}
           <Physics gravity={[0, 0, 0]}>
             <Level />
           </Physics>
