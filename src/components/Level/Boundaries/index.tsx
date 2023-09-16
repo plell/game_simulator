@@ -31,18 +31,6 @@ export const Boundaries = () => {
           if (id) {
             setBite(id);
           }
-          setDamage(damage + 1);
-          console.log("id", id);
-        }}
-        onIntersectionExit={({ rigidBody }) => {
-          console.log("rigidBody", rigidBody);
-          const { id } = rigidBody?.userData as UserData;
-          // release biter
-          if (id) {
-            setBite(id);
-          }
-          setDamage(damage + 1);
-          console.log("id", id);
         }}
       />
 

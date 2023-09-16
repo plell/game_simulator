@@ -34,8 +34,10 @@ export const Croc = ({ position, id, delay }: Props) => {
   }, [bonked]);
 
   useEffect(() => {
-    damageUp();
-    setDirection(direction * -1);
+    if (bite === id) {
+      damageUp();
+      setDirection(direction * -1);
+    }
   }, [bite]);
 
   const takeDamage = () => {
@@ -82,7 +84,7 @@ export const Croc = ({ position, id, delay }: Props) => {
           <boxGeometry args={[1, 1, 1]} />
           <meshStandardMaterial color='yellow' />
         </mesh>
-        <CrocModel key={id} />
+        <CrocModel />
       </RigidBody>
     </group>
   );

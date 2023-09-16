@@ -9,6 +9,7 @@ import { Lights } from "./components/Lights";
 import { Physics } from "@react-three/rapier";
 import { Environment, EnvironmentCube, Stage } from "@react-three/drei";
 import * as THREE from "three";
+import { Suspense } from "react";
 
 const cameraPosition = new Vector3(0, 10, 10);
 
@@ -32,11 +33,13 @@ const App = () => {
           position: [0, 16, 20],
         }}
       >
-        <EnvironmentCube preset='sunset' />
-        <Lights />
-        <Physics gravity={[0, 0, 0]}>
-          <Level />
-        </Physics>
+        <Suspense fallback={null}>
+          <EnvironmentCube preset='sunset' />
+          <Lights />
+          <Physics gravity={[0, 0, 0]}>
+            <Level />
+          </Physics>
+        </Suspense>
       </Canvas>
     </>
   );
