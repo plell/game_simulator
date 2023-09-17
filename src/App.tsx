@@ -1,4 +1,4 @@
-import { Canvas } from "@react-three/fiber";
+import { Canvas, extend, useFrame, useThree } from "@react-three/fiber";
 
 import styled from "styled-components";
 import { Vector3 } from "three";
@@ -7,22 +7,35 @@ import { Level } from "./components/Level";
 
 import { Lights } from "./components/Lights";
 import { Physics } from "@react-three/rapier";
-import {
-  CameraControls,
-  Environment,
-  EnvironmentCube,
-  Stage,
-} from "@react-three/drei";
-import * as THREE from "three";
-import { Suspense } from "react";
 
-const cameraPosition = new Vector3(0, 10, 10);
+import { Suspense, useRef } from "react";
+import { Leva, useControls } from "leva";
+
+const origin = new Vector3();
+
+const CameraController = () => {
+  const { camera } = useThree();
+
+  const { cameraPosition, lookAtTarget } = useControls("camera", {
+    cameraPosition: { value: { x: 0, y: 20, z: 16 }, step: 0.5 },
+    lookAtTarget: { value: { x: 0, y: 7, z: 0 }, step: 0.5 },
+  });
+
+  useFrame(() => {
+    if (camera) {
+      camera.position.set(cameraPosition.x, cameraPosition.y, cameraPosition.z);
+      camera.lookAt(origin.set(lookAtTarget.x, lookAtTarget.y, lookAtTarget.z));
+    }
+  });
+
+  return null;
+};
 
 const App = () => {
   return (
     <>
       {/* <Overlay></Overlay> */}
-
+      <Leva />
       <Canvas
         shadows
         gl={
@@ -35,12 +48,10 @@ const App = () => {
           fov: 45,
           near: 0.1,
           far: 200,
-          position: [0, 16, 20],
         }}
       >
         <Suspense fallback={null}>
-          <CameraControls />
-          {/* <EnvironmentCube preset='sunset' /> */}
+          <CameraController />
           <Lights />
           <Physics gravity={[0, 0, 0]}>
             <Level />

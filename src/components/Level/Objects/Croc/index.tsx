@@ -22,14 +22,20 @@ export const Croc = ({ position, id, delay }: Props) => {
   const [direction, setDirection] = useState(1);
 
   const bite = useGame((s) => s.bite);
+  const setHit = useGame((s) => s.setHit);
   const hit = useGame((s) => s.hit);
   const damageUp = useGame((s) => s.damageUp);
 
   const bonked = useMemo(() => hit === id, [hit, id]);
 
   useEffect(() => {
+    changeSpeed();
+  }, []);
+
+  useEffect(() => {
     if (bonked) {
-      changeSpeed();
+      takeDamage();
+      setHit(0);
     }
   }, [bonked]);
 
@@ -42,14 +48,11 @@ export const Croc = ({ position, id, delay }: Props) => {
 
   const takeDamage = () => {
     console.log("ouch!");
+    changeSpeed();
   };
 
-  useEffect(() => {
-    changeSpeed();
-  }, []);
-
   const changeSpeed = useCallback(() => {
-    const random = Math.floor(Math.random() * 4) * direction + 2;
+    const random = Math.floor(Math.random() * 12) * direction + 2;
     setSpeed(random);
   }, [direction]);
 
@@ -57,7 +60,7 @@ export const Croc = ({ position, id, delay }: Props) => {
     if (body?.current) {
       const elapsedTime = clock.getElapsedTime();
 
-      const z = Math.cos(elapsedTime * speed) * 10 + position.z;
+      const z = Math.cos(elapsedTime * speed) * 4 + position.z;
 
       const translation = body.current.translation();
       const newPosition = reuseableVec.set(
@@ -76,16 +79,14 @@ export const Croc = ({ position, id, delay }: Props) => {
   });
 
   return (
-    <group>
-      <RigidBody
-        ref={body}
-        position={position}
-        type='dynamic'
-        userData={{ type: "croc", id }}
-      >
-        <CrocModel />
-      </RigidBody>
-    </group>
+    <RigidBody
+      ref={body}
+      position={position}
+      type='dynamic'
+      userData={{ type: "croc", id }}
+    >
+      <CrocModel id={id} />
+    </RigidBody>
   );
 };
 

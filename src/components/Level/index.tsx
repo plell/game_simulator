@@ -1,5 +1,5 @@
 import { useFrame } from "@react-three/fiber";
-import { useMemo, useRef } from "react";
+import { Fragment, useMemo, useRef } from "react";
 import { Group, Vector3 } from "three";
 import { Croc } from "./Objects/Croc";
 import { MeshReflectorMaterial, Select } from "@react-three/drei";
@@ -8,6 +8,7 @@ import useGame from "../../Stores/useGame";
 import Boundaries from "./Boundaries";
 import Hammer from "./Objects/Hammer";
 import Wall from "./Objects/Wall";
+import CrocArch from "./Objects/Arch";
 
 export const Level = () => {
   const ref = useRef<Group | null>(null);
@@ -23,13 +24,16 @@ export const Level = () => {
     const amount = 5;
     for (let i = 0; i < amount; i++) {
       const defaultPosition = new Vector3(i * 5 - 10, 0.5, -5);
+      const archPosition = new Vector3(i * 5 - 10, 0.5, -7);
       m.push(
-        <Croc
-          key={i + "-croc"}
-          id={i + 1}
-          delay={Math.floor(Math.random())}
-          position={defaultPosition}
-        />
+        <Fragment key={i + "-croc"}>
+          <CrocArch position={archPosition} />
+          <Croc
+            id={i + 1}
+            delay={Math.floor(Math.random())}
+            position={defaultPosition}
+          />
+        </Fragment>
       );
     }
     return m;
@@ -49,17 +53,15 @@ export const Level = () => {
   return (
     <group ref={ref}>
       <Boundaries />
-      {/* score and hits */}
-      <Counter title={"HITS"} value={score} position={[-12, 5, -5]} />
-      <Counter title={"BITES"} value={damage} position={[-5, 5, -5]} />
-      <Counter title={"HI SCORE"} value={9} position={[2, 5, -5]} />
 
       <Hammer />
 
       <Select
         onChangePointerUp={(e) => {
           if (e.length) {
+            console.log("e", e);
             const id = e[0]?.userData?.id || 0;
+            console.log("id", id);
             scoreUp();
             setHit(id);
           }
@@ -70,21 +72,29 @@ export const Level = () => {
 
       {walls}
 
-      <mesh castShadow position={[0, 5.6, -10.5]}>
-        <boxGeometry args={[30, 6, 10]} />
-        <meshStandardMaterial color={"orange"} />
+      <mesh castShadow receiveShadow position={[0, 6.5, -11.5]}>
+        <boxGeometry args={[26, 6, 10]} />
+        <meshStandardMaterial color={"#0090c8"} />
       </mesh>
 
-      <mesh receiveShadow rotation-x={Math.PI * -0.5}>
-        <planeGeometry args={[30, 10]} />
-        <MeshReflectorMaterial
-          blur={[0, 0]} // Blur ground reflections (width, height), 0 skips blur
-          mixBlur={0.5} // How much blur mixes with surface roughness (default = 1)
-          mixStrength={0.6} // Strength of the reflections
-          mixContrast={0.5} // Contrast of the reflections
-          resolution={1056} // Off-buffer resolution, lower=faster, higher=better quality, slower
-          mirror={0.9} // Mirror environment, 0 = texture colors, 1 = pick up env colors
-        />
+      <mesh
+        castShadow
+        receiveShadow
+        position={[0, 3.6, -5]}
+        rotation-x={Math.PI * -0.5}
+      >
+        <planeGeometry args={[26, 3, 10]} />
+        <meshStandardMaterial color={"#00923e"} />
+      </mesh>
+
+      {/* score and hits */}
+      <Counter title={"HITS"} value={score} position={[-10, 6, -6]} />
+      <Counter title={"BITES"} value={damage} position={[-5, 6, -6]} />
+      <Counter title={"HI SCORE"} value={9} position={[0, 6, -6]} />
+
+      <mesh receiveShadow position-z={-10} rotation-x={Math.PI * -0.5}>
+        <planeGeometry args={[26.8, 26]} />
+        <meshStandardMaterial color={"#569f3e"} />
       </mesh>
     </group>
   );

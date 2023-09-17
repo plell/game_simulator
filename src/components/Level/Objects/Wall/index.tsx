@@ -1,5 +1,4 @@
-import { useRef } from "react";
-import { Group, Vector3 } from "three";
+import { Vector3 } from "three";
 
 import { useGLTF } from "@react-three/drei";
 
@@ -8,21 +7,21 @@ type Props = {
 };
 
 export const Wall = ({ position }: Props) => {
-  const groupRef = useRef<Group | null>(null);
   const wallModel = useGLTF("./models/crocWall.gltf");
 
   wallModel.scene.children.forEach((mesh) => {
     mesh.receiveShadow = true;
+    mesh.castShadow = true;
   });
 
   return (
-    <group castShadow position={position} ref={groupRef} dispose={null}>
-      <primitive
-        rotation-y={Math.PI * -0.5}
-        object={wallModel.scene.clone()}
-        scale={0.2}
-      />
-    </group>
+    <primitive
+      position={position}
+      rotation-y={Math.PI * -0.5}
+      object={wallModel.scene.clone()}
+      scale={0.2}
+      scale-z={0.15}
+    />
   );
 };
 

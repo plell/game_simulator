@@ -1,24 +1,24 @@
-import { useEffect, useRef } from "react";
-import { Group } from "three";
-
 import { useGLTF } from "@react-three/drei";
 
-export const CrocModel = () => {
-  const groupRef = useRef<Group | null>(null);
+type Props = {
+  id: number | string;
+};
+
+export const CrocModel = ({ id }: Props) => {
   const crocModel = useGLTF("./models/croc.gltf");
 
   crocModel.scene.children.forEach((mesh) => {
+    mesh.userData = { type: "croc", id };
+    mesh.castShadow = true;
     mesh.receiveShadow = true;
   });
 
   return (
-    <group castShadow receiveShadow ref={groupRef} dispose={null}>
-      <primitive
-        rotation-y={Math.PI * -0.5}
-        object={crocModel.scene.clone()}
-        scale={0.2}
-      />
-    </group>
+    <primitive
+      rotation-y={Math.PI * -0.5}
+      object={crocModel.scene.clone()}
+      scale={0.2}
+    />
   );
 };
 

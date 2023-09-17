@@ -4,7 +4,7 @@ import { Group } from "three";
 import useGame from "../../../Stores/useGame";
 
 const args: CuboidArgs = [30, 2, 0.2];
-const z = 4.5;
+const z = 0;
 
 type UserData = {
   id: number | undefined;
