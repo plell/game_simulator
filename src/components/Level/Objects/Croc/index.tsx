@@ -57,18 +57,21 @@ export const Croc = ({ position, id, delay }: Props) => {
     if (body?.current) {
       const elapsedTime = clock.getElapsedTime();
 
-      const z = Math.cos(elapsedTime * speed) * 3;
+      const z = Math.cos(elapsedTime * speed) * 10 + position.z;
 
       const translation = body.current.translation();
-      const position = reuseableVec.set(
+      const newPosition = reuseableVec.set(
         translation.x,
         translation.y,
         translation.z
       );
 
-      position.lerp(reuseableVec2.set(position.x, position.y, z), 0.03);
+      newPosition.lerp(
+        reuseableVec2.set(newPosition.x, newPosition.y, z),
+        0.03
+      );
 
-      body.current.setTranslation(position, true);
+      body.current.setTranslation(newPosition, true);
     }
   });
 
@@ -80,10 +83,6 @@ export const Croc = ({ position, id, delay }: Props) => {
         type='dynamic'
         userData={{ type: "croc", id }}
       >
-        <mesh>
-          <boxGeometry args={[1, 1, 1]} />
-          <meshStandardMaterial color='yellow' />
-        </mesh>
         <CrocModel />
       </RigidBody>
     </group>

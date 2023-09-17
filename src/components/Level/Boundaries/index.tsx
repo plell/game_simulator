@@ -29,10 +29,10 @@ export const Boundaries = () => {
         }}
       />
 
-      <mesh position-z={z}>
+      {/* <mesh position-z={z}>
         <boxGeometry args={args} />
         <meshStandardMaterial color={"red"} />
-      </mesh>
+      </mesh> */}
     </group>
   );
 };

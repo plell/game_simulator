@@ -7,6 +7,7 @@ import Counter from "./Counter";
 import useGame from "../../Stores/useGame";
 import Boundaries from "./Boundaries";
 import Hammer from "./Objects/Hammer";
+import Wall from "./Objects/Wall";
 
 export const Level = () => {
   const ref = useRef<Group | null>(null);
@@ -17,30 +18,41 @@ export const Level = () => {
   const setHit = useGame((s) => s.setHit);
 
   const crocs = useMemo(() => {
-    const h = [];
+    const m = [];
 
     const amount = 5;
     for (let i = 0; i < amount; i++) {
-      const defaultPosition = new Vector3(i * 5 - 10, 0.5, -2);
-      h.push(
+      const defaultPosition = new Vector3(i * 5 - 10, 0.5, -5);
+      m.push(
         <Croc
-          key={i}
+          key={i + "-croc"}
           id={i + 1}
           delay={Math.floor(Math.random())}
           position={defaultPosition}
         />
       );
     }
-    return h;
+    return m;
+  }, []);
+
+  const walls = useMemo(() => {
+    const m = [];
+
+    const amount = 6;
+    for (let i = 0; i < amount; i++) {
+      const defaultPosition = new Vector3(i * 5 - 12.5, 1, -2);
+      m.push(<Wall key={i + "-wall"} position={defaultPosition} />);
+    }
+    return m;
   }, []);
 
   return (
     <group ref={ref}>
       <Boundaries />
       {/* score and hits */}
-      <Counter title={"HI SCORE"} value={9} position={[4, 5, -5]} />
-      <Counter title={"HITS"} value={score} position={[-10, 5, -5]} />
-      <Counter title={"BITES"} value={damage} position={[-3, 5, -5]} />
+      <Counter title={"HITS"} value={score} position={[-12, 5, -5]} />
+      <Counter title={"BITES"} value={damage} position={[-5, 5, -5]} />
+      <Counter title={"HI SCORE"} value={9} position={[2, 5, -5]} />
 
       <Hammer />
 
@@ -55,6 +67,13 @@ export const Level = () => {
       >
         {crocs}
       </Select>
+
+      {walls}
+
+      <mesh castShadow position={[0, 5.6, -10.5]}>
+        <boxGeometry args={[30, 6, 10]} />
+        <meshStandardMaterial color={"orange"} />
+      </mesh>
 
       <mesh receiveShadow rotation-x={Math.PI * -0.5}>
         <planeGeometry args={[30, 10]} />

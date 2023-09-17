@@ -40,8 +40,8 @@ const App = () => {
       >
         <Suspense fallback={null}>
           <CameraControls />
-          <EnvironmentCube preset='sunset' />
-          {/* <Lights /> */}
+          {/* <EnvironmentCube preset='sunset' /> */}
+          <Lights />
           <Physics gravity={[0, 0, 0]}>
             <Level />
           </Physics>
