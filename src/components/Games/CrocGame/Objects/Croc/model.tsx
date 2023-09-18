@@ -1,10 +1,12 @@
 import { useGLTF } from "@react-three/drei";
+import { useEffect } from "react";
 
 type Props = {
   id: number | string;
+  disabled: boolean;
 };
 
-export const CrocModel = ({ id }: Props) => {
+export const CrocModel = ({ id, disabled }: Props) => {
   const crocModel = useGLTF("./models/croc.gltf");
 
   crocModel.scene.children.forEach((mesh) => {

@@ -1,16 +1,15 @@
-import { useFrame } from "@react-three/fiber";
 import { Fragment, useMemo, useRef } from "react";
 import { Group, Vector3 } from "three";
 import { Croc } from "./Objects/Croc";
-import { MeshReflectorMaterial, Select } from "@react-three/drei";
+import { Select } from "@react-three/drei";
 import Counter from "./Counter";
-import useGame from "../../Stores/useGame";
+import useGame from "../../../Stores/useGame";
 import Boundaries from "./Boundaries";
 import Hammer from "./Objects/Hammer";
 import Wall from "./Objects/Wall";
 import CrocArch from "./Objects/Arch";
 
-export const Level = () => {
+export const CrocGame = () => {
   const ref = useRef<Group | null>(null);
 
   const damage = useGame((s) => s.damage);
@@ -59,9 +58,8 @@ export const Level = () => {
       <Select
         onChangePointerUp={(e) => {
           if (e.length) {
-            console.log("e", e);
             const id = e[0]?.userData?.id || 0;
-            console.log("id", id);
+
             scoreUp();
             setHit(id);
           }
@@ -100,4 +98,4 @@ export const Level = () => {
   );
 };
 
-export default Level;
+export default CrocGame;

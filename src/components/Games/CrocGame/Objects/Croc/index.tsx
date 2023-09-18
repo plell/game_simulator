@@ -1,7 +1,7 @@
 import { useFrame } from "@react-three/fiber";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Group, Vector3 } from "three";
-import useGame from "../../../../Stores/useGame";
+import useGame from "../../../../../Stores/useGame";
 import { RapierRigidBody, RigidBody } from "@react-three/rapier";
 import { CrocModel } from "./model";
 
@@ -85,7 +85,7 @@ export const Croc = ({ position, id, delay }: Props) => {
       type='dynamic'
       userData={{ type: "croc", id }}
     >
-      <CrocModel id={id} />
+      <CrocModel disabled={true} id={id} />
     </RigidBody>
   );
 };

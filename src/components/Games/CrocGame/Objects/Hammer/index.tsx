@@ -1,7 +1,7 @@
 import { useFrame } from "@react-three/fiber";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { CylinderGeometry, Group, Vector3 } from "three";
-import useGame from "../../../../Stores/useGame";
+import useGame from "../../../../../Stores/useGame";
 import { RapierRigidBody, RigidBody } from "@react-three/rapier";
 
 type Props = {
@@ -24,7 +24,7 @@ export const Hammer = () => {
 
       const pos = ref.current.position;
       const destination = reuseableVec2.set(mouse.x * 10, pos.y, pos.z);
-      pos.lerp(destination, 0.03);
+      pos.lerp(destination, 0.09);
     }
   });
 
