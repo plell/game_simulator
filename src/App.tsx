@@ -12,27 +12,20 @@ import { CrocGame } from "./components/Games/CrocGame";
 
 import Browser from "./components/UI/Browser";
 import useGame from "./Stores/useGame";
-
-const origin = new Vector3();
+import { gamePositions } from "./Stores/constants";
+import SpaceGame from "./components/Games/SpaceGame";
 
 const CameraController = () => {
   const { camera } = useThree();
 
-  const cameraPosition = useGame((s) => s.cameraPosition);
-
-  const { position, lookAtTarget } = useControls("camera", {
-    position: { value: { x: 0, y: 20, z: 16 }, step: 0.5 },
-    lookAtTarget: { value: { x: 0, y: 7, z: 0 }, step: 0.5 },
-  });
-
-  useEffect(() => {
-    console.log("cameraPosition", cameraPosition);
-  }, [cameraPosition]);
+  const game = useGame((s) => s.game);
 
   useFrame(() => {
-    if (camera) {
-      camera.position.set(position.x, position.y, position.z);
-      camera.lookAt(origin.set(lookAtTarget.x, lookAtTarget.y, lookAtTarget.z));
+    const position = gamePositions[game]?.cameraPosition;
+    const target = gamePositions[game]?.cameraTarget;
+    if (camera && position && target) {
+      camera.position.lerp(position, 0.04);
+      camera.lookAt(target);
     }
   });
 
@@ -40,11 +33,17 @@ const CameraController = () => {
 };
 
 const App = () => {
+  const game = useGame((s) => s.game);
+
+  const games: Record<number, any> = {
+    0: <CrocGame />,
+    1: <SpaceGame />,
+  };
+
   return (
     <>
-      <Overlay>
-        <Browser />
-      </Overlay>
+      <Browser />
+
       <Leva />
       <Canvas
         shadows
@@ -63,10 +62,7 @@ const App = () => {
         <Suspense fallback={null}>
           <CameraController />
           <Lights />
-
-          <Physics gravity={[0, 0, 0]}>
-            <CrocGame />
-          </Physics>
+          <Physics gravity={[0, 0, 0]}>{games[game]}</Physics>
         </Suspense>
       </Canvas>
     </>
@@ -74,22 +70,3 @@ const App = () => {
 };
 
 export default App;
-
-const Overlay = styled.div`
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  width: calc(100% - 100px);
-  height: calc(100% - 100px);
-  padding: 50px;
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-
-  user-select: none;
-  pointer-events: none;
-  font-size: 40px;
-  font-weight: 900;
-  color: #fff;
-  z-index: 10;
-`;

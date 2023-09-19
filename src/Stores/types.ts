@@ -15,6 +15,14 @@ export type Player = {
     dead: boolean
 }
 
+export type Projectile = {
+    id: string | number
+    body: React.MutableRefObject<RapierRigidBody | null> | null
+    position: Vector3
+    type: string
+    dead: boolean
+}
+
 export type Zone = {
     position: Vector3
     height: number;

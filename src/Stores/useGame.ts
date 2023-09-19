@@ -1,6 +1,7 @@
 import create from 'zustand'
 
 const initialGameState = {
+    game:0,
     hit: 0,
     bite: 0,
     score: 0,
@@ -9,11 +10,13 @@ const initialGameState = {
 }
 
 type GameState = {
+    game: number
     hit: number
     bite: number
     score: number
     damage: number
     cameraPosition: number
+    setGame: (game: number) => void
     setHit: (hit: number) => void
     setBite: (bite: number) => void
     setScore: (score: number) => void
@@ -25,6 +28,7 @@ type GameState = {
 
 export default create<GameState>((set, get) => ({
     ...initialGameState,
+    setGame: (game) => set({ game }),
     setHit: (hit) => set({ hit }),
     setBite: (bite) => set({ bite }),
     setScore: (score) => set({ score }),

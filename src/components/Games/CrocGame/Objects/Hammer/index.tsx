@@ -3,6 +3,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { CylinderGeometry, Group, Vector3 } from "three";
 import useGame from "../../../../../Stores/useGame";
 import { RapierRigidBody, RigidBody } from "@react-three/rapier";
+import { useFollowCursor } from "../../../hooks/controllers/useFollowCursor";
 
 type Props = {
   position: Vector3;
@@ -10,23 +11,12 @@ type Props = {
   id: number;
 };
 
-const reuseableVec = new Vector3();
-const reuseableVec2 = new Vector3();
-
 const geometry = new CylinderGeometry(1, 1, 1);
 
 export const Hammer = () => {
   const ref = useRef<Group | null>(null);
 
-  useFrame(({ mouse, clock }) => {
-    if (ref.current) {
-      const elapsed = clock.getElapsedTime();
-
-      const pos = ref.current.position;
-      const destination = reuseableVec2.set(mouse.x * 10, pos.y, pos.z);
-      pos.lerp(destination, 0.09);
-    }
-  });
+  useFollowCursor({ ref });
 
   return (
     <group ref={ref} position={[0, 3, 4]} rotation-x={Math.PI * -0.25}>

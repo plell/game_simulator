@@ -8,10 +8,11 @@ import Boundaries from "./Boundaries";
 import Hammer from "./Objects/Hammer";
 import Wall from "./Objects/Wall";
 import CrocArch from "./Objects/Arch";
+import { gamePositions } from "../../../Stores/constants";
 
 export const CrocGame = () => {
   const ref = useRef<Group | null>(null);
-
+  const game = useGame((s) => s.game);
   const damage = useGame((s) => s.damage);
   const score = useGame((s) => s.score);
   const scoreUp = useGame((s) => s.scoreUp);
@@ -50,7 +51,7 @@ export const CrocGame = () => {
   }, []);
 
   return (
-    <group ref={ref}>
+    <group ref={ref} position={gamePositions[game].gamePosition}>
       <Boundaries />
 
       <Hammer />
