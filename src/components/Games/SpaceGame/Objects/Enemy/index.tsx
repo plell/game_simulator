@@ -1,37 +1,53 @@
 import { useFrame } from "@react-three/fiber";
 import { RapierRigidBody, RigidBody } from "@react-three/rapier";
-import { useRef } from "react";
+import { useEffect, useLayoutEffect, useRef } from "react";
 import { Group, Vector3 } from "three";
+import { Timeout } from "../../../CrocGame/Objects/Croc";
 
-type Props = {
-  position: [x: number, y: number, z: number];
+const movementInterval = 1200;
+
+const width = 30;
+
+const getRandomX = () => {
+  return Math.random() * width - width / 2;
 };
 
-const reuseableVec = new Vector3();
+const getRandomY = () => {
+  return 13 + Math.random() * 14 - 14 / 2;
+};
 
-export const Enemy = ({ position }: Props) => {
+export const Enemy = () => {
   const body = useRef<RapierRigidBody | null>(null);
+  let timeout: Timeout = null;
 
-  useFrame(({ clock }) => {
+  useEffect(() => {
+    doMovementTimeout();
+
+    return function cleanup() {
+      if (timeout) {
+        clearTimeout(timeout);
+      }
+    };
+  }, []);
+
+  const doMovementTimeout = () => {
+    timeout = setTimeout(() => {
+      applyForce();
+      doMovementTimeout();
+    }, movementInterval);
+  };
+
+  const applyForce = () => {
     if (body.current) {
-      const elapsedTime = clock.getElapsedTime();
-      // const translation = body.current.translation();
+      const impulse = { x: getRandomX() / width, y: -2, z: 0 };
 
-      const x = position[0] + Math.sin(elapsedTime);
-      const y = position[1] + Math.cos(elapsedTime);
-
-      // console.log("x", x);
-
-      // body.current.setTranslation(
-      //   new Vector3(Math.sin(elapsedTime), Math.sin(elapsedTime), 0),
-      //   true
-      // );
+      body.current.applyImpulse(impulse, true);
     }
-  });
+  };
 
   return (
-    <group position={position}>
-      <RigidBody ref={body}>
+    <group position={[getRandomX(), getRandomY(), 0]}>
+      <RigidBody ref={body} mass={0.4}>
         <mesh>
           <boxGeometry args={[1, 1, 1]} />
           <meshStandardMaterial color='red' />

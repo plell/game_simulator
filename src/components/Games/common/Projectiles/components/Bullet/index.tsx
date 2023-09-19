@@ -8,7 +8,7 @@ type Props = {
   self: Projectile;
 };
 
-const impulse = new Vector3(0, 1.4, 0);
+const impulse = new Vector3(0, 1, 0);
 
 export const Bullet = ({ self }: Props) => {
   const body = useRef<RapierRigidBody | null>(null);
@@ -24,7 +24,7 @@ export const Bullet = ({ self }: Props) => {
   return (
     <RigidBody ref={body} position={position}>
       <mesh>
-        <sphereGeometry args={[0.7, 10, 10]} />
+        <sphereGeometry args={[0.5, 10, 10]} />
         <meshStandardMaterial color={"black"} />
       </mesh>
     </RigidBody>

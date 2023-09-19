@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Group, Vector3 } from "three";
 import { Bullet } from "./components/Bullet";
 

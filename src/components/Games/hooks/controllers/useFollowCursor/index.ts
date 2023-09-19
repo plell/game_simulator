@@ -8,12 +8,19 @@ type Props = {
     ref: React.MutableRefObject<Group | null>
 }
 
+const tiltStrength = 0.2
+
 export const useFollowCursor = ({ ref }: Props) => {
     useFrame(({ mouse }) => {
         if (ref?.current) {
-            const pos = ref.current.position;
-            const destination = reuseableVec.set(mouse.x * 15, pos.y, pos.z);
-            pos.lerp(destination, 0.09);
+            const position = ref.current.position;
+            const rotation = ref.current.rotation;
+            const newX = mouse.x * 15
+            
+            const destination = reuseableVec.set(newX, position.y, position.z);
+            position.lerp(destination, 0.09);
+
+            rotation.y = (newX - position.x) * tiltStrength
         }
     });
 }

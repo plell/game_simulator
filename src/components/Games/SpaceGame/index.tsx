@@ -1,4 +1,4 @@
-import { Fragment, useMemo, useRef } from "react";
+import { Fragment, useMemo, useRef, useState } from "react";
 import { Group, Vector3 } from "three";
 import { Cloud, Select, Stars } from "@react-three/drei";
 import useGame from "../../../Stores/useGame";
@@ -12,6 +12,7 @@ export const SpaceGame = () => {
   const ref = useRef<Group | null>(null);
   const cloudRef = useRef<Group | null>(null);
   const cloudRef2 = useRef<Group | null>(null);
+  const enemies = useState<any>([]);
 
   const game = useGame((s) => s.game);
 
@@ -56,8 +57,18 @@ export const SpaceGame = () => {
           segments={20} // Number of particles
         />
       </group>
-      <Spaceship position={[0, -8, 0]} />
-      <Enemy position={[0, 5, 0]} />
+      <Spaceship position={[0, -6, 0]} />
+
+      <Enemy />
+      <Enemy />
+      <Enemy />
+      <Enemy />
+      <Enemy />
+      <Enemy />
+      <Enemy />
+      <Enemy />
+      <Enemy />
+
       <mesh receiveShadow position-z={-10}>
         <planeGeometry args={[45, 40]} />
         <meshStandardMaterial color={"skyblue"} />
