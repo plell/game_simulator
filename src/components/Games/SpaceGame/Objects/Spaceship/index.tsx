@@ -3,6 +3,7 @@ import { useRef } from "react";
 import { Group, Vector3 } from "three";
 import { useFollowCursor } from "../../../hooks/controllers/useFollowCursor";
 import { Projectiles } from "../../../common/Projectiles";
+import { useGLTF } from "@react-three/drei";
 
 type Props = {
   position: [x: number, y: number, z: number];
@@ -11,6 +12,14 @@ type Props = {
 export const Spaceship = ({ position }: Props) => {
   const ref = useRef<Group | null>(null);
   const playerRef = useRef<Group | null>(null);
+
+  const model = useGLTF("./models/spaceship.gltf");
+
+  model.scene.children.forEach((mesh) => {
+    mesh.userData = { type: "spaceship" };
+    mesh.castShadow = true;
+    mesh.receiveShadow = true;
+  });
 
   useFollowCursor({ ref: playerRef });
 
@@ -24,13 +33,15 @@ export const Spaceship = ({ position }: Props) => {
   return (
     <group ref={ref} position={position}>
       <group ref={playerRef}>
-        <mesh>
-          <boxGeometry args={[1, 1, 1]} />
-          <meshStandardMaterial color='pink' />
-        </mesh>
+        <primitive
+          rotation-y={Math.PI * -0.5}
+          rotation-x={Math.PI * 0.5}
+          object={model.scene.clone()}
+          scale={0.2}
+        />
       </group>
 
-      <Projectiles player={playerRef} />
+      <Projectiles player={playerRef} launchPosition={[0, 2, 0]} />
     </group>
   );
 };

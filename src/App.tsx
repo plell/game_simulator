@@ -14,6 +14,7 @@ import Browser from "./components/UI/Browser";
 import useGame from "./Stores/useGame";
 import { gamePositions } from "./Stores/constants";
 import SpaceGame from "./components/Games/SpaceGame";
+import { Bloom, EffectComposer } from "@react-three/postprocessing";
 
 const CameraController = () => {
   const { camera } = useThree();
@@ -60,6 +61,10 @@ const App = () => {
         }}
       >
         <Suspense fallback={null}>
+          <EffectComposer>
+            <Bloom luminanceThreshold={1} mipmapBlur />
+          </EffectComposer>
+
           <CameraController />
           <Lights />
           <Physics gravity={[0, 0, 0]}>{games[game]}</Physics>
