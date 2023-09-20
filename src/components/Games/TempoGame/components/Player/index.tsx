@@ -21,7 +21,6 @@ const reuseableVector3b = new Vector3();
 export const Player = () => {
   const players = useGame((s) => s.players);
   const setPlayers = useGame((s) => s.setPlayers);
-  const setSnapTo = useGame((s) => s.setSnapTo);
 
   const nextWorldTile = useGame((s) => s.nextWorldTile);
 

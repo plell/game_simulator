@@ -15,12 +15,6 @@ import { Loop } from "./components/Sounds/Loop";
 import { Terrain } from "./components/Terrain";
 import { Cursor } from "./components/UI/Cursor";
 
-import {
-  DepthOfField,
-  EffectComposer,
-  Pixelation,
-} from "@react-three/postprocessing";
-import { useOuch } from "./components/hooks/useOuch";
 import { experienceProperties } from "../../../Stores/constants";
 
 let enemyGeneratorTimeout: Interval = null;
@@ -30,13 +24,13 @@ const generatorSpeed = 2000;
 export const TempoGame = () => {
   const enemies = useGame((s) => s.enemies);
   const players = useGame((s) => s.players);
-  const restartGame = useGame((s) => s.restartGame);
 
   const setEnemies = useGame((s) => s.setEnemies);
 
   const setNextWorldTile = useGame((s) => s.setNextWorldTile);
   const discoveredWorldTiles = useGame((s) => s.discoveredWorldTiles);
   const worldTile = useGame((s) => s.worldTile);
+  const restartGame = useGame((s) => s.restartGame);
   const patterns = useGame((s) => s.patterns);
   const setPatterns = useGame((s) => s.setPatterns);
 
@@ -57,6 +51,13 @@ export const TempoGame = () => {
       setEnemies({});
     };
   }, []);
+
+  useEffect(() => {
+    window.addEventListener("click", placeNoteAtPlayersPosition);
+    return () => {
+      window.removeEventListener("click", placeNoteAtPlayersPosition);
+    };
+  });
 
   useEffect(() => {
     addNewEnemy();
@@ -140,41 +141,8 @@ export const TempoGame = () => {
     }
   };
 
-  const ouch = useOuch(players.p1?.health);
-
-  const p1IsDead = players.p1?.dead;
-
-  const toggledEffects: ReactElement<any, any> = useMemo(() => {
-    const te: ReactElement<any, any>[] = [];
-
-    if (p1IsDead) {
-      te.push(
-        <DepthOfField
-          key='depth-of-field'
-          focusDistance={0.01}
-          focalLength={0.02}
-          bokehScale={20}
-          height={280}
-        />
-      );
-    }
-
-    if (ouch) {
-      te.push(<Pixelation key='pixelation' granularity={10} />);
-    }
-
-    return <>{te}</>;
-  }, [ouch, p1IsDead]);
-
   return (
-    <group
-      position={experienceProperties[3].gamePosition}
-      onPointerDown={() => {
-        placeNoteAtPlayersPosition();
-      }}
-    >
-      <EffectComposer>{toggledEffects}</EffectComposer>
-
+    <group position={experienceProperties[3].gamePosition}>
       <color attach='background' args={[worldTile.color || "#fff"]} />
 
       <Lights />

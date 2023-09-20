@@ -100,5 +100,3 @@ export const CrocGame = () => {
     </group>
   );
 };
-
-export default CrocGame;
