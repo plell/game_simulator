@@ -71,3 +71,5 @@ export const Enemy = () => {
     </group>
   );
 };
+
+useGLTF.preload("./models/bird.gltf");

@@ -45,3 +45,5 @@ export const Spaceship = ({ position }: Props) => {
     </group>
   );
 };
+
+useGLTF.preload("./models/spaceship.gltf");
