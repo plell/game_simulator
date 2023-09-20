@@ -6,10 +6,10 @@ import { Suspense, useEffect, useRef } from "react";
 import { Leva, useControls } from "leva";
 import { CrocGame } from "./components/Games/CrocGame";
 
-import Browser from "./components/UI/Browser";
+import { Browser } from "./components/UI/Browser";
 import useGame from "./Stores/useGame";
 import { experienceProperties } from "./Stores/constants";
-import SpaceGame from "./components/Games/SpaceGame";
+import { SpaceGame } from "./components/Games/SpaceGame";
 import { Bloom, EffectComposer } from "@react-three/postprocessing";
 import { Earth } from "./components/Games/Earth";
 import { CameraControls } from "@react-three/drei";
@@ -22,7 +22,6 @@ const CameraController = () => {
   useEffect(() => {
     const position = experienceProperties[game]?.cameraPosition;
     const target = experienceProperties[game]?.cameraTarget;
-    const enabled = experienceProperties[game]?.cameraControls;
 
     if (cameraControlsRef.current && position && target) {
       cameraControlsRef.current.setLookAt(
@@ -43,7 +42,6 @@ const CameraController = () => {
       boundaryEnclosesCamera
       makeDefault
       maxDistance={1000}
-      // minDistance={100}
     />
   );
 };

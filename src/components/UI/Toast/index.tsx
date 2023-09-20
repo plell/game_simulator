@@ -9,7 +9,7 @@ import styled from "styled-components";
 import useGame from "../../../Stores/useGame";
 import { experienceProperties } from "../../../Stores/constants";
 
-export const Browser = () => {
+export const Toast = () => {
   const game = useGame((s) => s.game);
   const setGame = useGame((s) => s.setGame);
 

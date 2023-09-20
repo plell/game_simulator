@@ -3,7 +3,7 @@ import { Group, Vector3 } from "three";
 import { Cloud, Select, Stars } from "@react-three/drei";
 import useGame from "../../../Stores/useGame";
 import { experienceProperties } from "../../../Stores/constants";
-import { Lights } from "../../Lights";
+
 import { Spaceship } from "./Objects/Spaceship";
 import { Enemy } from "./Objects/Enemy";
 import { useFrame } from "@react-three/fiber";
@@ -12,7 +12,6 @@ export const SpaceGame = () => {
   const ref = useRef<Group | null>(null);
   const cloudRef = useRef<Group | null>(null);
   const cloudRef2 = useRef<Group | null>(null);
-  const enemies = useState<any>([]);
 
   const game = useGame((s) => s.game);
 
@@ -78,5 +77,3 @@ export const SpaceGame = () => {
     </group>
   );
 };
-
-export default SpaceGame;
