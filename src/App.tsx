@@ -25,19 +25,21 @@ const CameraController = () => {
     const position = experienceProperties[game]?.cameraPosition;
     const target = experienceProperties[game]?.cameraTarget;
 
-    camera.position.set(position.x, position.y, position.z);
-    camera.lookAt(target);
+    if (position && target) {
+      camera.position.set(position.x, position.y, position.z);
+      camera.lookAt(target);
 
-    if (cameraControlsRef.current) {
-      cameraControlsRef.current.setLookAt(
-        position.x,
-        position.y,
-        position.z,
-        target.x,
-        target.y,
-        target.z,
-        false
-      );
+      if (cameraControlsRef.current) {
+        cameraControlsRef.current.setLookAt(
+          position.x,
+          position.y,
+          position.z,
+          target.x,
+          target.y,
+          target.z,
+          false
+        );
+      }
     }
   }, [game]);
 
