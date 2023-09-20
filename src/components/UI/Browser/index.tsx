@@ -1,6 +1,13 @@
-import { MdArrowLeft, MdArrowRight } from "react-icons/md";
+import {
+  MdArrowCircleLeft,
+  MdArrowCircleRight,
+  MdArrowLeft,
+  MdArrowRight,
+  MdArrowRightAlt,
+} from "react-icons/md";
 import styled from "styled-components";
 import useGame from "../../../Stores/useGame";
+import { gamePositions } from "../../../Stores/constants";
 
 export const Browser = () => {
   const game = useGame((s) => s.game);
@@ -8,15 +15,18 @@ export const Browser = () => {
 
   return (
     <Overlay>
+      <div style={{ position: "absolute", top: 0, left: 0, padding: 40 }}>
+        {gamePositions[game]?.gameTitle || "Under Construction"}
+      </div>
       {game > 0 ? (
         <Button onClick={() => setGame(game - 1)}>
-          <MdArrowLeft /> Prev
+          <MdArrowCircleLeft />
         </Button>
       ) : (
         <div />
       )}
       <Button onClick={() => setGame(game + 1)}>
-        Next <MdArrowRight />
+        <MdArrowCircleRight />
       </Button>
     </Overlay>
   );
@@ -30,6 +40,12 @@ const Button = styled.div`
   display: flex;
   align-items: center;
   font-weight: 400;
+  font-size: 70px;
+  color: #fff;
+  transition: color 0.2s;
+  &:hover {
+    color: #ea0a8e;
+  }
 `;
 
 const Overlay = styled.div`

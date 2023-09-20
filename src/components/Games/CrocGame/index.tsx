@@ -51,7 +51,7 @@ export const CrocGame = () => {
   }, []);
 
   return (
-    <group ref={ref} position={gamePositions[game].gamePosition}>
+    <group ref={ref} position={gamePositions[game]?.gamePosition}>
       <Boundaries />
 
       <Hammer />

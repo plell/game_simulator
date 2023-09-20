@@ -35,7 +35,7 @@ export const SpaceGame = () => {
   });
 
   return (
-    <group ref={ref} position={gamePositions[game].gamePosition}>
+    <group ref={ref} position={gamePositions[game]?.gamePosition}>
       <Lights />
 
       <group ref={cloudRef}>

@@ -25,11 +25,11 @@ export const postDebounce = (key:string, fn: () => void, ms = 300) => {
   }
 };
 
-
 type GamePosition = {
   cameraPosition: Vector3
   cameraTarget: Vector3
   gamePosition: Vector3
+  gameTitle: string
 }
 
 export const gamePositions: Record<number, GamePosition> = {
@@ -37,11 +37,13 @@ export const gamePositions: Record<number, GamePosition> = {
     cameraPosition: new Vector3(0, 20, 16),
     cameraTarget: new Vector3(0, 7, 0),
     gamePosition: new Vector3(0, 0, 0),
+    gameTitle: 'Whac-a-croc'
   },
   1: {
     cameraPosition: new Vector3(50, 0, 23),
     cameraTarget: new Vector3(50, 0, 0),
     gamePosition: new Vector3(50, 0, 0),
+    gameTitle: 'Feed Two Birds with One Scone'
   }
   
 }
