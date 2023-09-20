@@ -25,31 +25,35 @@ export const postDebounce = (key:string, fn: () => void, ms = 300) => {
   }
 };
 
-type GamePosition = {
+type ExperienceProps = {
   cameraPosition: Vector3
   cameraTarget: Vector3
   gamePosition: Vector3
   gameTitle: string
+  cameraControls: boolean
 }
 
-export const gamePositions: Record<number, GamePosition> = {
+export const experienceProperties: Record<number, ExperienceProps> = {
   0: {
     cameraPosition: new Vector3(0, 20, 16),
     cameraTarget: new Vector3(0, 7, 0),
     gamePosition: new Vector3(0, 0, 0),
-    gameTitle: 'Whac-a-croc'
+    gameTitle: 'Whac-a-croc',
+    cameraControls:false
   },
   1: {
     cameraPosition: new Vector3(50, 0, 23),
     cameraTarget: new Vector3(50, 0, 0),
     gamePosition: new Vector3(50, 0, 0),
-    gameTitle: 'Feed Two Birds with One Scone'
+    gameTitle: 'Feed Two Birds with One Scone',
+    cameraControls:false
   },
   2: {
     cameraPosition: new Vector3(100, 0, 23),
     cameraTarget: new Vector3(100, 0, 0),
     gamePosition: new Vector3(100, 0, 0),
-    gameTitle: 'Earth'
+    gameTitle: 'Earth',
+    cameraControls:true
   }
   
 }

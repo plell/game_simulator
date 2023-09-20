@@ -1,37 +1,51 @@
 import { Canvas, extend, useFrame, useThree } from "@react-three/fiber";
 
-import styled from "styled-components";
-import { Vector3 } from "three";
-
-import { Lights } from "./components/Lights";
 import { Physics } from "@react-three/rapier";
 
-import { Suspense, useEffect } from "react";
+import { Suspense, useEffect, useRef } from "react";
 import { Leva, useControls } from "leva";
 import { CrocGame } from "./components/Games/CrocGame";
 
 import Browser from "./components/UI/Browser";
 import useGame from "./Stores/useGame";
-import { gamePositions } from "./Stores/constants";
+import { experienceProperties } from "./Stores/constants";
 import SpaceGame from "./components/Games/SpaceGame";
 import { Bloom, EffectComposer } from "@react-three/postprocessing";
 import { Earth } from "./components/Games/Earth";
+import { CameraControls } from "@react-three/drei";
 
 const CameraController = () => {
-  const { camera } = useThree();
+  const cameraControlsRef = useRef<CameraControls | null>(null);
 
   const game = useGame((s) => s.game);
 
-  useFrame(() => {
-    const position = gamePositions[game]?.cameraPosition;
-    const target = gamePositions[game]?.cameraTarget;
-    if (camera && position && target) {
-      camera.position.lerp(position, 0.04);
-      camera.lookAt(target);
-    }
-  });
+  useEffect(() => {
+    const position = experienceProperties[game]?.cameraPosition;
+    const target = experienceProperties[game]?.cameraTarget;
+    const enabled = experienceProperties[game]?.cameraControls;
 
-  return null;
+    if (cameraControlsRef.current && position && target) {
+      cameraControlsRef.current.setLookAt(
+        position.x,
+        position.y,
+        position.z,
+        target.x,
+        target.y,
+        target.z,
+        false
+      );
+    }
+  }, [game]);
+
+  return (
+    <CameraControls
+      ref={cameraControlsRef}
+      boundaryEnclosesCamera
+      makeDefault
+      maxDistance={1000}
+      // minDistance={100}
+    />
+  );
 };
 
 const App = () => {

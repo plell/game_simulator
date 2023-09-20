@@ -3,7 +3,7 @@ import { useFrame } from "@react-three/fiber";
 import { useEffect, useMemo, useRef } from "react";
 import { DoubleSide, Group, Light, Mesh, MeshStandardMaterial } from "three";
 import useGame from "../../../Stores/useGame";
-import { gamePositions } from "../../../Stores/constants";
+import { experienceProperties } from "../../../Stores/constants";
 
 const EARTH_RADIUS = 6;
 
@@ -32,7 +32,7 @@ export const Earth = () => {
   });
 
   return (
-    <group position={gamePositions[game]?.gamePosition}>
+    <group position={experienceProperties[game]?.gamePosition}>
       <directionalLight ref={lightRef} intensity={3} position={[0, 0, 90]} />
 
       <group ref={groupRef}>

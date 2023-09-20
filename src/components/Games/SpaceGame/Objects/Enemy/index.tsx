@@ -48,7 +48,7 @@ export const Enemy = () => {
 
   const applyForce = () => {
     if (body.current) {
-      const impulse = { x: getRandomX() / width, y: -2, z: 0 };
+      const impulse = { x: getRandomX() / width, y: -0.5, z: 0 };
 
       body.current.applyImpulse(impulse, true);
 

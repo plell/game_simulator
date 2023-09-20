@@ -2,7 +2,7 @@ import { Fragment, useMemo, useRef, useState } from "react";
 import { Group, Vector3 } from "three";
 import { Cloud, Select, Stars } from "@react-three/drei";
 import useGame from "../../../Stores/useGame";
-import { gamePositions } from "../../../Stores/constants";
+import { experienceProperties } from "../../../Stores/constants";
 import { Lights } from "../../Lights";
 import { Spaceship } from "./Objects/Spaceship";
 import { Enemy } from "./Objects/Enemy";
@@ -34,9 +34,19 @@ export const SpaceGame = () => {
     }
   });
 
+  const birds = useMemo(() => {
+    const b: any = [];
+
+    for (let i = 0; i < 20; i++) {
+      b.push(<Enemy key={i + "-bird"} />);
+    }
+
+    return b;
+  }, []);
+
   return (
-    <group ref={ref} position={gamePositions[game]?.gamePosition}>
-      <Lights />
+    <group ref={ref} position={experienceProperties[game]?.gamePosition}>
+      <directionalLight position={[5, 5, 60]} intensity={4} />
 
       <group ref={cloudRef}>
         <Cloud
@@ -59,15 +69,7 @@ export const SpaceGame = () => {
       </group>
       <Spaceship position={[0, -6, 0]} />
 
-      <Enemy />
-      <Enemy />
-      <Enemy />
-      <Enemy />
-      <Enemy />
-      <Enemy />
-      <Enemy />
-      <Enemy />
-      <Enemy />
+      {birds}
 
       <mesh receiveShadow position-z={-10}>
         <planeGeometry args={[45, 40]} />

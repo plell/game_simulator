@@ -7,7 +7,7 @@ import {
 } from "react-icons/md";
 import styled from "styled-components";
 import useGame from "../../../Stores/useGame";
-import { gamePositions } from "../../../Stores/constants";
+import { experienceProperties } from "../../../Stores/constants";
 
 export const Browser = () => {
   const game = useGame((s) => s.game);
@@ -16,7 +16,7 @@ export const Browser = () => {
   return (
     <Overlay>
       <div style={{ position: "absolute", top: 0, left: 0, padding: 40 }}>
-        {gamePositions[game]?.gameTitle || "Under Construction"}
+        {experienceProperties[game]?.gameTitle || "Under Construction"}
       </div>
       {game > 0 ? (
         <Button onClick={() => setGame(game - 1)}>

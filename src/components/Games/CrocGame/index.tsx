@@ -8,7 +8,7 @@ import Boundaries from "./Boundaries";
 import Hammer from "./Objects/Hammer";
 import Wall from "./Objects/Wall";
 import CrocArch from "./Objects/Arch";
-import { gamePositions } from "../../../Stores/constants";
+import { experienceProperties } from "../../../Stores/constants";
 import { Lights } from "../../Lights";
 
 export const CrocGame = () => {
@@ -52,7 +52,7 @@ export const CrocGame = () => {
   }, []);
 
   return (
-    <group ref={ref} position={gamePositions[game]?.gamePosition}>
+    <group ref={ref} position={experienceProperties[game]?.gamePosition}>
       <Boundaries />
       <Lights />
 
