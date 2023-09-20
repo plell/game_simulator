@@ -35,9 +35,9 @@ type ExperienceProps = {
 
 export const experienceProperties: Record<number, ExperienceProps> = {
   0: {
-    cameraPosition: new Vector3(0, 20, 16),
-    cameraTarget: new Vector3(0, 7, 0),
-    gamePosition: new Vector3(0, 0, 0),
+    cameraPosition: new Vector3(150, 20, 16),
+    cameraTarget: new Vector3(150, 7, 0),
+    gamePosition: new Vector3(150, 0, 0),
     gameTitle: 'Whac-a-croc',
     cameraControls:false
   },
@@ -54,6 +54,13 @@ export const experienceProperties: Record<number, ExperienceProps> = {
     gamePosition: new Vector3(100, 0, 0),
     gameTitle: 'Earth',
     cameraControls:true
+  },
+  3: {
+    cameraPosition: new Vector3(0, 0, 60),
+    cameraTarget: new Vector3(0, 0, 0),
+    gamePosition: new Vector3(0, 0, 0),
+    gameTitle: 'Tempo Sneakers',
+    cameraControls:false
   }
   
 }

@@ -13,6 +13,7 @@ import { SpaceGame } from "./components/Games/SpaceGame";
 import { Bloom, EffectComposer } from "@react-three/postprocessing";
 import { Earth } from "./components/Games/Earth";
 import { CameraControls } from "@react-three/drei";
+import { TempoGame } from "./components/Games/TempoGame";
 
 const CameraController = () => {
   const cameraControlsRef = useRef<CameraControls | null>(null);
@@ -64,6 +65,7 @@ const App = () => {
     0: <CrocGame />,
     1: <SpaceGame />,
     2: <Earth />,
+    3: <TempoGame />,
   };
 
   return (

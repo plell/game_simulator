@@ -19,13 +19,13 @@ export const Browser = () => {
         {experienceProperties[game]?.gameTitle || "Under Construction"}
       </div>
       {game > 0 ? (
-        <Button onClick={() => setGame(game - 1)}>
+        <Button onPointerDown={() => setGame(game - 1)}>
           <MdArrowCircleLeft />
         </Button>
       ) : (
         <div />
       )}
-      <Button onClick={() => setGame(game + 1)}>
+      <Button onPointerDown={() => setGame(game + 1)}>
         <MdArrowCircleRight />
       </Button>
     </Overlay>
