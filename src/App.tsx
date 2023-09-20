@@ -19,11 +19,16 @@ const CameraController = () => {
 
   const game = useGame((s) => s.game);
 
+  const { camera } = useThree();
+
   useEffect(() => {
     const position = experienceProperties[game]?.cameraPosition;
     const target = experienceProperties[game]?.cameraTarget;
 
-    if (cameraControlsRef.current && position && target) {
+    camera.position.set(position.x, position.y, position.z);
+    camera.lookAt(target);
+
+    if (cameraControlsRef.current) {
       cameraControlsRef.current.setLookAt(
         position.x,
         position.y,
@@ -36,14 +41,18 @@ const CameraController = () => {
     }
   }, [game]);
 
-  return (
-    <CameraControls
-      ref={cameraControlsRef}
-      boundaryEnclosesCamera
-      makeDefault
-      maxDistance={1000}
-    />
-  );
+  if (experienceProperties[game]?.cameraControls) {
+    return (
+      <CameraControls
+        ref={cameraControlsRef}
+        boundaryEnclosesCamera
+        makeDefault
+        maxDistance={1000}
+      />
+    );
+  }
+
+  return null;
 };
 
 const App = () => {
@@ -72,6 +81,7 @@ const App = () => {
           fov: 45,
           near: 0.1,
           far: 200,
+          position: experienceProperties[0].cameraPosition,
         }}
       >
         <Suspense fallback={null}>
