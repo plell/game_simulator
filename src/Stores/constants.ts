@@ -44,6 +44,12 @@ export const gamePositions: Record<number, GamePosition> = {
     cameraTarget: new Vector3(50, 0, 0),
     gamePosition: new Vector3(50, 0, 0),
     gameTitle: 'Feed Two Birds with One Scone'
+  },
+  2: {
+    cameraPosition: new Vector3(100, 0, 23),
+    cameraTarget: new Vector3(100, 0, 0),
+    gamePosition: new Vector3(100, 0, 0),
+    gameTitle: 'Earth'
   }
   
 }

@@ -15,6 +15,7 @@ import useGame from "./Stores/useGame";
 import { gamePositions } from "./Stores/constants";
 import SpaceGame from "./components/Games/SpaceGame";
 import { Bloom, EffectComposer } from "@react-three/postprocessing";
+import { Earth } from "./components/Games/Earth";
 
 const CameraController = () => {
   const { camera } = useThree();
@@ -39,6 +40,7 @@ const App = () => {
   const games: Record<number, any> = {
     0: <CrocGame />,
     1: <SpaceGame />,
+    2: <Earth />,
   };
 
   return (
@@ -66,7 +68,6 @@ const App = () => {
           </EffectComposer>
 
           <CameraController />
-          <Lights />
           <Physics gravity={[0, 0, 0]}>{games[game]}</Physics>
         </Suspense>
       </Canvas>
