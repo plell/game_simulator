@@ -73,8 +73,8 @@ export const CrocGame = () => {
 
       {walls}
 
-      <mesh castShadow receiveShadow position={[0, 6.5, -11.5]}>
-        <boxGeometry args={[26, 6, 10]} />
+      <mesh castShadow receiveShadow position={[0, 4.5, -11.5]}>
+        <boxGeometry args={[26, 4, 10]} />
         <meshStandardMaterial color={"#0090c8"} />
       </mesh>
 
@@ -89,9 +89,9 @@ export const CrocGame = () => {
       </mesh>
 
       {/* score and hits */}
-      <Counter title={"HITS"} value={score} position={[-10, 6, -6]} />
-      <Counter title={"BITES"} value={damage} position={[-5, 6, -6]} />
-      <Counter title={"HI SCORE"} value={9} position={[0, 6, -6]} />
+      <Counter title={"HITS"} value={score} position={[-11, 4.4, -6.5]} />
+      <Counter title={"BITES"} value={damage} position={[-6, 4.4, -6.5]} />
+      <Counter title={"HI SCORE"} value={9} position={[-1, 4.4, -6.5]} />
 
       <mesh receiveShadow position-z={-10} rotation-x={Math.PI * -0.5}>
         <planeGeometry args={[26.8, 26]} />

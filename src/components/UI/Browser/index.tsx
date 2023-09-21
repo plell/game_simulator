@@ -15,9 +15,11 @@ export const Browser = () => {
 
   return (
     <Overlay>
-      <div style={{ position: "absolute", top: 0, left: 0, padding: 40 }}>
-        {experienceProperties[game]?.gameTitle || "Under Construction"}
-      </div>
+      <Title>
+        <div>{experienceProperties[game]?.title || "Under Construction"}</div>
+        <Description>{experienceProperties[game]?.description}</Description>
+      </Title>
+
       {game > 0 ? (
         <Button onPointerDown={() => setGame(game - 1)}>
           <MdArrowCircleLeft />
@@ -31,6 +33,20 @@ export const Browser = () => {
     </Overlay>
   );
 };
+
+const Title = styled.div`
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  padding: 40px;
+`;
+
+const Description = styled.div`
+  font-size: 26px;
+  font-weight: 300;
+  margin: 5px 40px;
+  color: #f1f1f1;
+`;
 
 const Button = styled.div`
   pointer-events: auto;
