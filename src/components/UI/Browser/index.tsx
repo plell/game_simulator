@@ -4,6 +4,7 @@ import {
   MdArrowLeft,
   MdArrowRight,
   MdArrowRightAlt,
+  MdInfoOutline,
 } from "react-icons/md";
 import styled from "styled-components";
 import useGame from "../../../Stores/useGame";
@@ -19,6 +20,12 @@ export const Browser = () => {
         <div>{experienceProperties[game]?.title || "Under Construction"}</div>
         <Description>{experienceProperties[game]?.description}</Description>
       </Title>
+      {/* 
+      <Info>
+        <Button>
+          <MdInfoOutline />
+        </Button>
+      </Info> */}
 
       {game > 0 ? (
         <Button onPointerDown={() => setGame(game - 1)}>
@@ -33,6 +40,13 @@ export const Browser = () => {
     </Overlay>
   );
 };
+
+const Info = styled.div`
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  padding: 40px;
+`;
 
 const Title = styled.div`
   position: absolute;
