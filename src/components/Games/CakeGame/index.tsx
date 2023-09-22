@@ -6,6 +6,9 @@ import { experienceProperties } from "../../../Stores/constants";
 import { RapierRigidBody, RigidBody } from "@react-three/rapier";
 
 import { useFollowCursor } from "../hooks/controllers/useFollowCursor";
+import { useStartButton } from "../hooks/useStartButton";
+import { Loading } from "../common/Loading";
+import { RigidBodyData } from "../../../Stores/types";
 
 type CakeData = {
   height: number;
@@ -27,6 +30,12 @@ export const CakeGame = () => {
 
   const game = useGame((s) => s.game);
 
+  const { ready } = useStartButton();
+
+  if (!ready) {
+    return <Loading />;
+  }
+
   return (
     <group ref={ref} position={experienceProperties[game]?.gamePosition}>
       <directionalLight position={[5, 50, 0]} intensity={4} />
@@ -35,9 +44,9 @@ export const CakeGame = () => {
         return <CakeLayer {...c} key={i + "-cake"} />;
       })}
 
-      <RigidBody type='fixed'>
+      <RigidBody type='fixed' userData={{ type: "wall" }}>
         <mesh receiveShadow position-y={-10} rotation-x={Math.PI * -0.5}>
-          <planeGeometry args={[300, 300]} />
+          <boxGeometry args={[300, 300, 5]} />
           <meshStandardMaterial color={"purple"} />
         </mesh>
       </RigidBody>
@@ -46,16 +55,21 @@ export const CakeGame = () => {
 };
 
 const CakeLayer = ({ height, radius, color, position, isBottom }: CakeData) => {
+  const [dead, setDead] = useState(false);
   const body = useRef<RapierRigidBody | null>(null);
 
-  if (isBottom) {
-    useFollowCursor({ ref: body });
-  }
+  useFollowCursor({ ref: body, lockY: !isBottom, disabled: dead });
 
   return (
     <group position={position}>
       <RigidBody
-        gravityScale={isBottom ? 0 : 1}
+        onCollisionEnter={({ other }: any) => {
+          const object = other.rigidBodyObject?.userData as RigidBodyData;
+          if (object?.type === "wall") {
+            setDead(true);
+          }
+        }}
+        gravityScale={isBottom ? 0 : 2}
         dominanceGroup={isBottom ? 1 : 0}
         ref={body}
         type={isBottom ? "kinematicPosition" : "dynamic"}

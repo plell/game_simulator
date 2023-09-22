@@ -73,7 +73,7 @@ export const experienceProperties: Record<number, ExperienceProps> = {
     cameraControls:false
   },
   4: {
-    cameraPosition: new Vector3(0, 10, 30),
+    cameraPosition: new Vector3(0, 10, 40),
     cameraTarget: new Vector3(0, 0, 0),
     gamePosition: new Vector3(0, 0, 0),
     title: 'Cake Drop',

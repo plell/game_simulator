@@ -15,6 +15,7 @@ import { Earth } from "./components/Games/Earth";
 import { CameraControls } from "@react-three/drei";
 import { TempoGame } from "./components/Games/TempoGame";
 import { CakeGame } from "./components/Games/CakeGame";
+import styled from "styled-components";
 
 const CameraController = () => {
   const cameraControlsRef = useRef<CameraControls | null>(null);
@@ -80,8 +81,9 @@ const App = () => {
 
   return (
     <>
-      <Browser />
+      <Anchor id='anchor' />
 
+      <Browser />
       <Leva />
       <Canvas
         shadows
@@ -110,5 +112,13 @@ const App = () => {
     </>
   );
 };
+
+const Anchor = styled.div`
+  position: absolute;
+  pointer-events: none;
+  user-select: none;
+  height: 100%;
+  width: 100%;
+`;
 
 export default App;
