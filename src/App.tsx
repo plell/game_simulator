@@ -14,6 +14,7 @@ import { Bloom, EffectComposer } from "@react-three/postprocessing";
 import { Earth } from "./components/Games/Earth";
 import { CameraControls } from "@react-three/drei";
 import { TempoGame } from "./components/Games/TempoGame";
+import { CakeGame } from "./components/Games/CakeGame";
 
 const CameraController = () => {
   const cameraControlsRef = useRef<CameraControls | null>(null);
@@ -60,12 +61,21 @@ const CameraController = () => {
 
 const App = () => {
   const game = useGame((s) => s.game);
+  const physicsRef = useRef<any>(null);
+
+  // useEffect(() => {
+  //   const gravity = experienceProperties[game]?.gravity;
+  //   if (physicsRef && gravity) {
+  //     physicsRef.current.
+  //   }
+  // },[game])
 
   const games: Record<number, any> = {
     0: <CrocGame />,
     1: <SpaceGame />,
     2: <Earth />,
     3: <TempoGame />,
+    4: <CakeGame />,
   };
 
   return (
@@ -94,7 +104,7 @@ const App = () => {
           </EffectComposer>
 
           <CameraController />
-          <Physics gravity={[0, 0, 0]}>{games[game]}</Physics>
+          <Physics gravity={[0, -40, 0]}>{games[game]}</Physics>
         </Suspense>
       </Canvas>
     </>

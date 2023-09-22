@@ -1,9 +1,15 @@
-import { CameraControls, useTexture } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { useEffect, useMemo, useRef } from "react";
 import { DoubleSide, Group, Light, Mesh, MeshStandardMaterial } from "three";
 import useGame from "../../../Stores/useGame";
 import { experienceProperties } from "../../../Stores/constants";
+import {
+  bumpMapTexture,
+  cloudsMapTexture,
+  earthMapTexture,
+  galaxyMapTexture,
+  waterMapTexture,
+} from "../assets";
 
 const EARTH_RADIUS = 6;
 
@@ -14,9 +20,6 @@ export const Earth = () => {
   const cloudsRef = useRef<THREE.Mesh | null>(null);
 
   const game = useGame((s) => s.game);
-
-  const galaxyMapTexture = useTexture("textures/earth/galaxy.png");
-  const cloudsMapTexture = useTexture("textures/earth/clouds.png");
 
   useFrame(() => {
     if (groupRef.current) {
@@ -70,11 +73,6 @@ export const Earth = () => {
 };
 
 const EarthMaterial = () => {
-  // Load the textures
-  const earthMapTexture = useTexture("textures/earth/earth.jpeg");
-  const bumpMapTexture = useTexture("textures/earth/bump.jpeg");
-  const waterMapTexture = useTexture("textures/earth/water.png");
-
   // Create the material
   const material = useMemo(
     () =>
