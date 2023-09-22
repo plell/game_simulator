@@ -1,9 +1,5 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
-import {
-  Group,
-  MeshBasicMaterial,
-  Vector3
-} from "three";
+import { Group, MeshBasicMaterial, Vector3 } from "three";
 
 import { SpriteAnimator } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
@@ -59,13 +55,16 @@ export const Enemy = (props: Player) => {
 
   const [flipX, setFlipX] = useState(true);
 
-  const health = useMemo(() => enemies[props.id]?.health || 0, [enemies, props.id]);
+  const health = useMemo(
+    () => enemies[props.id]?.health || 0,
+    [enemies, props.id]
+  );
 
   const ouch = useOuch(health);
 
   let timeout: Timeout = null;
 
-  const startPosition = useMemo(() =>  getEnemyStartPosition(), []);
+  const startPosition = useMemo(() => getEnemyStartPosition(), []);
 
   useEffect(() => {
     if (!enemies[props.id]) {
@@ -182,7 +181,7 @@ export const Enemy = (props: Player) => {
         return;
       }
 
-      const {tempo} = useGame.getState()
+      const { tempo } = useGame.getState();
 
       const movement = getMovement(
         currentPosition,
@@ -215,6 +214,7 @@ export const Enemy = (props: Player) => {
 
       <RigidBody
         ref={body}
+        gravityScale={0}
         restitution={1}
         friction={1}
         position={startPosition}

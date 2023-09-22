@@ -7,6 +7,7 @@ const reuseableVec = new Vector3();
 
 type Props = {
     ref: React.MutableRefObject<Group | RapierRigidBody | null>
+    strength?: number
 }
 
 const tiltStrength = 0.2
@@ -15,14 +16,14 @@ const positionOrigin = new Vector3()
 const quaternion = new Quaternion()
 const euler = new Euler()
 
-export const useFollowCursor = ({ ref }: Props) => {
+export const useFollowCursor = ({ ref, strength = 20 }: Props) => {
 
     useFrame(({ mouse }) => {
         if (ref?.current) {
 
             if (ref.current instanceof RapierRigidBody) {
-                const newX = mouse.x*20
-                const newY = mouse.y*10
+                const newX = mouse.x * strength
+                const newY = mouse.y * strength
                 const translation = ref.current.translation();
                 positionOrigin.set(translation.x,translation.y,translation.z)
                 const position = reuseableVec.set(newX, newY, 0)

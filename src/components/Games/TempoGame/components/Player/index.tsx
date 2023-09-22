@@ -112,8 +112,8 @@ export const Player = () => {
     if (nextWorldTile) {
       teleport();
     } else if (!pause && body.current) {
-      const x = (mouse.x * viewport.width) / 2;
-      const y = (mouse.y * viewport.height) / 2;
+      const x = mouse.x * viewport.width * 1.5;
+      const y = mouse.y * viewport.height * 1.5;
 
       const currentTranslation = body.current.translation();
 
@@ -164,6 +164,7 @@ export const Player = () => {
 
       <RigidBody
         ref={body}
+        gravityScale={0}
         type='dynamic'
         position={[0, 0, 0]}
         lockRotations

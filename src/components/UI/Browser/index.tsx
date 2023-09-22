@@ -71,8 +71,10 @@ const Button = styled.div`
   font-size: 70px;
   color: #fff;
   transition: color 0.2s;
+
+  border-radius: 100%;
   &:hover {
-    color: #ea0a8e;
+    color: #f1f1f1;
   }
 `;
 
@@ -86,7 +88,6 @@ const Overlay = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-
   user-select: none;
   pointer-events: none;
   font-size: 40px;

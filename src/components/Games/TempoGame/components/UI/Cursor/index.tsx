@@ -8,8 +8,8 @@ export const Cursor = () => {
   useFrame(({ mouse, viewport, clock }) => {
     if (ref?.current) {
       const elapsedTime = clock.getElapsedTime();
-      const x = (mouse.x * viewport.width) / 2;
-      const y = (mouse.y * viewport.height) / 2;
+      const x = mouse.x * viewport.width * 1.5;
+      const y = mouse.y * viewport.height * 1.5;
       ref.current.position.set(x, y, 0);
 
       const scale = (Math.cos(elapsedTime * 6) + 4) / 6;

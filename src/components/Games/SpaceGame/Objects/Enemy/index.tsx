@@ -4,6 +4,7 @@ import { useEffect, useLayoutEffect, useRef } from "react";
 import { Timeout } from "../../../CrocGame/Objects/Croc";
 import { useGLTF } from "@react-three/drei";
 import { Vector3 } from "three";
+import { useFrame } from "@react-three/fiber";
 
 const movementInterval = 1000;
 
@@ -17,6 +18,8 @@ const getRandomY = () => {
   return 20 + Math.random() * 14 - 14 / 2;
 };
 
+const reuseableVector3 = new Vector3();
+
 export const Enemy = () => {
   const body = useRef<RapierRigidBody | null>(null);
   let timeout: Timeout = null;
@@ -29,38 +32,53 @@ export const Enemy = () => {
     mesh.receiveShadow = true;
   });
 
-  useEffect(() => {
-    doMovementTimeout();
+  // useEffect(() => {
+  //   doMovementTimeout();
 
-    return function cleanup() {
-      if (timeout) {
-        clearTimeout(timeout);
-      }
-    };
-  }, []);
+  //   return function cleanup() {
+  //     if (timeout) {
+  //       clearTimeout(timeout);
+  //     }
+  //   };
+  // }, []);
 
-  const doMovementTimeout = () => {
-    timeout = setTimeout(() => {
-      applyForce();
-      doMovementTimeout();
-    }, movementInterval);
-  };
+  // const doMovementTimeout = () => {
+  //   timeout = setTimeout(() => {
+  //     applyForce();
+  //     doMovementTimeout();
+  //   }, movementInterval);
+  // };
 
-  const applyForce = () => {
+  // const applyForce = () => {
+  //   if (body.current) {
+  //     const impulse = { x: getRandomX() / width, y: -1, z: 0 };
+
+  //     body.current.applyImpulse(impulse, true);
+
+  //     if (body.current.translation().y < -10) {
+  //       body.current.setTranslation(new Vector3(0, 10, 0), true);
+  //     }
+  //   }
+  // };
+
+  useFrame(({ clock }) => {
     if (body.current) {
-      const impulse = { x: getRandomX() / width, y: -1, z: 0 };
-
-      body.current.applyImpulse(impulse, true);
-
-      if (body.current.translation().y < -10) {
-        body.current.setTranslation(new Vector3(0, 10, 0), true);
-      }
+      const translation = body.current.translation();
+      const elapsedTime = clock.getElapsedTime();
+      body.current.setTranslation(
+        reuseableVector3.set(
+          translation.x + Math.sin(elapsedTime) * 0.2,
+          translation.y + -0.1,
+          translation.z
+        ),
+        true
+      );
     }
-  };
+  });
 
   return (
     <group position={[getRandomX(), getRandomY(), 0]}>
-      <RigidBody ref={body} mass={0.4}>
+      <RigidBody ref={body} gravityScale={0}>
         <primitive
           rotation-y={Math.PI * -0.5}
           rotation-x={Math.PI * 0.5}

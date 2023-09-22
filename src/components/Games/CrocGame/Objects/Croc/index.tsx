@@ -81,8 +81,10 @@ export const Croc = ({ position, id, delay }: Props) => {
   return (
     <RigidBody
       ref={body}
+      gravityScale={0}
       position={position}
       type='dynamic'
+      colliders={"cuboid"}
       userData={{ type: "croc", id }}
     >
       <CrocModel disabled={true} id={id} />
