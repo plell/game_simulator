@@ -104,7 +104,7 @@ const App = () => {
           </EffectComposer>
 
           <CameraController />
-          <Physics gravity={[0, -40, 0]}>{games[game]}</Physics>
+          <Physics gravity={[0, 0, 0]}>{games[game]}</Physics>
         </Suspense>
       </Canvas>
     </>

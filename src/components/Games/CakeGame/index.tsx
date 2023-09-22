@@ -24,8 +24,6 @@ const cakesLayers: CakeData[] = [
 
 export const CakeGame = () => {
   const ref = useRef<Group | null>(null);
-  const cloudRef = useRef<Group | null>(null);
-  const cloudRef2 = useRef<Group | null>(null);
 
   const game = useGame((s) => s.game);
 
