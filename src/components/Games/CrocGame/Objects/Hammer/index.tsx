@@ -19,23 +19,25 @@ export const Hammer = () => {
   useFollowCursor({ ref });
 
   return (
-    <group ref={ref} position={[0, 3, 4]} rotation-x={Math.PI * -0.25}>
-      <group position-y={2}>
-        <mesh castShadow geometry={geometry}>
-          <meshStandardMaterial color='blue' transparent opacity={0.6} />
-        </mesh>
-        <mesh castShadow position-y={-1} geometry={geometry}>
-          <cylinderGeometry args={[1, 1, 1]} />
-          <meshStandardMaterial color='yellow' transparent opacity={0.6} />
-        </mesh>
-        <mesh castShadow position-y={-2} geometry={geometry}>
-          <cylinderGeometry args={[1, 1, 1]} />
-          <meshStandardMaterial color='red' transparent opacity={0.6} />
-        </mesh>
-        <mesh castShadow position-y={-3.5}>
-          <cylinderGeometry args={[0.2, 0.2, 2]} />
-          <meshStandardMaterial color='white' transparent opacity={0.6} />
-        </mesh>
+    <group position={[0, 5, 4]}>
+      <group ref={ref} rotation-x={Math.PI * -0.25}>
+        <group position-y={2}>
+          <mesh castShadow geometry={geometry}>
+            <meshStandardMaterial color='blue' transparent opacity={0.6} />
+          </mesh>
+          <mesh castShadow position-y={-1} geometry={geometry}>
+            <cylinderGeometry args={[1, 1, 1]} />
+            <meshStandardMaterial color='yellow' transparent opacity={0.6} />
+          </mesh>
+          <mesh castShadow position-y={-2} geometry={geometry}>
+            <cylinderGeometry args={[1, 1, 1]} />
+            <meshStandardMaterial color='red' transparent opacity={0.6} />
+          </mesh>
+          <mesh castShadow position-y={-3.5}>
+            <cylinderGeometry args={[0.2, 0.2, 2]} />
+            <meshStandardMaterial color='white' transparent opacity={0.6} />
+          </mesh>
+        </group>
       </group>
     </group>
   );

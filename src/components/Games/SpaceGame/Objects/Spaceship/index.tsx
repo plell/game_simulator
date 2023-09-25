@@ -21,14 +21,7 @@ export const Spaceship = ({ position }: Props) => {
     mesh.receiveShadow = true;
   });
 
-  useFollowCursor({ ref: playerRef });
-
-  useFrame(({ clock }) => {
-    const elapsedTime = clock.getElapsedTime();
-    if (playerRef.current) {
-      playerRef.current.position.y = Math.sin(elapsedTime * 1.5);
-    }
-  });
+  useFollowCursor({ ref: playerRef, lockY: false });
 
   return (
     <group ref={ref} position={position}>

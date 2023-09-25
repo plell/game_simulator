@@ -1,6 +1,6 @@
-import { Fragment, useMemo, useRef, useState } from "react";
-import { Group, Vector3 } from "three";
-import { Cloud, Select, Stars } from "@react-three/drei";
+import { useMemo, useRef } from "react";
+import { Group } from "three";
+import { Cloud } from "@react-three/drei";
 import useGame from "../../../Stores/useGame";
 import { experienceProperties } from "../../../Stores/constants";
 
@@ -71,7 +71,7 @@ export const SpaceGame = () => {
       {birds}
 
       <mesh receiveShadow position-z={-10}>
-        <planeGeometry args={[45, 40]} />
+        <planeGeometry args={[85, 40]} />
         <meshStandardMaterial color={"skyblue"} />
       </mesh>
     </group>

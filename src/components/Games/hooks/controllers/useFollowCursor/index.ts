@@ -41,15 +41,13 @@ export const useFollowCursor = ({ ref, lockY, disabled, strength = 20 }: Props) 
             
             else {
                 const newX = mouse.x * 15
+                const newY = mouse.y * 2
                 const position = ref.current.position;
                 const rotation = ref.current.rotation;
-                const destination = reuseableVec.set(newX, position.y, position.z);
+                const destination = reuseableVec.set(newX, newY, position.z);
                 position.lerp(destination, 0.09);
                 rotation.y = (newX - position.x) * tiltStrength
-            }
-        
-            
-                
+            }       
         }
     });
 }

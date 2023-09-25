@@ -38,21 +38,22 @@ type ExperienceProps = {
   description: string
   instructions: string
   cameraControls: boolean
-  game:any
+  game: () => JSX.Element
 }
 
-export const experienceProperties: Record<number, ExperienceProps> = {
-  0: {
-    cameraPosition: new Vector3(150, 20, 16),
-    cameraTarget: new Vector3(150, 7, 0),
-    gamePosition: new Vector3(150, 0, 0),
-    title: 'Whac-a-croc',
-    description: 'Remember this one?',
-    instructions: 'Click to',
-    cameraControls: false,
-    game:CrocGame
+export const experienceProperties: ExperienceProps[] = [
+  {
+    cameraPosition: new Vector3(0, 0, 23),
+    cameraTarget: new Vector3(0, 0, 0),
+    gamePosition: new Vector3(0, 0, 0),
+    title: 'Earth',
+    description: 'Here you are.',
+    instructions: 'Drag to turn the world. Take a look around.',
+    cameraControls: true,
+    game: Earth
   },
-  1: {
+
+  {
     cameraPosition: new Vector3(0, 0, 23),
     cameraTarget: new Vector3(0, 0, 0),
     gamePosition: new Vector3(0, 0, 0),
@@ -62,17 +63,7 @@ export const experienceProperties: Record<number, ExperienceProps> = {
     cameraControls: false,
     game: SpaceGame
   },
-  2: {
-    cameraPosition: new Vector3(0, 0, 23),
-    cameraTarget: new Vector3(0, 0, 0),
-    gamePosition: new Vector3(0, 0, 0),
-    title: 'Earth',
-    description: 'Here we are.',
-    instructions: 'Drag to turn the world. Take a look around.',
-    cameraControls: true,
-    game: Earth
-  },
-  3: {
+  {
     cameraPosition: new Vector3(0, 0, 60),
     cameraTarget: new Vector3(0, 0, 0),
     gamePosition: new Vector3(0, 0, 0),
@@ -82,7 +73,18 @@ export const experienceProperties: Record<number, ExperienceProps> = {
     cameraControls: false,
     game:TempoGame
   },
-  4: {
+  
+  {
+    cameraPosition: new Vector3(0, 20, 16),
+    cameraTarget: new Vector3(0, 7, 0),
+    gamePosition: new Vector3(0, 0, 0),
+    title: 'Whac-a-croc',
+    description: 'Remember this one?',
+    instructions: 'Click to',
+    cameraControls: false,
+    game:CrocGame
+  },
+  {
     cameraPosition: new Vector3(0, 10, 40),
     cameraTarget: new Vector3(0, 0, 0),
     gamePosition: new Vector3(0, 0, 0),
@@ -91,6 +93,7 @@ export const experienceProperties: Record<number, ExperienceProps> = {
     instructions: 'The player moves toward the cursor. Click to drop a note, bait enemies toward notes to gain points.',
     cameraControls: false,
     game: CakeGame
-  }
+  },
   
-}
+  
+]

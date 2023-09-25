@@ -16,12 +16,24 @@ import { Terrain } from "./components/Terrain";
 import { Cursor } from "./components/UI/Cursor";
 
 import { experienceProperties } from "../../../Stores/constants";
+import { useStartButton } from "../hooks/useStartButton";
+import { Loading } from "../common/Loading";
 
 let enemyGeneratorTimeout: Interval = null;
 
 const generatorSpeed = 2000;
 
 export const TempoGame = () => {
+  // const { ready } = useStartButton();
+
+  // if (!ready) {
+  //   return <Loading />;
+  // }
+
+  return <TempoGameCore />;
+};
+
+const TempoGameCore = () => {
   const enemies = useGame((s) => s.enemies);
   const players = useGame((s) => s.players);
 

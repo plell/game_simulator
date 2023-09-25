@@ -13,7 +13,7 @@ import { SnapRadius } from "./Effects/SnapToRadius";
 
 import { useOuch } from "../hooks/useOuch";
 
-export const playerSpeed = 0.2;
+export const playerSpeed = 0.15;
 
 const reuseableVector3a = new Vector3();
 const reuseableVector3b = new Vector3();

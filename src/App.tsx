@@ -1,22 +1,19 @@
-import { Canvas, extend, useFrame, useThree } from "@react-three/fiber";
+import { Canvas, useThree } from "@react-three/fiber";
 
 import { Physics } from "@react-three/rapier";
 
 import { Suspense, useEffect, useRef } from "react";
-import { Leva, useControls } from "leva";
-import { CrocGame } from "./components/Games/CrocGame";
+import { Leva } from "leva";
 
 import { Browser } from "./components/UI/Browser";
 import useGame from "./Stores/useGame";
 import { experienceProperties } from "./Stores/constants";
-import { SpaceGame } from "./components/Games/SpaceGame";
+
 import { Bloom, EffectComposer } from "@react-three/postprocessing";
-import { Earth } from "./components/Games/Earth";
+
 import { CameraControls } from "@react-three/drei";
-import { TempoGame } from "./components/Games/TempoGame";
-import { CakeGame } from "./components/Games/CakeGame";
+
 import styled from "styled-components";
-import { Loading } from "./components/Games/common/Loading";
 
 const CameraController = () => {
   const cameraControlsRef = useRef<CameraControls | null>(null);
