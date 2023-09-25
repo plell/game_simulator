@@ -16,6 +16,7 @@ import { CameraControls } from "@react-three/drei";
 import { TempoGame } from "./components/Games/TempoGame";
 import { CakeGame } from "./components/Games/CakeGame";
 import styled from "styled-components";
+import { Loading } from "./components/Games/common/Loading";
 
 const CameraController = () => {
   const cameraControlsRef = useRef<CameraControls | null>(null);
@@ -62,22 +63,8 @@ const CameraController = () => {
 
 const App = () => {
   const game = useGame((s) => s.game);
-  const physicsRef = useRef<any>(null);
 
-  // useEffect(() => {
-  //   const gravity = experienceProperties[game]?.gravity;
-  //   if (physicsRef && gravity) {
-  //     physicsRef.current.
-  //   }
-  // },[game])
-
-  const games: Record<number, any> = {
-    0: <CrocGame />,
-    1: <SpaceGame />,
-    2: <Earth />,
-    3: <TempoGame />,
-    4: <CakeGame />,
-  };
+  const GameComponent = experienceProperties[game]?.game;
 
   return (
     <>
@@ -96,7 +83,7 @@ const App = () => {
         camera={{
           fov: 45,
           near: 0.1,
-          far: 200,
+          far: 3000,
           position: experienceProperties[0].cameraPosition,
         }}
       >
@@ -106,7 +93,9 @@ const App = () => {
           </EffectComposer>
 
           <CameraController />
-          <Physics gravity={[0, -40, 0]}>{games[game]}</Physics>
+          <Physics gravity={[0, -40, 0]}>
+            {GameComponent && <GameComponent />}
+          </Physics>
         </Suspense>
       </Canvas>
     </>

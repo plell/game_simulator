@@ -88,20 +88,29 @@ export const TempoGame = () => {
         const discovered = discoveredWorldTiles.includes(t.id);
         const hasShrine = !!t.shrine;
         return (
-          <TileIcon
-            key={`tile-${i}`}
-            onPointerDown={() =>
-              setNextWorldTile({
-                worldTile: t,
-                relativeDirection: "top",
-              })
-            }
-            discovered={discovered}
-            selected={selected}
-            background={t.color}
-          >
-            {hasShrine && <MdCake />}
-          </TileIcon>
+          <group key={`tile-${i}`} position={[column, -row, 5]}>
+            {/* {hasShrine && (
+              <mesh position-z={1} position-x={-0.2}>
+                <boxGeometry args={[0.3, 0.3]} />
+                <meshStandardMaterial color={"#ffffff"} />
+              </mesh>
+            )} */}
+            <mesh
+              onPointerDown={() =>
+                setNextWorldTile({
+                  worldTile: t,
+                  relativeDirection: "top",
+                })
+              }
+            >
+              <boxGeometry args={[0.6, 0.6, 0.1]} />
+              <meshStandardMaterial
+                color={selected ? "#ffffff" : discovered ? t.color : "#444"}
+                transparent
+                opacity={selected ? 1 : 0.8}
+              />
+            </mesh>
+          </group>
         );
       }),
     [worldTile]
@@ -162,9 +171,7 @@ export const TempoGame = () => {
         return <Enemy key={`enemy-${i}`} {...e} />;
       })}
 
-      {/* <MapWrapWrap>
-        <MapWrap width={(columnLimit + 1) * 14}>{mapTiles}</MapWrap>
-      </MapWrapWrap> */}
+      <group position={[20, 20, 0]}>{mapTiles}</group>
     </group>
   );
 };

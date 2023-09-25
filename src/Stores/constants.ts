@@ -1,4 +1,9 @@
 import { Vector3 } from "three";
+import { CakeGame } from "../components/Games/CakeGame";
+import { TempoGame } from "../components/Games/TempoGame";
+import { Earth } from "../components/Games/Earth";
+import { SpaceGame } from "../components/Games/SpaceGame";
+import { CrocGame } from "../components/Games/CrocGame";
 
 
 export const debounce = (fn: () => void, ms = 300) => {
@@ -33,6 +38,7 @@ type ExperienceProps = {
   description: string
   instructions: string
   cameraControls: boolean
+  game:any
 }
 
 export const experienceProperties: Record<number, ExperienceProps> = {
@@ -43,7 +49,8 @@ export const experienceProperties: Record<number, ExperienceProps> = {
     title: 'Whac-a-croc',
     description: 'Remember this one?',
     instructions: 'Click to',
-    cameraControls:false
+    cameraControls: false,
+    game:CrocGame
   },
   1: {
     cameraPosition: new Vector3(0, 0, 23),
@@ -52,16 +59,18 @@ export const experienceProperties: Record<number, ExperienceProps> = {
     title: 'Feed Two Birds with One Scone',
     description: 'The idea here is to feed the birds.',
     instructions: 'Click to',
-    cameraControls:false
+    cameraControls: false,
+    game: SpaceGame
   },
   2: {
     cameraPosition: new Vector3(0, 0, 23),
     cameraTarget: new Vector3(0, 0, 0),
     gamePosition: new Vector3(0, 0, 0),
     title: 'Earth',
-    description: 'There we are.',
+    description: 'Here we are.',
     instructions: 'Drag to turn the world. Take a look around.',
-    cameraControls:true
+    cameraControls: true,
+    game: Earth
   },
   3: {
     cameraPosition: new Vector3(0, 0, 60),
@@ -70,7 +79,8 @@ export const experienceProperties: Record<number, ExperienceProps> = {
     title: 'Tempo Sneakers',
     description: 'A music adventure game.',
     instructions: 'The player moves toward the cursor. Click to drop a note, bait enemies toward notes to gain points.',
-    cameraControls:false
+    cameraControls: false,
+    game:TempoGame
   },
   4: {
     cameraPosition: new Vector3(0, 10, 40),
@@ -79,7 +89,8 @@ export const experienceProperties: Record<number, ExperienceProps> = {
     title: 'Cake Drop',
     description: 'Balance the cake.',
     instructions: 'The player moves toward the cursor. Click to drop a note, bait enemies toward notes to gain points.',
-    cameraControls:false
+    cameraControls: false,
+    game: CakeGame
   }
   
 }

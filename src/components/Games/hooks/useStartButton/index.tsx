@@ -28,8 +28,11 @@ export const useStartButton = () => {
     button.style.justifyContent = "center";
     button.style.alignItems = "center";
     button.style.borderRadius = "100%";
-    button.style.background = "#ffffff";
-    button.style.fontSize = "30px";
+    button.style.border = "1px solid #ffffff99";
+
+    // button.style.background = "#ffffff22";
+    button.style.color = "#f1f1f1";
+    button.style.fontSize = "24px";
     button.style.height = "200px";
     button.style.width = "200px";
 
