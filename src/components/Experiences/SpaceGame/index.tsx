@@ -37,7 +37,7 @@ export const SpaceGame = () => {
   const birds = useMemo(() => {
     const b: any = [];
 
-    for (let i = 0; i < 20; i++) {
+    for (let i = 0; i < 2; i++) {
       b.push(<Enemy key={i + "-bird"} />);
     }
 
@@ -67,10 +67,10 @@ export const SpaceGame = () => {
           segments={20} // Number of particles
         />
       </group>
+
       <Spaceship position={[0, -6, 0]} />
 
       {birds}
-      <Goal />
 
       <mesh receiveShadow position-z={-10}>
         <planeGeometry args={[85, 40]} />

@@ -2,7 +2,7 @@ import { Fragment, useMemo, useRef } from "react";
 import { Group, Vector3 } from "three";
 import { Croc } from "./Objects/Croc";
 import { Select } from "@react-three/drei";
-import Counter from "./Counter";
+import Counter from "../common/Counter";
 import useGame from "../../../Stores/useGame";
 import Hammer from "./Objects/Hammer";
 import Wall from "./Objects/Wall";
@@ -28,11 +28,7 @@ export const CrocGame = () => {
       m.push(
         <Fragment key={i + "-croc"}>
           <CrocArch position={archPosition} />
-          <Croc
-            id={i + 1}
-            delay={Math.floor(Math.random())}
-            position={defaultPosition}
-          />
+          <Croc id={i + 1} position={defaultPosition} />
         </Fragment>
       );
     }
@@ -52,7 +48,6 @@ export const CrocGame = () => {
 
   return (
     <group ref={ref} position={experienceProperties[game]?.gamePosition}>
-      {/* <Boundaries /> */}
       <Lights />
 
       <Hammer />

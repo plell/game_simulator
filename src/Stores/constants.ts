@@ -1,9 +1,9 @@
 import { Vector3 } from "three";
-import { CakeGame } from "../components/Games/CakeGame";
-import { TempoGame } from "../components/Games/TempoGame";
-import { Earth } from "../components/Games/Earth";
-import { SpaceGame } from "../components/Games/SpaceGame";
-import { CrocGame } from "../components/Games/CrocGame";
+import { CakeGame } from "../components/Experiences/CakeGame";
+import { TempoGame } from "../components/Experiences/TempoGame";
+import { Earth } from "../components/Experiences/Earth";
+import { SpaceGame } from "../components/Experiences/SpaceGame";
+import { CrocGame } from "../components/Experiences/CrocGame";
 
 
 export const debounce = (fn: () => void, ms = 300) => {

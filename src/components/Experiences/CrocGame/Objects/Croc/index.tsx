@@ -1,12 +1,12 @@
 import { useFrame } from "@react-three/fiber";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Box3, Group, Mesh, Vector3 } from "three";
+import { Group, Mesh, Vector3 } from "three";
 import useGame from "../../../../../Stores/useGame";
 import { CrocModel } from "./model";
+import { useObjectsIntersect } from "../../../hooks/useObjectsIntersect";
 
 type Props = {
   position: Vector3;
-  delay: number;
   id: number;
 };
 
@@ -16,18 +16,12 @@ export type Timeout = ReturnType<typeof setTimeout> | null;
 
 const movementRange = 4;
 
-export const Croc = ({ position, id, delay }: Props) => {
+export const Croc = ({ position, id }: Props) => {
   const crocGroupRef = useRef<Group | null>(null);
-
   const wallRef = useRef<Mesh | null>(null);
-
-  const crocBoundingBox = useMemo(() => new Box3(), []);
-  const wallBoundingBox = useMemo(() => new Box3(), []);
 
   const [speed, setSpeed] = useState(0);
   const [direction, setDirection] = useState(1);
-
-  const [biting, setBiting] = useState(false);
 
   const setHit = useGame((s) => s.setHit);
   const hit = useGame((s) => s.hit);
@@ -46,12 +40,14 @@ export const Croc = ({ position, id, delay }: Props) => {
     }
   }, [bonked]);
 
+  const { objectsIntersect } = useObjectsIntersect(crocGroupRef, wallRef);
+
   useEffect(() => {
-    if (biting) {
+    if (objectsIntersect) {
       damageUp();
     }
     setDirection(direction * -1);
-  }, [biting]);
+  }, [objectsIntersect]);
 
   const takeDamage = () => {
     console.log("ouch!");
@@ -82,21 +78,6 @@ export const Croc = ({ position, id, delay }: Props) => {
         crocPosition.y,
         crocPosition.z
       );
-
-      crocBoundingBox.setFromObject(crocGroupRef.current);
-    }
-
-    if (wallRef.current) {
-      wallBoundingBox.setFromObject(wallRef.current);
-    }
-
-    // do bite
-    if (crocBoundingBox.intersectsBox(wallBoundingBox)) {
-      if (!biting) {
-        setBiting(true);
-      }
-    } else if (biting) {
-      setBiting(false);
     }
   });
 
@@ -108,7 +89,7 @@ export const Croc = ({ position, id, delay }: Props) => {
 
       <mesh ref={wallRef} position={[position.x, position.y, 1]}>
         <boxGeometry />
-        <meshStandardMaterial color={"red"} />
+        <meshStandardMaterial transparent opacity={0} />
       </mesh>
     </group>
   );

@@ -4,6 +4,7 @@ import { Group, Vector3 } from "three";
 import { useFollowCursor } from "../../../hooks/controllers/useFollowCursor";
 import { Projectiles } from "../../../common/Projectiles";
 import { useGLTF } from "@react-three/drei";
+import { Goal } from "../Goal";
 
 type Props = {
   position: [x: number, y: number, z: number];
@@ -24,18 +25,22 @@ export const Spaceship = ({ position }: Props) => {
   useFollowCursor({ ref: playerRef, lockY: false });
 
   return (
-    <group ref={ref} position={position}>
-      <group ref={playerRef}>
-        <primitive
-          rotation-y={Math.PI * -0.5}
-          rotation-x={Math.PI * 0.5}
-          object={model.scene.clone()}
-          scale={0.2}
-        />
+    <>
+      <group ref={ref} position={position}>
+        <group ref={playerRef}>
+          <primitive
+            rotation-y={Math.PI * -0.5}
+            rotation-x={Math.PI * 0.5}
+            object={model.scene.clone()}
+            scale={0.2}
+          />
+        </group>
+
+        <Projectiles player={playerRef} launchPosition={[0, 2, 0]} />
       </group>
 
-      <Projectiles player={playerRef} launchPosition={[0, 2, 0]} />
-    </group>
+      <Goal player={playerRef} />
+    </>
   );
 };
 
