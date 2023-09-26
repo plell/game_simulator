@@ -1,8 +1,7 @@
 import { useFrame } from "@react-three/fiber";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Group, Vector3 } from "three";
+import { Box3, Group, Mesh, Vector3 } from "three";
 import useGame from "../../../../../Stores/useGame";
-import { RapierRigidBody, RigidBody } from "@react-three/rapier";
 import { CrocModel } from "./model";
 
 type Props = {
@@ -12,16 +11,24 @@ type Props = {
 };
 
 const reuseableVec = new Vector3();
-const reuseableVec2 = new Vector3();
 
 export type Timeout = ReturnType<typeof setTimeout> | null;
 
+const movementRange = 4;
+
 export const Croc = ({ position, id, delay }: Props) => {
-  const body = useRef<RapierRigidBody | null>(null);
+  const crocGroupRef = useRef<Group | null>(null);
+
+  const wallRef = useRef<Mesh | null>(null);
+
+  const crocBoundingBox = useMemo(() => new Box3(), []);
+  const wallBoundingBox = useMemo(() => new Box3(), []);
+
   const [speed, setSpeed] = useState(0);
   const [direction, setDirection] = useState(1);
 
-  const bite = useGame((s) => s.bite);
+  const [biting, setBiting] = useState(false);
+
   const setHit = useGame((s) => s.setHit);
   const hit = useGame((s) => s.hit);
   const damageUp = useGame((s) => s.damageUp);
@@ -40,11 +47,11 @@ export const Croc = ({ position, id, delay }: Props) => {
   }, [bonked]);
 
   useEffect(() => {
-    if (bite === id) {
+    if (biting) {
       damageUp();
-      setDirection(direction * -1);
     }
-  }, [bite]);
+    setDirection(direction * -1);
+  }, [biting]);
 
   const takeDamage = () => {
     console.log("ouch!");
@@ -52,43 +59,58 @@ export const Croc = ({ position, id, delay }: Props) => {
   };
 
   const changeSpeed = useCallback(() => {
-    const random = Math.floor(Math.random() * 12) * direction + 2;
+    const random = Math.floor(Math.random() * 12) + 1;
     setSpeed(random);
   }, [direction]);
 
   useFrame(({ clock }) => {
-    if (body?.current) {
+    if (crocGroupRef?.current) {
       const elapsedTime = clock.getElapsedTime();
 
-      const z = Math.cos(elapsedTime * speed) * 4 + position.z;
+      const newZ =
+        Math.cos(elapsedTime * speed * 0.1) * movementRange + position.z;
 
-      const translation = body.current.translation();
-      const newPosition = reuseableVec.set(
-        translation.x,
-        translation.y,
-        translation.z
-      );
+      const crocPosition = crocGroupRef?.current.position;
 
-      newPosition.lerp(
-        reuseableVec2.set(newPosition.x, newPosition.y, z),
+      crocPosition.lerp(
+        reuseableVec.set(crocPosition.x, crocPosition.y, newZ),
         0.03
       );
 
-      body.current.setTranslation(newPosition, true);
+      crocGroupRef.current.position.set(
+        crocPosition.x,
+        crocPosition.y,
+        crocPosition.z
+      );
+
+      crocBoundingBox.setFromObject(crocGroupRef.current);
+    }
+
+    if (wallRef.current) {
+      wallBoundingBox.setFromObject(wallRef.current);
+    }
+
+    // do bite
+    if (crocBoundingBox.intersectsBox(wallBoundingBox)) {
+      if (!biting) {
+        setBiting(true);
+      }
+    } else if (biting) {
+      setBiting(false);
     }
   });
 
   return (
-    <RigidBody
-      ref={body}
-      gravityScale={0}
-      position={position}
-      type='dynamic'
-      colliders={"cuboid"}
-      userData={{ type: "croc", id }}
-    >
-      <CrocModel disabled={true} id={id} />
-    </RigidBody>
+    <group>
+      <group ref={crocGroupRef} position={position}>
+        <CrocModel disabled={true} id={id} />
+      </group>
+
+      <mesh ref={wallRef} position={[position.x, position.y, 1]}>
+        <boxGeometry />
+        <meshStandardMaterial color={"red"} />
+      </mesh>
+    </group>
   );
 };
 

@@ -4,7 +4,6 @@ import { Croc } from "./Objects/Croc";
 import { Select } from "@react-three/drei";
 import Counter from "./Counter";
 import useGame from "../../../Stores/useGame";
-import Boundaries from "./Boundaries";
 import Hammer from "./Objects/Hammer";
 import Wall from "./Objects/Wall";
 import CrocArch from "./Objects/Arch";
@@ -53,7 +52,7 @@ export const CrocGame = () => {
 
   return (
     <group ref={ref} position={experienceProperties[game]?.gamePosition}>
-      <Boundaries />
+      {/* <Boundaries /> */}
       <Lights />
 
       <Hammer />

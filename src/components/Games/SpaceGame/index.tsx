@@ -7,6 +7,7 @@ import { experienceProperties } from "../../../Stores/constants";
 import { Spaceship } from "./Objects/Spaceship";
 import { Enemy } from "./Objects/Enemy";
 import { useFrame } from "@react-three/fiber";
+import { Goal } from "./Objects/Goal";
 
 export const SpaceGame = () => {
   const ref = useRef<Group | null>(null);
@@ -69,6 +70,7 @@ export const SpaceGame = () => {
       <Spaceship position={[0, -6, 0]} />
 
       {birds}
+      <Goal />
 
       <mesh receiveShadow position-z={-10}>
         <planeGeometry args={[85, 40]} />
