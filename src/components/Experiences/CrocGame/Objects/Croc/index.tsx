@@ -4,6 +4,7 @@ import { Group, Mesh, Vector3 } from "three";
 import useGame from "../../../../../Stores/useGame";
 import { CrocModel } from "./model";
 import { useObjectsIntersect } from "../../../hooks/useObjectsIntersect";
+import { ImpactCloud } from "../../../common/ImpactCloud";
 
 type Props = {
   position: Vector3;

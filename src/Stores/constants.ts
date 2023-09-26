@@ -5,6 +5,12 @@ import { Earth } from "../components/Experiences/Earth";
 import { SpaceGame } from "../components/Experiences/SpaceGame";
 import { CrocGame } from "../components/Experiences/CrocGame";
 
+const { origin } = window.location
+
+export const isDevelopment = !!(
+  origin === 'http://localhost:3000' ||
+  origin === 'http://localhost:5173'
+)
 
 export const debounce = (fn: () => void, ms = 300) => {
   let timeoutId: ReturnType<typeof setTimeout>;

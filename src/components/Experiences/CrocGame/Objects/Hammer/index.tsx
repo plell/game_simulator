@@ -4,6 +4,7 @@ import { CylinderGeometry, Group, Vector3 } from "three";
 import useGame from "../../../../../Stores/useGame";
 import { RapierRigidBody, RigidBody } from "@react-three/rapier";
 import { useFollowCursor } from "../../../hooks/controllers/useFollowCursor";
+import { Fire } from "../../../common/Fire";
 
 type Props = {
   position: Vector3;

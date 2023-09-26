@@ -7,13 +7,15 @@ import { Leva } from "leva";
 
 import { Browser } from "./components/UI/Browser";
 import useGame from "./Stores/useGame";
-import { experienceProperties } from "./Stores/constants";
+import { experienceProperties, isDevelopment } from "./Stores/constants";
 
 import { Bloom, EffectComposer } from "@react-three/postprocessing";
 
 import { CameraControls } from "@react-three/drei";
+import { Perf } from "r3f-perf";
 
 import styled from "styled-components";
+import { LoadProgress } from "./components/Experiences/common/LoadProgress";
 
 const CameraController = () => {
   const cameraControlsRef = useRef<CameraControls | null>(null);
@@ -68,7 +70,8 @@ const App = () => {
       <Anchor id='anchor' />
 
       <Browser />
-      <Leva />
+      {isDevelopment && <Leva />}
+
       <Canvas
         shadows
         gl={
@@ -84,6 +87,7 @@ const App = () => {
           position: experienceProperties[0].cameraPosition,
         }}
       >
+        <Perf />
         <Suspense fallback={null}>
           <EffectComposer>
             <Bloom luminanceThreshold={1} mipmapBlur />

@@ -10,6 +10,7 @@ import {
   galaxyMapTexture,
   waterMapTexture,
 } from "../assets";
+import { Loader } from "@react-three/drei";
 
 const EARTH_RADIUS = 6;
 

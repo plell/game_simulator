@@ -1,7 +1,6 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { Group, MeshBasicMaterial, Vector3 } from "three";
 
-import { SpriteAnimator } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { RapierRigidBody, RigidBody } from "@react-three/rapier";
 import {
@@ -16,6 +15,8 @@ import { Damage } from "../Effects/Damage";
 import { dieSound } from "../Sounds/Tone";
 import { HealthBar } from "../UI/HealthBar";
 import { useOuch } from "../hooks/useOuch";
+import { useDisposeGroup } from "../../../hooks/useDisposeGroup";
+import { invisibleMaterial, sphereGeometry } from "./constants";
 
 const reuseableVector3a = new Vector3();
 const reuseableVector3b = new Vector3();
@@ -52,6 +53,8 @@ export const Enemy = (props: Player) => {
   const body = useRef<RapierRigidBody | null>(null);
   const material = useRef<MeshBasicMaterial | null>(null);
   const group = useRef<Group | null>(null);
+
+  useDisposeGroup(group);
 
   const [flipX, setFlipX] = useState(true);
 
@@ -227,22 +230,7 @@ export const Enemy = (props: Player) => {
           type: "enemy",
         }}
       >
-        <mesh castShadow>
-          <sphereGeometry args={[0.4]} />
-          <meshBasicMaterial ref={material} transparent opacity={0} />
-          <SpriteAnimator
-            flipX={flipX}
-            position={[0, 0, 0]}
-            startFrame={1}
-            fps={10}
-            autoPlay
-            loop
-            numberOfFrames={4}
-            alphaTest={0.01}
-            textureImageURL={"sprites/enemy_sprites.png"}
-            textureDataURL={"sprites/enemy_sprites.json"}
-          />
-        </mesh>
+        <mesh geometry={sphereGeometry} material={invisibleMaterial} />
       </RigidBody>
     </>
   );
