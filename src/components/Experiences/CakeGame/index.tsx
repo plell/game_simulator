@@ -189,6 +189,10 @@ const getRandomSprinkleColor = () => {
   return sprinkleColors[index];
 };
 
+const vec3 = new Vector3();
+const focusedScale = new Vector3(11, 11, 11);
+const normalScale = new Vector3(10, 10, 10);
+
 const Donut = ({ models, position, rotation }: DonutProps) => {
   const [focused, setFocused] = useState(false);
   const [selected, setSelected] = useState(false);
@@ -201,6 +205,12 @@ const Donut = ({ models, position, rotation }: DonutProps) => {
       if (selected) {
         ref.current.position.y += 0.2;
         ref.current.rotation.y += 0.1;
+
+        // const newScale = ref.current.scale.lerp(focusedScale, 0.2);
+        // ref.current.scale.set(newScale.x, newScale.y, newScale.z);
+      } else {
+        const newScale = ref.current.scale.lerp(normalScale, 0.2);
+        ref.current.scale.set(newScale.x, newScale.y, newScale.z);
       }
       // ref.current.rotation.z = Math.sin(elapsedTime * speed);
     }
@@ -228,7 +238,7 @@ const Donut = ({ models, position, rotation }: DonutProps) => {
         position={position}
         rotation={rotation}
         rotation-y={rotationY}
-        scale={10}
+        scale={selected ? 10 : focused ? 11 : 10}
       >
         <group
           onPointerDown={(e) => {
@@ -245,6 +255,10 @@ const Donut = ({ models, position, rotation }: DonutProps) => {
           }}
         >
           <models.Dough color={doughColor} />
+          <mesh rotation-x={Math.PI * -0.5}>
+            <planeGeometry args={[0.2, 0.2]} />
+            <meshBasicMaterial transparent opacity={0} />
+          </mesh>
         </group>
 
         {!iAmNakedCake && (
