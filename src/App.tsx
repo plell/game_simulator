@@ -9,7 +9,13 @@ import { Browser } from "./components/UI/Browser";
 import useGame from "./Stores/useGame";
 import { experienceProperties, isDevelopment } from "./Stores/constants";
 
-import { Bloom, EffectComposer } from "@react-three/postprocessing";
+import {
+  Bloom,
+  EffectComposer,
+  Outline,
+  Selection,
+} from "@react-three/postprocessing";
+import { BlendFunction, Resolution } from "postprocessing";
 
 import { CameraControls } from "@react-three/drei";
 import { Perf } from "r3f-perf";
@@ -26,7 +32,7 @@ const CameraController = () => {
   const { camera } = useThree();
 
   useFrame(() => {
-    console.log(camera.position);
+    // console.log(camera.position);
   });
 
   // const { cameraPosition, cameraTarget } = useControls("camera", {
@@ -119,14 +125,28 @@ const App = () => {
         }}
       >
         <Suspense fallback={null}>
-          <EffectComposer>
-            <Bloom luminanceThreshold={1} mipmapBlur />
-          </EffectComposer>
-
           <CameraController />
-          <Physics gravity={[0, -40, 0]}>
-            {GameComponent && <GameComponent />}
-          </Physics>
+          <Selection>
+            <EffectComposer autoClear={false} multisampling={8}>
+              <Bloom
+                luminanceThreshold={1}
+                mipmapBlur
+                resolutionX={Resolution.AUTO_SIZE} // The horizontal resolution.
+                resolutionY={Resolution.AUTO_SIZE} // The vertical resolution.
+              />
+              <Outline
+                blur
+                edgeStrength={4}
+                blendFunction={BlendFunction.SCREEN} // set this to BlendFunction.ALPHA for dark outlines
+                hiddenEdgeColor={0xffffff}
+                visibleEdgeColor={0xffffff}
+              />
+            </EffectComposer>
+
+            <Physics gravity={[0, -40, 0]}>
+              {GameComponent && <GameComponent />}
+            </Physics>
+          </Selection>
         </Suspense>
       </Canvas>
     </>
