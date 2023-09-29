@@ -1,5 +1,5 @@
 import { SpriteAnimator } from "@react-three/drei";
-import { MeshBasicMaterial, SphereGeometry } from "three";
+import { MeshBasicMaterial, SphereGeometry, TextureLoader } from "three";
 
 // export const spriteAnimator:any = SpriteAnimator({
 //         position:[0, 0, 0],
@@ -14,4 +14,12 @@ import { MeshBasicMaterial, SphereGeometry } from "three";
 // })
 
 export const sphereGeometry = new SphereGeometry(0.4)
-export const invisibleMaterial = new MeshBasicMaterial({transparent:true,opacity:0 })
+
+const textureLoader = new TextureLoader()
+
+const enemySprite = textureLoader.load("sprites/enemy_sprites.png")
+
+export const spriteMaterial = new MeshBasicMaterial({
+    color:'black'
+})
+

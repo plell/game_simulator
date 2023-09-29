@@ -1,6 +1,7 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
-import { Group, MeshBasicMaterial, Vector3 } from "three";
+import { Group, Vector3 } from "three";
 
+import { useTexture } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { RapierRigidBody, RigidBody } from "@react-three/rapier";
 import {
@@ -16,7 +17,7 @@ import { dieSound } from "../Sounds/Tone";
 import { HealthBar } from "../UI/HealthBar";
 import { useOuch } from "../hooks/useOuch";
 import { useDisposeGroup } from "../../../hooks/useDisposeGroup";
-import { invisibleMaterial, sphereGeometry } from "./constants";
+import { spriteMaterial, sphereGeometry } from "./constants";
 
 const reuseableVector3a = new Vector3();
 const reuseableVector3b = new Vector3();
@@ -51,7 +52,6 @@ export const Enemy = (props: Player) => {
   const enemies = useGame((s) => s.enemies);
   const setEnemies = useGame((s) => s.setEnemies);
   const body = useRef<RapierRigidBody | null>(null);
-  const material = useRef<MeshBasicMaterial | null>(null);
   const group = useRef<Group | null>(null);
 
   useDisposeGroup(group);
@@ -230,7 +230,7 @@ export const Enemy = (props: Player) => {
           type: "enemy",
         }}
       >
-        <mesh geometry={sphereGeometry} material={invisibleMaterial} />
+        <mesh geometry={sphereGeometry} material={spriteMaterial} />
       </RigidBody>
     </>
   );

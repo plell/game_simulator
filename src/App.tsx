@@ -1,9 +1,9 @@
-import { Canvas, useThree } from "@react-three/fiber";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
 
 import { Physics } from "@react-three/rapier";
 
 import { Suspense, useEffect, useRef } from "react";
-import { Leva } from "leva";
+import { Leva, useControls } from "leva";
 
 import { Browser } from "./components/UI/Browser";
 import useGame from "./Stores/useGame";
@@ -15,7 +15,8 @@ import { CameraControls } from "@react-three/drei";
 import { Perf } from "r3f-perf";
 
 import styled from "styled-components";
-import { LoadProgress } from "./components/Experiences/common/LoadProgress";
+
+import { ACESFilmicToneMapping, PCFSoftShadowMap, Vector3 } from "three";
 
 const CameraController = () => {
   const cameraControlsRef = useRef<CameraControls | null>(null);
@@ -23,6 +24,33 @@ const CameraController = () => {
   const game = useGame((s) => s.game);
 
   const { camera } = useThree();
+
+  useFrame(() => {
+    console.log(camera.position);
+  });
+
+  // const { cameraPosition, cameraTarget } = useControls("camera", {
+  //   cameraPosition: { value: { x: 0, y: 0, z: 0 }, step: 1 },
+  //   cameraTarget: { value: { x: 0, y: 0, z: 0 }, step: 1 },
+  // });
+
+  // useEffect(() => {
+  //   camera.position.set(cameraPosition.x, cameraPosition.y, cameraPosition.z);
+  //   const look = new Vector3(cameraTarget.x, cameraTarget.y, cameraTarget.z);
+  //   camera.lookAt(look);
+
+  //   if (cameraControlsRef.current) {
+  //     cameraControlsRef.current.setLookAt(
+  //       cameraPosition.x,
+  //       cameraPosition.y,
+  //       cameraPosition.z,
+  //       cameraTarget.x,
+  //       cameraTarget.y,
+  //       cameraTarget.z,
+  //       false
+  //     );
+  //   }
+  // }, [cameraPosition, cameraTarget]);
 
   useEffect(() => {
     const position = experienceProperties[game]?.cameraPosition;
@@ -71,13 +99,16 @@ const App = () => {
 
       <Browser />
       {isDevelopment && <Leva />}
-
+      {/* {isDevelopment && <Perf />} */}
       <Canvas
-        shadows
-        gl={
+        gl={{
+          toneMappingExposure: 3,
+          toneMapping: ACESFilmicToneMapping,
+          antialias: true,
+        }}
+        shadows={
           {
-            // toneMappingExposure: 2,
-            // toneMapping: THREE.ACESFilmicToneMapping,
+            // type: PCFSoftShadowMap,
           }
         }
         camera={{
@@ -87,7 +118,6 @@ const App = () => {
           position: experienceProperties[0].cameraPosition,
         }}
       >
-        <Perf />
         <Suspense fallback={null}>
           <EffectComposer>
             <Bloom luminanceThreshold={1} mipmapBlur />

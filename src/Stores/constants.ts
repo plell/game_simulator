@@ -49,6 +49,16 @@ type ExperienceProps = {
 
 export const experienceProperties: ExperienceProps[] = [
   {
+    cameraPosition: new Vector3(-0.7185883307964502, 13.752072648993375, 18.871447724673647),
+    cameraTarget: new Vector3(0, 0, 0),
+    gamePosition: new Vector3(0, 0, 0),
+    title: 'Cake Drop',
+    description: 'Choose four.',
+    instructions: 'The player moves toward the cursor. Click to drop a note, bait enemies toward notes to gain points.',
+    cameraControls: true,
+    game: CakeGame
+  },
+  {
     cameraPosition: new Vector3(0, 0, 23),
     cameraTarget: new Vector3(0, 0, 0),
     gamePosition: new Vector3(0, 0, 0),
@@ -58,7 +68,6 @@ export const experienceProperties: ExperienceProps[] = [
     cameraControls: true,
     game: Earth
   },
-
   {
     cameraPosition: new Vector3(0, 0, 23),
     cameraTarget: new Vector3(0, 0, 0),
@@ -69,16 +78,16 @@ export const experienceProperties: ExperienceProps[] = [
     cameraControls: false,
     game: SpaceGame
   },
-  {
-    cameraPosition: new Vector3(0, 0, 60),
-    cameraTarget: new Vector3(0, 0, 0),
-    gamePosition: new Vector3(0, 0, 0),
-    title: 'Tempo Sneakers',
-    description: 'A music adventure game.',
-    instructions: 'The player moves toward the cursor. Click to drop a note, bait enemies toward notes to gain points.',
-    cameraControls: false,
-    game:TempoGame
-  },
+  // {
+  //   cameraPosition: new Vector3(0, 0, 60),
+  //   cameraTarget: new Vector3(0, 0, 0),
+  //   gamePosition: new Vector3(0, 0, 0),
+  //   title: 'Tempo Sneakers',
+  //   description: 'A music adventure game.',
+  //   instructions: 'The player moves toward the cursor. Click to drop a note, bait enemies toward notes to gain points.',
+  //   cameraControls: false,
+  //   game:TempoGame
+  // },
   
   {
     cameraPosition: new Vector3(0, 20, 16),
@@ -90,16 +99,7 @@ export const experienceProperties: ExperienceProps[] = [
     cameraControls: false,
     game:CrocGame
   },
-  {
-    cameraPosition: new Vector3(0, 10, 40),
-    cameraTarget: new Vector3(0, 0, 0),
-    gamePosition: new Vector3(0, 0, 0),
-    title: 'Cake Drop',
-    description: 'Balance the cake.',
-    instructions: 'The player moves toward the cursor. Click to drop a note, bait enemies toward notes to gain points.',
-    cameraControls: false,
-    game: CakeGame
-  },
+  
   
   
 ]

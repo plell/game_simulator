@@ -44,9 +44,6 @@ export const Counter = ({ position, value, title }: Props) => {
 
       _setValue(newValue);
 
-      console.log("newValue", newValue);
-      console.log("value", value);
-
       if (newValue !== value) {
         count();
       } else {
