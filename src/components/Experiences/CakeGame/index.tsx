@@ -59,10 +59,8 @@ const topPad = -(height * (rows / 2) - height / 2);
 const tablePadding = 12;
 
 const WoodTable = () => {
-  const armMap = useTexture("textures/wood/raw_plank_wall_arm_1k.jpg");
   const diffMap = useTexture("textures/wood/raw_plank_wall_diff_1k.jpg");
   const dispMap = useTexture("textures/wood/raw_plank_wall_disp_1k.jpg");
-  const normalMap = useTexture("textures/wood/raw_plank_wall_nor_gl_1k.jpg");
 
   return (
     <group position-y={-5}>
@@ -76,12 +74,9 @@ const WoodTable = () => {
         />
 
         <meshStandardMaterial
-          aoMap={armMap}
-          roughnessMap={armMap}
-          metalnessMap={armMap}
+          roughnessMap={dispMap}
           map={diffMap}
           displacementMap={dispMap}
-          normalMap={normalMap}
         />
       </mesh>
     </group>
