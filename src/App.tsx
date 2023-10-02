@@ -23,6 +23,7 @@ import { Perf } from "r3f-perf";
 import styled from "styled-components";
 
 import { ACESFilmicToneMapping, PCFSoftShadowMap, Vector3 } from "three";
+import { useGooseNeck } from "./components/Experiences/hooks/useGooseNeck";
 
 const CameraController = () => {
   const cameraControlsRef = useRef<CameraControls | null>(null);
@@ -30,6 +31,8 @@ const CameraController = () => {
   const game = useGame((s) => s.game);
 
   const { camera } = useThree();
+
+  useGooseNeck();
 
   useFrame(() => {
     // console.log(camera.position);
