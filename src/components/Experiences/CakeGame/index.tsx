@@ -285,10 +285,10 @@ const Donut = ({ models, position, rotation, id }: DonutProps) => {
 
   useFrame(() => {
     if (ref?.current) {
-      if (!selected) {
-        const newScale = ref.current.scale.lerp(normalScale, 0.2);
-        ref.current.scale.set(newScale.x, newScale.y, newScale.z);
-      } else {
+      const newScale = ref.current.scale.lerp(normalScale, 0.2);
+      ref.current.scale.set(newScale.x, newScale.y, newScale.z);
+
+      if (selected) {
         ref.current.rotation.x += 0.04;
       }
     }
@@ -361,7 +361,7 @@ const Donut = ({ models, position, rotation, id }: DonutProps) => {
         position={position}
         rotation={rotation}
         rotation-y={rotationY}
-        scale={selected ? regularScale : focused ? focusedScale : regularScale}
+        scale={focused ? focusedScale : regularScale}
       >
         <group
           onClick={(e) => {
@@ -386,7 +386,10 @@ const Donut = ({ models, position, rotation, id }: DonutProps) => {
           }}
           onPointerEnter={(e) => {
             e.stopPropagation();
-            setFocused(true);
+
+            if (selected || selectedDonutIds.length < 4) {
+              setFocused(true);
+            }
           }}
           onPointerLeave={(e) => {
             e.stopPropagation();
