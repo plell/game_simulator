@@ -44,11 +44,16 @@ const Points = () => {
     <group ref={ref} position-y={40}>
       {pointPositions.map((d, i) => {
         const fill = i + 1 <= selectedDonutIds.length;
+        const complete = selectedDonutIds.length > 3;
         return (
           <group key={i} position-x={pointPositions[i] * 10}>
             <mesh>
               <torusGeometry args={[5, 0.2]} />
-              <meshBasicMaterial color={"#ffffff"} transparent opacity={0.04} />
+              <meshBasicMaterial
+                color={complete ? "skyblue" : "#ffffff"}
+                transparent
+                opacity={complete ? 1 : 0.04}
+              />
             </mesh>
 
             {fill && (
