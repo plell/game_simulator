@@ -112,15 +112,13 @@ const App = () => {
           toneMapping: ACESFilmicToneMapping,
           antialias: true,
         }}
-        shadows={
-          {
-            // type: PCFSoftShadowMap,
-          }
-        }
+        shadows={{
+          type: PCFSoftShadowMap,
+        }}
         camera={{
           fov: 45,
-          near: 0.1,
-          far: 3000,
+          near: 10,
+          far: 900,
           position: experienceProperties[0].cameraPosition,
         }}
       >

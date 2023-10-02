@@ -55,7 +55,7 @@ export const experienceProperties: ExperienceProps[] = [
     title: 'Cake Drop',
     description: 'Choose four.',
     instructions: 'The player moves toward the cursor. Click to drop a note, bait enemies toward notes to gain points.',
-    cameraControls: true,
+    cameraControls: false,
     game: CakeGame
   },
   {
