@@ -1,4 +1,13 @@
-import { Fragment, MutableRefObject, useMemo, useRef, useState } from "react";
+import {
+  Fragment,
+  MutableRefObject,
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { Color, Group, Mesh, Vector3 } from "three";
 
 import useGame from "../../../Stores/useGame";
@@ -11,7 +20,11 @@ import {
   useGLTF,
   useTexture,
 } from "@react-three/drei";
-import { useFrame } from "@react-three/fiber";
+import { useFrame, useThree } from "@react-three/fiber";
+import { useCursorHover } from "../hooks/useCursorHover";
+import { useFollowCursor } from "../hooks/controllers/useFollowCursor";
+import gsap, { Back, Bounce, Elastic } from "gsap";
+import { Power1 } from "gsap";
 
 export const CakeGame = () => {
   const ref = useRef<Group | null>(null);
@@ -21,28 +34,9 @@ export const CakeGame = () => {
   return (
     <group ref={ref} position={experienceProperties[game]?.gamePosition}>
       <directionalLight position={[0, 80, 100]} intensity={3} />
-      <pointLight position={[0, 8, 0]} intensity={2} />
+      <ambientLight intensity={0.6} />
 
-      {/* <mesh position={[0, 0, 100]} rotation-y={Math.PI}>
-        <planeGeometry args={[200, 200]} />
-        <MeshReflectorMaterial
-          blur={[0, 0]} // Blur ground reflections (width, height), 0 skips blur
-          mixBlur={0} // How much blur mixes with surface roughness (default = 1)
-          mixStrength={1} // Strength of the reflections
-          mixContrast={1} // Contrast of the reflections
-          resolution={1024} // Off-buffer resolution, lower=faster, higher=better quality, slower
-          mirror={1} // Mirror environment, 0 = texture colors, 1 = pick up env colors
-          depthScale={0} // Scale the depth factor (0 = no depth, default = 0)
-          minDepthThreshold={0.9} // Lower edge for the depthTexture interpolation (default = 0)
-          maxDepthThreshold={1} // Upper edge for the depthTexture interpolation (default = 0)
-          // depthToBlurRatioBias={0.25} // Adds a bias factor to the depthTexture before calculating the blur amount [blurFactor = blurTexture * (depthTexture + bias)]. It accepts values between 0 and 1, default is 0.25. An amount > 0 of bias makes sure that the blurTexture is not too sharp because of the multiplication with the depthTexture
-          distortion={0.1} // Amount of distortion based on the distortionMap texture
-          reflectorOffset={0.2} // Offsets the virtual camera that projects the reflection. Useful when the reflective surface is some distance from the object's origin (default = 0)
-        />
-      </mesh> */}
-
-      {/* <EnvironmentCube preset='city' /> */}
-
+      <DonutBox />
       <CakeLayer />
 
       <WoodTable />
@@ -50,8 +44,8 @@ export const CakeGame = () => {
   );
 };
 
-const columns = 8;
-const rows = 12;
+const columns = 12;
+const rows = 8;
 const width = 12;
 const height = 12;
 const leftPad = -(width * (columns / 2) - width / 2);
@@ -79,6 +73,48 @@ const WoodTable = () => {
           displacementMap={dispMap}
         />
       </mesh>
+    </group>
+  );
+};
+
+const boxPosition = new Vector3(0, 20, 70);
+
+const DonutBox = () => {
+  const donutBox = useGLTF("./models/donut_box.gltf");
+  const ref = useRef<Group | null>(null);
+
+  useEffect(() => {
+    animateIn();
+  }, []);
+
+  const animateIn = () => {
+    const startPosition = new Vector3(0, -100, 40);
+
+    const moveCycle = gsap.to(startPosition, {
+      duration: 2,
+      keyframes: {
+        ease: Bounce.easeOut,
+        "0%": startPosition,
+        "100%": boxPosition,
+      },
+      onUpdate: () => {
+        if (ref?.current) {
+          ref.current.position.copy(startPosition);
+        }
+      },
+    });
+
+    moveCycle.play();
+  };
+
+  return (
+    <group
+      ref={ref}
+      position={boxPosition}
+      rotation-y={Math.PI * -0.5}
+      onClick={(e) => e.stopPropagation()}
+    >
+      <primitive object={donutBox.scene.clone()} scale={regularScale} />
     </group>
   );
 };
@@ -113,11 +149,11 @@ const DonutsWrap = ({ models }: DonutsWrapProps) => {
 
     for (let c = 0; c < columns; c += 1) {
       for (let r = 0; r < rows; r += 1) {
-        const pos: [x: number, y: number, z: number] = [
+        const pos: Vector3 = new Vector3(
           c * width + leftPad,
           0,
-          r * height + topPad,
-        ];
+          r * height + topPad
+        );
         d.push(<Donut key={`${c}+${r}`} models={models} position={pos} />);
       }
     }
@@ -130,7 +166,7 @@ const DonutsWrap = ({ models }: DonutsWrapProps) => {
 
 type DonutProps = {
   models: Record<string, any>;
-  position?: [x: number, y: number, z: number];
+  position: Vector3;
   rotation?: [x: number, y: number, z: number];
 };
 
@@ -189,32 +225,39 @@ const getRandomSprinkleColor = () => {
   return sprinkleColors[index];
 };
 
-const vec3 = new Vector3();
-const focusedScale = new Vector3(11, 11, 11);
-const normalScale = new Vector3(10, 10, 10);
+const focusedScale = 11;
+const regularScale = 10;
+const normalScale = new Vector3(regularScale, regularScale, regularScale);
 
 const Donut = ({ models, position, rotation }: DonutProps) => {
   const [focused, setFocused] = useState(false);
   const [selected, setSelected] = useState(false);
+  const [animating, setAnimating] = useState(false);
   const [speed, setSpeed] = useState(1);
   const ref = useRef<Group | null>(null);
 
-  useFrame(({ clock }) => {
-    const elapsedTime = clock.getElapsedTime();
-    if (ref?.current) {
-      if (selected) {
-        ref.current.position.y += 0.2;
-        ref.current.rotation.y += 0.1;
+  useCursorHover(focused);
 
-        // const newScale = ref.current.scale.lerp(focusedScale, 0.2);
-        // ref.current.scale.set(newScale.x, newScale.y, newScale.z);
-      } else {
+  const { camera } = useThree();
+
+  useFrame(({ clock }) => {
+    if (ref?.current) {
+      if (!selected) {
         const newScale = ref.current.scale.lerp(normalScale, 0.2);
         ref.current.scale.set(newScale.x, newScale.y, newScale.z);
       }
-      // ref.current.rotation.z = Math.sin(elapsedTime * speed);
     }
   });
+
+  useEffect(() => {
+    setAnimating(true);
+
+    if (selected) {
+      goTo(position.clone(), boxPosition.clone());
+    } else {
+      returnTo(boxPosition.clone(), position.clone());
+    }
+  }, [selected]);
 
   const rotationY = useMemo(() => Math.random() * 10, []);
   const doughColor = useMemo(() => getRandomDoughColor(), []);
@@ -231,6 +274,50 @@ const Donut = ({ models, position, rotation }: DonutProps) => {
     return Math.random() * 10 < 2;
   }, []);
 
+  const goTo = (origin: Vector3, destination: Vector3) => {
+    const cameraPosition = origin.clone().lerp(camera.position, 0.5);
+
+    const moveCycle = gsap.to(origin, {
+      duration: 0.4,
+      keyframes: {
+        "0%": origin,
+        "30%": cameraPosition,
+        "100%": destination,
+      },
+      onComplete: () => {
+        setAnimating(false);
+      },
+      onUpdate: () => {
+        if (ref?.current) {
+          ref.current.position.copy(origin);
+        }
+      },
+    });
+
+    moveCycle.play();
+  };
+
+  const returnTo = (origin: Vector3, destination: Vector3) => {
+    const moveCycle = gsap.to(origin, {
+      duration: 0.4,
+      keyframes: {
+        "0%": origin,
+        "40%": new Vector3(origin.x, origin.y + 20, origin.z),
+        "100%": destination,
+      },
+      onComplete: () => {
+        setAnimating(false);
+      },
+      onUpdate: () => {
+        if (ref?.current) {
+          ref.current.position.copy(origin);
+        }
+      },
+    });
+
+    moveCycle.play();
+  };
+
   return (
     <>
       <group
@@ -238,12 +325,14 @@ const Donut = ({ models, position, rotation }: DonutProps) => {
         position={position}
         rotation={rotation}
         rotation-y={rotationY}
-        scale={selected ? 10 : focused ? 11 : 10}
+        scale={selected ? regularScale : focused ? focusedScale : regularScale}
       >
         <group
-          onPointerDown={(e) => {
-            e.stopPropagation();
-            setSelected(true);
+          onClick={(e) => {
+            if (!animating) {
+              e.stopPropagation();
+              setSelected(!selected);
+            }
           }}
           onPointerEnter={(e) => {
             e.stopPropagation();

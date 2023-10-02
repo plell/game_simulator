@@ -49,7 +49,7 @@ type ExperienceProps = {
 
 export const experienceProperties: ExperienceProps[] = [
   {
-    cameraPosition: new Vector3(-0.7185883307964502, 13.752072648993375, 18.871447724673647),
+    cameraPosition: new Vector3(0,66,128),
     cameraTarget: new Vector3(0, 0, 0),
     gamePosition: new Vector3(0, 0, 0),
     title: 'Cake Drop',
