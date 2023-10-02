@@ -1,45 +1,65 @@
-import {
-  Fragment,
-  MutableRefObject,
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
-import { Color, Group, Mesh, Vector3 } from "three";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { Group, Mesh, Vector3 } from "three";
 
 import useGame from "../../../Stores/useGame";
 import { experienceProperties } from "../../../Stores/constants";
 
-import {
-  EnvironmentCube,
-  Merged,
-  MeshReflectorMaterial,
-  useGLTF,
-  useTexture,
-} from "@react-three/drei";
+import { Merged, useGLTF, useTexture } from "@react-three/drei";
 import { useFrame, useThree } from "@react-three/fiber";
 import { useCursorHover } from "../hooks/useCursorHover";
-import { useFollowCursor } from "../hooks/controllers/useFollowCursor";
-import gsap, { Back, Bounce, Elastic } from "gsap";
-import { Power1 } from "gsap";
+import gsap, { Bounce } from "gsap";
 
 export const CakeGame = () => {
   const ref = useRef<Group | null>(null);
 
   const game = useGame((s) => s.game);
+  const setSelectedDonutIds = useGame((s) => s.setSelectedDonutIds);
+
+  useEffect(() => {
+    return () => {
+      setSelectedDonutIds([]);
+    };
+  }, []);
 
   return (
     <group ref={ref} position={experienceProperties[game]?.gamePosition}>
-      <directionalLight position={[0, 80, 100]} intensity={3} />
+      <directionalLight position={[0, 80, 100]} intensity={2} />
       <ambientLight intensity={0.6} />
 
       <DonutBox />
-      <CakeLayer />
-
+      <Donuts />
       <WoodTable />
+      <Points />
+    </group>
+  );
+};
+
+const pointPositions = [-3, -1, 1, 3];
+
+const Points = () => {
+  const ref = useRef<Group | null>(null);
+  const selectedDonutIds = useGame((s) => s.selectedDonutIds);
+
+  return (
+    <group ref={ref} position-y={40}>
+      {pointPositions.map((d, i) => {
+        const fill = i + 1 <= selectedDonutIds.length;
+        return (
+          <group key={i} position-x={pointPositions[i] * 10}>
+            <mesh>
+              <torusGeometry args={[5, 0.2]} />
+              <meshBasicMaterial color={"#ffffff"} transparent opacity={0.04} />
+            </mesh>
+
+            {fill && (
+              <mesh>
+                <circleGeometry args={[3, 40]} />
+                <meshBasicMaterial color={"#ffffff"} />
+              </mesh>
+            )}
+          </group>
+        );
+      })}
     </group>
   );
 };
@@ -119,7 +139,7 @@ const DonutBox = () => {
   );
 };
 
-const CakeLayer = () => {
+const Donuts = () => {
   // @ts-ignore
   const { nodes } = useGLTF("./models/donut_white.gltf");
   // @ts-ignore
@@ -154,7 +174,14 @@ const DonutsWrap = ({ models }: DonutsWrapProps) => {
           0,
           r * height + topPad
         );
-        d.push(<Donut key={`${c}+${r}`} models={models} position={pos} />);
+        d.push(
+          <Donut
+            key={`${c}+${r}`}
+            models={models}
+            position={pos}
+            id={`${c}+${r}`}
+          />
+        );
       }
     }
 
@@ -165,6 +192,7 @@ const DonutsWrap = ({ models }: DonutsWrapProps) => {
 };
 
 type DonutProps = {
+  id: string;
   models: Record<string, any>;
   position: Vector3;
   rotation?: [x: number, y: number, z: number];
@@ -229,35 +257,37 @@ const focusedScale = 11;
 const regularScale = 10;
 const normalScale = new Vector3(regularScale, regularScale, regularScale);
 
-const Donut = ({ models, position, rotation }: DonutProps) => {
+const Donut = ({ models, position, rotation, id }: DonutProps) => {
   const [focused, setFocused] = useState(false);
-  const [selected, setSelected] = useState(false);
+
   const [animating, setAnimating] = useState(false);
-  const [speed, setSpeed] = useState(1);
   const ref = useRef<Group | null>(null);
+
+  const selectedDonutIds = useGame((s) => s.selectedDonutIds);
+  const setSelectedDonutIds = useGame((s) => s.setSelectedDonutIds);
 
   useCursorHover(focused);
 
+  useEffect(() => {
+    goTo(true);
+  }, []);
+
+  const selected: boolean = useMemo(() => {
+    return !!selectedDonutIds.includes(id);
+  }, [selectedDonutIds, id]);
+
   const { camera } = useThree();
 
-  useFrame(({ clock }) => {
+  useFrame(() => {
     if (ref?.current) {
       if (!selected) {
         const newScale = ref.current.scale.lerp(normalScale, 0.2);
         ref.current.scale.set(newScale.x, newScale.y, newScale.z);
+      } else {
+        ref.current.rotation.x += 0.04;
       }
     }
   });
-
-  useEffect(() => {
-    setAnimating(true);
-
-    if (selected) {
-      goTo(position.clone(), boxPosition.clone());
-    } else {
-      returnTo(boxPosition.clone(), position.clone());
-    }
-  }, [selected]);
 
   const rotationY = useMemo(() => Math.random() * 10, []);
   const doughColor = useMemo(() => getRandomDoughColor(), []);
@@ -274,48 +304,49 @@ const Donut = ({ models, position, rotation }: DonutProps) => {
     return Math.random() * 10 < 2;
   }, []);
 
-  const goTo = (origin: Vector3, destination: Vector3) => {
-    const cameraPosition = origin.clone().lerp(camera.position, 0.5);
+  const goTo = (reverse?: boolean) => {
+    const myBoxPosition = new Vector3(
+      boxPosition.x + selectedDonutIds.length * 5 - 7.3,
+      boxPosition.y + 0.5,
+      boxPosition.z + -0.2
+    );
+    const origin = reverse ? myBoxPosition.clone() : position.clone();
+    const destination = reverse ? position.clone() : myBoxPosition.clone();
+    const cameraPosition = position.clone().lerp(camera.position, 0.5);
 
-    const moveCycle = gsap.to(origin, {
-      duration: 0.4,
-      keyframes: {
-        "0%": origin,
-        "30%": cameraPosition,
-        "100%": destination,
-      },
-      onComplete: () => {
-        setAnimating(false);
-      },
-      onUpdate: () => {
-        if (ref?.current) {
-          ref.current.position.copy(origin);
-        }
-      },
-    });
+    if (ref?.current) {
+      setAnimating(true);
+      gsap
+        .to(ref.current.position, {
+          duration: 0.4,
+          keyframes: {
+            "0%": origin,
+            "30%": cameraPosition,
+            "100%": destination,
+          },
+          onComplete: () => {
+            setAnimating(false);
+          },
+        })
+        .play();
 
-    moveCycle.play();
-  };
+      const start = reverse
+        ? new Vector3(0, 0, Math.PI * 0.5)
+        : new Vector3(0, 0, 0);
+      const end = reverse
+        ? new Vector3(0, 0, 0)
+        : new Vector3(0, 0, Math.PI * 0.5);
 
-  const returnTo = (origin: Vector3, destination: Vector3) => {
-    const moveCycle = gsap.to(origin, {
-      duration: 0.4,
-      keyframes: {
-        "0%": origin,
-        "40%": new Vector3(origin.x, origin.y + 20, origin.z),
-        "100%": destination,
-      },
-      onComplete: () => {
-        setAnimating(false);
-      },
-      onUpdate: () => {
-        if (ref?.current) {
-          ref.current.position.copy(origin);
-        }
-      },
-    });
-
-    moveCycle.play();
+      gsap
+        .to(ref.current.rotation, {
+          duration: 0.4,
+          keyframes: {
+            "0%": start,
+            "100%": end,
+          },
+        })
+        .play();
+    }
   };
 
   return (
@@ -331,7 +362,21 @@ const Donut = ({ models, position, rotation }: DonutProps) => {
           onClick={(e) => {
             if (!animating) {
               e.stopPropagation();
-              setSelected(!selected);
+              const selectedIdsClone = [...selectedDonutIds];
+              if (!selected) {
+                if (selectedIdsClone.length < 4) {
+                  setSelectedDonutIds([...selectedIdsClone, id]);
+                  goTo(false);
+                }
+              } else {
+                const myIndex = selectedDonutIds.findIndex((f) => f === id);
+                if (myIndex > -1) {
+                  selectedIdsClone.splice(myIndex, 1);
+
+                  setSelectedDonutIds(selectedIdsClone);
+                  goTo(true);
+                }
+              }
             }
           }}
           onPointerEnter={(e) => {
