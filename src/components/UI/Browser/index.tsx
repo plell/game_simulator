@@ -75,7 +75,7 @@ export const Browser = () => {
           }
         }}
       >
-        {locked ? <MdLock color={"#ffffff99"} /> : <MdArrowCircleRight />}
+        {locked ? null : <MdArrowCircleRight />}
       </Button>
     </Overlay>
   );
