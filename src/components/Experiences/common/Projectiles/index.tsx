@@ -18,7 +18,6 @@ export const Projectiles = ({ player, launchPosition }: Props) => {
   });
 
   const newProjectile = () => {
-    console.log("new!");
     const pCopy = { ...projectiles };
     const id = Object.keys(pCopy).length;
 

@@ -1,31 +1,62 @@
 import {
   MdArrowCircleLeft,
   MdArrowCircleRight,
-  MdArrowLeft,
-  MdArrowRight,
-  MdArrowRightAlt,
-  MdInfoOutline,
+  MdLock,
+  MdLockOutline,
 } from "react-icons/md";
 import styled from "styled-components";
 import useGame from "../../../Stores/useGame";
 import { experienceProperties } from "../../../Stores/constants";
+import { useEffect, useRef } from "react";
+import gsap, { Power4 } from "gsap";
+import { Bounce } from "gsap";
 
 export const Browser = () => {
   const game = useGame((s) => s.game);
   const setGame = useGame((s) => s.setGame);
+  const setLockClicked = useGame((s) => s.setLockClicked);
+  const lockClicked = useGame((s) => s.lockClicked);
+  const locked = useGame((s) => s.locked);
+
+  const forwardButton = useRef(null);
+
+  const nopeAnimation = () => {
+    if (forwardButton.current) {
+      setLockClicked(!lockClicked);
+      gsap.from(forwardButton.current, {
+        duration: 0.5,
+        keyframes: {
+          ease: Bounce.easeOut,
+          "0%": { transform: "translateX(0px)" },
+          "50%": { transform: "translateX(10px)" },
+          "100%": { transform: "translateX(0px)" },
+        },
+      });
+    }
+  };
+
+  useEffect(() => {
+    if (!locked && forwardButton.current) {
+      gsap
+        .to(forwardButton.current, {
+          duration: 1,
+          ease: Power4.easeOut,
+          keyframes: {
+            "0%": { transform: "rotateY(0deg)", color: "#fff" },
+            "50%": { transform: "rotateY(180deg)", color: "skyblue" },
+            "100%": { transform: "rotateY(0deg)", color: "#fff" },
+          },
+        })
+        .play();
+    }
+  }, [locked]);
 
   return (
     <Overlay>
       <Title>
-        <div>{experienceProperties[game]?.title || "Under Construction"}</div>
+        <div>{experienceProperties[game]?.title}</div>
         <Description>{experienceProperties[game]?.description}</Description>
       </Title>
-      {/* 
-      <Info>
-        <Button>
-          <MdInfoOutline />
-        </Button>
-      </Info> */}
 
       {game > 0 ? (
         <Button onPointerDown={() => setGame(game - 1)}>
@@ -34,19 +65,21 @@ export const Browser = () => {
       ) : (
         <div />
       )}
-      <Button onPointerDown={() => setGame(game + 1)}>
-        <MdArrowCircleRight />
+      <Button
+        ref={forwardButton}
+        onPointerDown={() => {
+          if (locked) {
+            nopeAnimation();
+          } else {
+            setGame(game + 1);
+          }
+        }}
+      >
+        {locked ? <MdLock color={"#ffffff99"} /> : <MdArrowCircleRight />}
       </Button>
     </Overlay>
   );
 };
-
-const Info = styled.div`
-  position: absolute;
-  top: 0px;
-  right: 0px;
-  padding: 40px;
-`;
 
 const Title = styled.div`
   position: absolute;

@@ -21,14 +21,6 @@ const getRandomY = () => {
 export const Enemy = () => {
   const ref = useRef<Group | null>(null);
 
-  const model = useGLTF("./models/bird.gltf");
-
-  model.scene.children.forEach((mesh) => {
-    mesh.userData = { type: "bird" };
-    mesh.castShadow = true;
-    mesh.receiveShadow = true;
-  });
-
   const reset = () => {
     if (ref?.current) {
       ref.current.position.y = 30;
@@ -37,9 +29,6 @@ export const Enemy = () => {
 
   useFrame(({ clock }) => {
     if (ref?.current) {
-      const elapsedTime = clock.getElapsedTime();
-
-      ref.current.position.x += Math.sin(elapsedTime) * 0.2;
       ref.current.position.y -= 0.1;
 
       if (ref.current.position.y < -30) {
@@ -50,12 +39,10 @@ export const Enemy = () => {
 
   return (
     <group ref={ref} position={[getRandomX(), getRandomY(), 0]}>
-      <primitive
-        rotation-y={Math.PI * -0.5}
-        rotation-x={Math.PI * 0.5}
-        object={model.scene.clone()}
-        scale={0.2}
-      />
+      <mesh>
+        <boxGeometry args={[1, 1, 1]} />
+        <meshStandardMaterial color={"red"} />
+      </mesh>
     </group>
   );
 };

@@ -30,7 +30,7 @@ export const Goal = ({ player }: Props) => {
       ref.current.rotation.y = 0;
       ref.current.position.z = 0;
     }
-    setRate(Math.random() * 4);
+    setRate(Math.random() * 2);
     setTouched(false);
   };
 

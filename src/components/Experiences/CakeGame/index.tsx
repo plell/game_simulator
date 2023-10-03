@@ -1,13 +1,13 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Group, Mesh, Vector3 } from "three";
+import { Euler, Group, Mesh, Vector3 } from "three";
 
 import useGame from "../../../Stores/useGame";
 import { experienceProperties } from "../../../Stores/constants";
 
-import { Merged, useGLTF, useTexture } from "@react-three/drei";
+import { Center, Merged, useGLTF, useTexture } from "@react-three/drei";
 import { useFrame, useThree } from "@react-three/fiber";
 import { useCursorHover } from "../hooks/useCursorHover";
-import gsap, { Bounce } from "gsap";
+import gsap, { Bounce, Power4 } from "gsap";
 
 export const CakeGame = () => {
   const ref = useRef<Group | null>(null);
@@ -38,10 +38,67 @@ const pointPositions = [-3, -1, 1, 3];
 
 const Points = () => {
   const ref = useRef<Group | null>(null);
+  const [animating, setAnimating] = useState(false);
   const selectedDonutIds = useGame((s) => s.selectedDonutIds);
+  const setLocked = useGame((s) => s.setLocked);
+  const lockClicked = useGame((s) => s.lockClicked);
+
+  const position = useMemo(() => new Vector3(0, 40, 0), []);
+
+  const { camera } = useThree();
+
+  useEffect(() => {
+    animate();
+  }, [lockClicked]);
+
+  useEffect(() => {
+    if (selectedDonutIds.length > 3) {
+      complete();
+      setLocked(false);
+    }
+  }, [selectedDonutIds]);
+
+  const complete = () => {
+    if (ref.current) {
+      setAnimating(true);
+      gsap
+        .to(ref.current.rotation, {
+          duration: 1,
+          ease: Power4.easeInOut,
+          keyframes: {
+            "0%": new Vector3(0, 0, 0),
+            "100%": new Vector3(0, Math.PI * 2, 0),
+          },
+          onComplete: () => {
+            setAnimating(false);
+          },
+        })
+        .play();
+    }
+  };
+
+  const animate = () => {
+    if (ref.current && !animating) {
+      setAnimating(true);
+      gsap
+        .to(ref.current.position, {
+          duration: 1,
+          ease: Bounce.easeOut,
+          keyframes: {
+            "0%": position,
+            "50%": position.clone().lerp(camera.position, 0.2),
+            "100%": position,
+          },
+          onComplete: () => {
+            setAnimating(false);
+          },
+        })
+        .play();
+    }
+  };
 
   return (
-    <group ref={ref} position-y={40}>
+    <group ref={ref} position={position}>
       {pointPositions.map((d, i) => {
         const fill = i + 1 <= selectedDonutIds.length;
         const complete = selectedDonutIds.length > 3;

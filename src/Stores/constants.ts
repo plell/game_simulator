@@ -52,8 +52,8 @@ export const experienceProperties: ExperienceProps[] = [
     cameraPosition: new Vector3(0,100,128),
     cameraTarget: new Vector3(0, -20, 0),
     gamePosition: new Vector3(0, 0, 0),
-    title: 'Cake Drop',
-    description: 'Choose four.',
+    title: '',
+    description: '',
     instructions: 'The player moves toward the cursor. Click to drop a note, bait enemies toward notes to gain points.',
     cameraControls: false,
     game: CakeGame
