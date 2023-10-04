@@ -42,7 +42,7 @@ export const Browser = () => {
           duration: 1,
           ease: Power4.easeOut,
           keyframes: {
-            "0%": { transform: "rotateY(0deg)", color: "#fff" },
+            "0%": { transform: "rotateY(90deg)", color: "#fff" },
             "50%": { transform: "rotateY(180deg)", color: "skyblue" },
             "100%": { transform: "rotateY(0deg)", color: "#fff" },
           },

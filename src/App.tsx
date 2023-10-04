@@ -98,8 +98,26 @@ const CameraController = () => {
 
 const App = () => {
   const game = useGame((s) => s.game);
+  const setMouseDown = useGame((s) => s.setMouseDown);
 
   const GameComponent = experienceProperties[game]?.game;
+
+  useEffect(() => {
+    window.addEventListener("mousedown", handleMouseDown);
+    window.addEventListener("mouseup", handleMouseUp);
+    return () => {
+      window.removeEventListener("mousedown", handleMouseDown);
+      window.removeEventListener("mouseup", handleMouseUp);
+    };
+  });
+
+  const handleMouseDown = () => {
+    setMouseDown(true);
+  };
+
+  const handleMouseUp = () => {
+    setMouseDown(false);
+  };
 
   return (
     <>

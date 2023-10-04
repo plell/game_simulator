@@ -4,6 +4,7 @@ import { TempoGame } from "../components/Experiences/TempoGame";
 import { Earth } from "../components/Experiences/Earth";
 import { SpaceGame } from "../components/Experiences/SpaceGame";
 import { CrocGame } from "../components/Experiences/CrocGame";
+import { LeafBlower } from "../components/Experiences/LeafBlower";
 
 const { origin } = window.location
 
@@ -54,9 +55,19 @@ export const experienceProperties: ExperienceProps[] = [
     gamePosition: new Vector3(0, 0, 0),
     title: '',
     description: '',
-    instructions: 'The player moves toward the cursor. Click to drop a note, bait enemies toward notes to gain points.',
+    instructions: '',
     cameraControls: false,
     game: CakeGame
+  },
+  {
+    cameraPosition: new Vector3(0, 30,180),
+    cameraTarget: new Vector3(0, 0, -100),
+    gamePosition: new Vector3(0, 0, 0),
+    title: 'Leaf Blower',
+    description: '',
+    instructions: 'Drag to turn the world. Take a look around.',
+    cameraControls: false,
+    game: LeafBlower
   },
   {
     cameraPosition: new Vector3(0, 0, 23),

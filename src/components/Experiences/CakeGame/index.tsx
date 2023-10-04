@@ -23,7 +23,7 @@ export const CakeGame = () => {
 
   return (
     <group ref={ref} position={experienceProperties[game]?.gamePosition}>
-      <directionalLight position={[0, 80, 100]} intensity={2} />
+      <directionalLight castShadow position={[0, 80, 100]} intensity={2} />
       <ambientLight intensity={0.6} />
 
       <DonutBox />
@@ -159,10 +159,20 @@ const WoodTable = () => {
   );
 };
 
-const boxPosition = new Vector3(0, 20, 70);
+const boxPosition = new Vector3(0, 18, 70);
 
 const DonutBox = () => {
   const donutBox = useGLTF("./models/donut_box.gltf");
+  // @ts-ignore
+  donutBox.scene.children.forEach((group: Group) => {
+    // @ts-ignore
+    group.children.forEach((mesh: Mesh) => {
+      console.log(mesh);
+      mesh.castShadow = true;
+      mesh.receiveShadow = true;
+    });
+  });
+
   const ref = useRef<Group | null>(null);
 
   useEffect(() => {
@@ -203,12 +213,9 @@ const DonutBox = () => {
 
 const Donuts = () => {
   // @ts-ignore
-  const { nodes } = useGLTF("./models/donut_white.gltf");
-  // @ts-ignore
-  Object.values(nodes).forEach((mesh: Mesh) => {
-    if (mesh.name === "Dough") {
-      mesh.castShadow = true;
-    }
+  const { nodes } = useGLTF("./models/donut_white.gltf", null, {
+    castShadow: true,
+    receiveShadow: true,
   });
 
   return (
