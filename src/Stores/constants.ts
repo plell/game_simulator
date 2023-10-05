@@ -56,7 +56,7 @@ export const experienceProperties: ExperienceProps[] = [
     title: '',
     description: '',
     instructions: '',
-    cameraControls: false,
+    cameraControls: true,
     game: CakeGame
   },
   {

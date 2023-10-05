@@ -1,13 +1,20 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Euler, Group, Mesh, Vector3 } from "three";
+import { DoubleSide, Group, Mesh, MeshStandardMaterial, Vector3 } from "three";
 
 import useGame from "../../../Stores/useGame";
 import { experienceProperties } from "../../../Stores/constants";
 
-import { Center, Merged, useGLTF, useTexture } from "@react-three/drei";
+import {
+  Merged,
+  MeshReflectorMaterial,
+  useGLTF,
+  useTexture,
+} from "@react-three/drei";
 import { useFrame, useThree } from "@react-three/fiber";
 import { useCursorHover } from "../hooks/useCursorHover";
 import gsap, { Bounce, Power4 } from "gsap";
+
+const roomSize = 300;
 
 export const CakeGame = () => {
   const ref = useRef<Group | null>(null);
@@ -23,13 +30,43 @@ export const CakeGame = () => {
 
   return (
     <group ref={ref} position={experienceProperties[game]?.gamePosition}>
-      <directionalLight castShadow position={[0, 80, 100]} intensity={2} />
-      <ambientLight intensity={0.6} />
+      <pointLight castShadow intensity={30000} position={[60, 100, 0]} />
+
+      <ambientLight intensity={0.2} />
+
+      <Room />
 
       <DonutBox />
       <Donuts />
       <WoodTable />
       <Points />
+    </group>
+  );
+};
+
+const Room = () => {
+  const diffMap = useTexture("textures/wood/raw_plank_wall_diff_1k.jpg");
+  const dispMap = useTexture("textures/wood/raw_plank_wall_disp_1k.jpg");
+  return (
+    <group rotation-y={Math.PI * -0.25}>
+      <mesh position-z={roomSize * -0.5}>
+        <planeGeometry args={[roomSize, roomSize]} />
+        <meshStandardMaterial side={DoubleSide} color={"#ffffff"} />
+      </mesh>
+      <mesh position-x={roomSize * -0.5} rotation-y={Math.PI * 0.5}>
+        <planeGeometry args={[roomSize, roomSize]} />
+        <meshStandardMaterial side={DoubleSide} color={"#ffffff"} />
+      </mesh>
+
+      <mesh position-y={roomSize * -0.5} rotation-x={Math.PI * 0.5}>
+        <planeGeometry args={[roomSize, roomSize]} />
+        <meshStandardMaterial
+          roughnessMap={dispMap}
+          map={diffMap}
+          displacementMap={dispMap}
+          side={DoubleSide}
+        />
+      </mesh>
     </group>
   );
 };
@@ -126,8 +163,8 @@ const Points = () => {
   );
 };
 
-const columns = 12;
-const rows = 8;
+const columns = 10;
+const rows = 6;
 const width = 12;
 const height = 12;
 const leftPad = -(width * (columns / 2) - width / 2);
@@ -135,9 +172,6 @@ const topPad = -(height * (rows / 2) - height / 2);
 const tablePadding = 12;
 
 const WoodTable = () => {
-  const diffMap = useTexture("textures/wood/raw_plank_wall_diff_1k.jpg");
-  const dispMap = useTexture("textures/wood/raw_plank_wall_disp_1k.jpg");
-
   return (
     <group position-y={-5}>
       <mesh receiveShadow>
@@ -149,11 +183,7 @@ const WoodTable = () => {
           ]}
         />
 
-        <meshStandardMaterial
-          roughnessMap={dispMap}
-          map={diffMap}
-          displacementMap={dispMap}
-        />
+        <meshStandardMaterial transparent opacity={0.4} />
       </mesh>
     </group>
   );
@@ -206,6 +236,7 @@ const DonutBox = () => {
       rotation-y={Math.PI * -0.5}
       onClick={(e) => e.stopPropagation()}
     >
+      <pointLight position={[0, 0, 0]} intensity={100} />
       <primitive object={donutBox.scene.clone()} scale={regularScale} />
     </group>
   );

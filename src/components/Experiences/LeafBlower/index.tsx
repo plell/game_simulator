@@ -1,4 +1,11 @@
-import { MutableRefObject, useEffect, useMemo, useRef, useState } from "react";
+import {
+  MutableRefObject,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import {
   Group,
   MeshBasicMaterial,
@@ -82,7 +89,7 @@ export const LeafBlower = () => {
         </mesh>
       </group>
 
-      <RigidBody type={"fixed"}>
+      <RigidBody friction={5} type={"fixed"}>
         <mesh
           receiveShadow
           rotation-x={Math.PI * -0.5}
@@ -109,25 +116,33 @@ const material = new MeshStandardMaterial({ color: "lime" });
 
 const translationVec = new Vector3();
 const forceVec = new Vector3();
+
 const Leaf = ({ offset, mouseRef }: LeafProps) => {
   const ref = useRef<RapierRigidBody | null>(null);
   const mouseDown = useGame((s) => s.mouseDown);
 
-  useFrame(() => {
-    if (mouseDown && ref.current) {
-      const { x, y, z } = ref.current.translation();
-      const position = translationVec.set(x, y, z);
-      if (position.distanceTo(mouseRef.current) < radius) {
-        const xDirection = x - mouseRef.current.x;
-        const zDirection = z - mouseRef.current.z;
-        const forces = {
-          x: xDirection * 10,
-          y: 50,
-          z: zDirection * 10,
-        };
+  const wind = useMemo(() => {
+    return new Vector3(1, 1, 1);
+  }, []);
 
-        const force = forceVec.set(forces.x, forces.y, forces.z);
-        ref.current.applyImpulse(force, true);
+  useFrame(() => {
+    if (ref.current) {
+      ref.current.applyImpulse(wind, true);
+      if (mouseDown) {
+        const { x, y, z } = ref.current.translation();
+        const position = translationVec.set(x, y, z);
+        if (position.distanceTo(mouseRef.current) < radius) {
+          const xDirection = x - mouseRef.current.x;
+          const zDirection = z - mouseRef.current.z;
+          const forces = {
+            x: xDirection * 10,
+            y: 50,
+            z: zDirection * 10,
+          };
+
+          const force = forceVec.set(forces.x, forces.y, forces.z);
+          ref.current.applyImpulse(force, true);
+        }
       }
     }
   });
