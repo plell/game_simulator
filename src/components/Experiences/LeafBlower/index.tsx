@@ -21,7 +21,7 @@ import { experienceProperties } from "../../../Stores/constants";
 import { useFrame } from "@react-three/fiber";
 
 import { RapierRigidBody, RigidBody } from "@react-three/rapier";
-import { Sky } from "@react-three/drei";
+import { Sky, Trail } from "@react-three/drei";
 import { useControls } from "leva";
 
 const mouseVec3 = new Vector3();

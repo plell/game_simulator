@@ -124,7 +124,7 @@ const App = () => {
       <Anchor id='anchor' />
 
       <Browser />
-      {isDevelopment && <Leva />}
+      <Leva hidden={!isDevelopment} />
 
       <Canvas
         gl={{
