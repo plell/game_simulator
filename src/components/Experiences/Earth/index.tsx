@@ -16,19 +16,6 @@ export const Earth = () => {
 
   const game = useGame((s) => s.game);
 
-  useFrame(() => {
-    if (groupRef.current) {
-      groupRef.current.rotation.y -= 0.001;
-      groupRef.current.rotation.x += 0.0009;
-    }
-
-    if (cloudsRef.current) {
-      cloudsRef.current.rotation.z += 0.000008;
-      cloudsRef.current.rotation.x += 0.000008;
-      cloudsRef.current.rotation.y += 0.000008;
-    }
-  });
-
   return (
     <group position={experienceProperties[game]?.gamePosition}>
       <directionalLight ref={lightRef} intensity={3} position={[0, 0, 90]} />

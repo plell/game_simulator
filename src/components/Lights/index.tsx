@@ -56,7 +56,7 @@ export const Lights = () => {
   });
 
   // @ts-ignore
-  useHelper(pointRef, PointLightHelper, 10, "red");
+  // useHelper(pointRef, PointLightHelper, 10, "red");
   // @ts-ignore
   useHelper(directionalRef, DirectionalLightHelper, 10, "green");
   // @ts-ignore
@@ -77,6 +77,7 @@ export const Lights = () => {
       <pointLight ref={pointRef} {...pointLight} />
 
       <rectAreaLight ref={rectAreaRef} {...rectLightParams} />
+
       <mesh ref={rectAreaHelper}>
         <planeGeometry args={[rectLightParams.width, rectLightParams.height]} />
         <meshBasicMaterial side={DoubleSide} wireframe color={"#fff"} />

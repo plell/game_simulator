@@ -179,7 +179,7 @@ const tablePadding = 12;
 const WoodTable = () => {
   return (
     <group position-y={-5}>
-      <mesh receiveShadow>
+      <mesh receiveShadow castShadow>
         <boxGeometry
           args={[
             columns * width + tablePadding,
@@ -246,6 +246,14 @@ const DonutBox = () => {
 const Donuts = () => {
   // @ts-ignore
   const { nodes } = useGLTF("./models/donut_white.gltf");
+
+  console.log("nodes", nodes);
+
+  Object.keys(nodes).forEach((key: string) => {
+    const mesh: Mesh = nodes[key];
+    mesh.castShadow = true;
+    mesh.receiveShadow = true;
+  });
 
   return (
     <Merged meshes={nodes || []}>
