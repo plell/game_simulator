@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Group, Vector3 } from "three";
 import { Bullet } from "./components/Bullet";
+import { v4 as uuidv4 } from "uuid";
 
 type Props = {
   player: React.MutableRefObject<Group | null>;
@@ -19,7 +20,7 @@ export const Projectiles = ({ player, launchPosition }: Props) => {
 
   const newProjectile = () => {
     const pCopy = { ...projectiles };
-    const id = Object.keys(pCopy).length;
+    const id = uuidv4();
 
     const playerPosition = player?.current?.position.clone() || new Vector3();
     const offset: [x: number, y: number, z: number] = launchPosition
@@ -33,7 +34,6 @@ export const Projectiles = ({ player, launchPosition }: Props) => {
 
     pCopy[id] = {
       id,
-      body: null,
       position: position,
       type: "projectile",
       dead: false,
@@ -42,11 +42,17 @@ export const Projectiles = ({ player, launchPosition }: Props) => {
     setProjectiles(pCopy);
   };
 
+  const removeProjectile = (id: string) => {
+    const pCopy = { ...projectiles };
+    delete pCopy[id];
+    // setProjectiles(pCopy);
+  };
+
   return (
     <group>
-      {Object.keys(projectiles).map((p, i) => {
+      {Object.keys(projectiles).map((p) => {
         const self = projectiles[p];
-        return <Bullet self={self} key={i} />;
+        return <Bullet self={self} removeMe={removeProjectile} key={self.id} />;
       })}
     </group>
   );

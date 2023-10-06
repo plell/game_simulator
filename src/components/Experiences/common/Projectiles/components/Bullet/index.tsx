@@ -1,14 +1,13 @@
 import { useFrame } from "@react-three/fiber";
-import { RapierRigidBody, RigidBody } from "@react-three/rapier";
+
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Color, Group, MeshStandardMaterial, Vector3 } from "three";
+import { Color, Group, MeshStandardMaterial } from "three";
 import { Projectile } from "../../../../../../Stores/types";
 
 type Props = {
   self: Projectile;
+  removeMe: (id: string) => void;
 };
-
-const impulse = new Vector3(0, 0.3, 0);
 
 const highlightMaterial = new MeshStandardMaterial({
   emissive: new Color("red"),
@@ -18,32 +17,37 @@ const highlightMaterial = new MeshStandardMaterial({
   transparent: true,
 });
 
-export const Bullet = ({ self }: Props) => {
-  const body = useRef<RapierRigidBody | null>(null);
+export const Bullet = ({ self, removeMe }: Props) => {
+  const ref = useRef<Group | null>(null);
 
   const [dead, setDead] = useState(false);
 
+  useEffect(() => {
+    if (dead) {
+      console.log("removeMe");
+      removeMe(self.id);
+    }
+
+    return () => {
+      console.log("im removed!");
+    };
+  }, [dead]);
+
   useFrame(() => {
-    if (dead) return;
+    if (ref.current) {
+      ref.current.position.y += 0.3;
 
-    if (body.current) {
-      body.current.applyImpulse(impulse, true);
-
-      if (body?.current?.translation().y > 50) {
+      if (ref.current.position.y > 50) {
         setDead(true);
       }
     }
   });
 
-  const position = useMemo(() => self?.position || [0, 0, 0], [self]);
-
-  if (dead) return null;
-
   return (
-    <RigidBody ref={body} position={position}>
+    <group ref={ref} position={self?.position}>
       <mesh material={highlightMaterial}>
         <sphereGeometry args={[0.3, 10, 10]} />
       </mesh>
-    </RigidBody>
+    </group>
   );
 };

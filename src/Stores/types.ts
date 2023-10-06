@@ -16,8 +16,7 @@ export type Player = {
 }
 
 export type Projectile = {
-    id: string | number
-    body: React.MutableRefObject<RapierRigidBody | null> | null
+    id:  string
     position: Vector3
     type: string
     dead: boolean
