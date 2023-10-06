@@ -21,6 +21,8 @@ import { experienceProperties } from "../../../Stores/constants";
 import { useFrame } from "@react-three/fiber";
 
 import { RapierRigidBody, RigidBody } from "@react-three/rapier";
+import { Sky } from "@react-three/drei";
+import { useControls } from "leva";
 
 const mouseVec3 = new Vector3();
 const pointLightVec3 = new Vector3();
@@ -62,13 +64,30 @@ export const LeafBlower = () => {
     return l;
   }, [cursorRef]);
 
+  const sunParams = useControls("sun", {
+    position: {
+      value: [0.7789999999999998, 0.20099999999999996, -8.760353553682876e-17],
+    },
+  });
+
+  const groundParams = useControls("ground", {
+    color: "#ffad69",
+  });
+
   return (
     <group ref={ref} position={experienceProperties[game]?.gamePosition}>
-      <directionalLight intensity={3} />
+      <directionalLight intensity={2} />
+
+      <Sky
+        distance={450000}
+        sunPosition={sunParams.position}
+        // inclination={0}
+        // azimuth={0.25}
+      />
       <pointLight
         ref={pointLightRef}
         castShadow
-        intensity={6000}
+        intensity={4000}
         color={"#ffffff"}
       />
 
@@ -99,7 +118,7 @@ export const LeafBlower = () => {
           }}
         >
           <boxGeometry args={[7000, 10000, 1]} />
-          <meshStandardMaterial color={"gray"} />
+          <meshStandardMaterial color={groundParams.color} />
         </mesh>
       </RigidBody>
     </group>
@@ -112,7 +131,6 @@ type LeafProps = {
 };
 
 const geometry = new TorusKnotGeometry();
-const material = new MeshStandardMaterial({ color: "lime" });
 
 const translationVec = new Vector3();
 const forceVec = new Vector3();
@@ -135,9 +153,9 @@ const Leaf = ({ offset, mouseRef }: LeafProps) => {
           const xDirection = x - mouseRef.current.x;
           const zDirection = z - mouseRef.current.z;
           const forces = {
-            x: xDirection * 10,
+            x: xDirection * 20,
             y: 50,
-            z: zDirection * 10,
+            z: zDirection * 20,
           };
 
           const force = forceVec.set(forces.x, forces.y, forces.z);
@@ -147,9 +165,15 @@ const Leaf = ({ offset, mouseRef }: LeafProps) => {
     }
   });
 
+  const leafParams = useControls("leaf", {
+    color: "#18eb94",
+  });
+
   return (
     <RigidBody gravityScale={2} ref={ref} position={[0, 30 + offset * 6, 0]}>
-      <mesh castShadow geometry={geometry} material={material} />
+      <mesh castShadow geometry={geometry}>
+        <meshStandardMaterial color={leafParams.color} />
+      </mesh>
     </RigidBody>
   );
 };
