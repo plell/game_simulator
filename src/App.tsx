@@ -125,7 +125,7 @@ const App = () => {
 
       <Browser />
       {isDevelopment && <Leva />}
-      {/* {isDevelopment && <Perf />} */}
+
       <Canvas
         gl={{
           toneMappingExposure: 3,
@@ -143,6 +143,8 @@ const App = () => {
         }}
       >
         <Suspense fallback={null}>
+          {isDevelopment && <Perf position='top-left' />}
+
           <CameraController />
           <Selection>
             <EffectComposer autoClear={false} multisampling={8}>

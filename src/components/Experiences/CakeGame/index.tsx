@@ -1,23 +1,30 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { DoubleSide, Group, Mesh, MeshStandardMaterial, Vector3 } from "three";
+import {
+  DoubleSide,
+  Group,
+  Mesh,
+  MeshStandardMaterial,
+  PointLight,
+  PointLightHelper,
+  Vector3,
+} from "three";
 
 import useGame from "../../../Stores/useGame";
 import { experienceProperties } from "../../../Stores/constants";
 
-import {
-  Merged,
-  MeshReflectorMaterial,
-  useGLTF,
-  useTexture,
-} from "@react-three/drei";
+import { Merged, useGLTF, useHelper, useTexture } from "@react-three/drei";
 import { useFrame, useThree } from "@react-three/fiber";
 import { useCursorHover } from "../hooks/useCursorHover";
 import gsap, { Bounce, Power4 } from "gsap";
+import { Lights } from "../../Lights";
 
 const roomSize = 300;
 
+const colors = ["#DABE99", "#CF9F6E", "#9D6538", "#652817", "#33140A"];
+
 export const CakeGame = () => {
   const ref = useRef<Group | null>(null);
+  const pointLightRef = useRef<PointLight | null>(null);
 
   const game = useGame((s) => s.game);
   const setSelectedDonutIds = useGame((s) => s.setSelectedDonutIds);
@@ -30,9 +37,7 @@ export const CakeGame = () => {
 
   return (
     <group ref={ref} position={experienceProperties[game]?.gamePosition}>
-      <pointLight castShadow intensity={30000} position={[60, 100, 0]} />
-
-      <ambientLight intensity={0.2} />
+      <Lights />
 
       <Room />
 
@@ -51,20 +56,20 @@ const Room = () => {
     <group rotation-y={Math.PI * -0.25}>
       <mesh position-z={roomSize * -0.5}>
         <planeGeometry args={[roomSize, roomSize]} />
-        <meshStandardMaterial side={DoubleSide} color={"#ffffff"} />
+        <meshStandardMaterial color={colors[0]} />
       </mesh>
       <mesh position-x={roomSize * -0.5} rotation-y={Math.PI * 0.5}>
         <planeGeometry args={[roomSize, roomSize]} />
-        <meshStandardMaterial side={DoubleSide} color={"#ffffff"} />
+        <meshStandardMaterial color={colors[0]} />
       </mesh>
 
-      <mesh position-y={roomSize * -0.5} rotation-x={Math.PI * 0.5}>
+      <mesh position-y={roomSize * -0.5} rotation-x={Math.PI * -0.5}>
         <planeGeometry args={[roomSize, roomSize]} />
         <meshStandardMaterial
+          color={colors[0]}
           roughnessMap={dispMap}
           map={diffMap}
           displacementMap={dispMap}
-          side={DoubleSide}
         />
       </mesh>
     </group>
@@ -183,7 +188,12 @@ const WoodTable = () => {
           ]}
         />
 
-        <meshStandardMaterial transparent opacity={0.4} />
+        <meshStandardMaterial
+          metalness={1}
+          roughness={0.8}
+          transparent
+          opacity={0.7}
+        />
       </mesh>
     </group>
   );
@@ -193,15 +203,6 @@ const boxPosition = new Vector3(0, 18, 70);
 
 const DonutBox = () => {
   const donutBox = useGLTF("./models/donut_box.gltf");
-  // @ts-ignore
-  donutBox.scene.children.forEach((group: Group) => {
-    // @ts-ignore
-    group.children.forEach((mesh: Mesh) => {
-      console.log(mesh);
-      mesh.castShadow = true;
-      mesh.receiveShadow = true;
-    });
-  });
 
   const ref = useRef<Group | null>(null);
 
@@ -244,10 +245,7 @@ const DonutBox = () => {
 
 const Donuts = () => {
   // @ts-ignore
-  const { nodes } = useGLTF("./models/donut_white.gltf", null, {
-    castShadow: true,
-    receiveShadow: true,
-  });
+  const { nodes } = useGLTF("./models/donut_white.gltf");
 
   return (
     <Merged meshes={nodes || []}>
@@ -338,6 +336,11 @@ const sprinkleColors = [
   "#3CB371",
 ];
 
+const getCoffeeColors = () => {
+  const index = Math.floor(Math.random() * colors.length);
+  return colors[index];
+};
+
 const getRandomFrostingColor = () => {
   const index = Math.floor(Math.random() * frostingColors.length);
   return frostingColors[index];
@@ -390,8 +393,8 @@ const Donut = ({ models, position, rotation, id }: DonutProps) => {
   });
 
   const rotationY = useMemo(() => Math.random() * 10, []);
-  const doughColor = useMemo(() => getRandomDoughColor(), []);
-  const frostingColor = useMemo(() => getRandomFrostingColor(), []);
+  const doughColor = useMemo(() => getCoffeeColors(), []);
+  const frostingColor = useMemo(() => getCoffeeColors(), []);
   const sprinkleColor = useMemo(() => {
     return [
       getRandomSprinkleColor(),

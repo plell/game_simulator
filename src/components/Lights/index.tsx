@@ -1,36 +1,88 @@
 import { useHelper } from "@react-three/drei";
-import { useRef } from "react";
+import { useControls } from "leva";
+import { useEffect, useMemo, useRef } from "react";
 import {
   DirectionalLight,
   DirectionalLightHelper,
+  DoubleSide,
+  Mesh,
   PointLight,
   PointLightHelper,
+  RectAreaLight,
+  SpotLight,
+  SpotLightHelper,
+  Vector3,
 } from "three";
+import { useBasicDebug } from "../Experiences/hooks/useBasicDebug";
+import { useFrame } from "@react-three/fiber";
+
+const center = new Vector3();
 
 export const Lights = () => {
-  const ref = useRef<DirectionalLight | null>(null);
-  const pointRef = useRef<PointLight | null>(null);
+  const pointRef = useRef<PointLight>(null);
+  const directionalRef = useRef<DirectionalLight>(null);
+  const rectAreaRef = useRef<RectAreaLight>(null);
+  const spotRef = useRef<SpotLight>(null);
+  const rectAreaHelper = useRef<Mesh>(null);
+
+  const spotLight = useBasicDebug("spotLight", {
+    position: [0, 0, 0],
+  });
+
+  const directionalLight = useBasicDebug("directionalLight", {
+    position: [0, 0, 0],
+  });
+
+  const pointLight = useControls("pointLight", {
+    position: {
+      value: [-52, 41, -47],
+      step: 4,
+    },
+    intensity: 4300,
+    visible: true,
+    color: { value: "#fff9d6" },
+  });
+
+  const rectLightParams = useControls("rectLight", {
+    position: {
+      value: [40, 230, -44],
+      step: 4,
+    },
+    intensity: 100,
+    height: 10,
+    width: 200,
+    visible: true,
+    color: { value: "#fff7d6" },
+  });
 
   // @ts-ignore
-  // useHelper(ref, DirectionalLightHelper, "red");
+  useHelper(pointRef, PointLightHelper, 10, "red");
   // @ts-ignore
-  useHelper(pointRef, PointLightHelper, "red");
+  useHelper(directionalRef, DirectionalLightHelper, 10, "green");
+  // @ts-ignore
+  useHelper(spotRef, SpotLightHelper, 10, "blue");
+
+  useFrame(() => {
+    if (rectAreaRef.current) {
+      rectAreaRef.current.lookAt(center);
+      if (rectAreaHelper.current) {
+        rectAreaHelper.current.position.copy(rectAreaRef.current.position);
+        rectAreaHelper.current.rotation.copy(rectAreaRef.current.rotation);
+      }
+    }
+  });
 
   return (
     <>
-      <pointLight
-        ref={pointRef}
-        castShadow
-        position={[-7, 16, 7]}
-        intensity={1000}
-        color={"yellow"}
-        shadow-bias={-0.001}
-        shadow-mapSize-width={1024} // Adjust shadow map size
-        shadow-mapSize-height={1024} // Adjust shadow map size
-      />
+      <pointLight ref={pointRef} {...pointLight} />
 
-      {/* <directionalLightHelper light={ref} /> */}
-      <ambientLight intensity={0.3} />
+      <rectAreaLight ref={rectAreaRef} {...rectLightParams} />
+      <mesh ref={rectAreaHelper}>
+        <planeGeometry args={[rectLightParams.width, rectLightParams.height]} />
+        <meshBasicMaterial side={DoubleSide} wireframe color={"#fff"} />
+      </mesh>
+
+      <ambientLight intensity={0.4} />
     </>
   );
 };
