@@ -8,9 +8,11 @@ import {
 } from "react";
 import {
   Group,
+  Matrix4,
   MeshBasicMaterial,
   MeshStandardMaterial,
   PointLight,
+  Quaternion,
   TorusKnotGeometry,
   Vector3,
 } from "three";
@@ -20,12 +22,19 @@ import { experienceProperties } from "../../../Stores/constants";
 
 import { useFrame } from "@react-three/fiber";
 
-import { RapierRigidBody, RigidBody } from "@react-three/rapier";
-import { Sky, Trail } from "@react-three/drei";
+import {
+  InstancedRigidBodies,
+  RapierRigidBody,
+  RigidBody,
+} from "@react-three/rapier";
+import { Instance, Instances, Sky, Trail } from "@react-three/drei";
 import { useControls } from "leva";
 
 const mouseVec3 = new Vector3();
 const pointLightVec3 = new Vector3();
+
+const translationVec = new Vector3();
+const forceVec = new Vector3();
 
 const radius = 20;
 
@@ -34,6 +43,9 @@ export const LeafBlower = () => {
   const cursorRef = useRef<Group | null>(null);
   const mouseRef = useRef<Vector3>(mouseVec3);
   const pointLightRef = useRef<PointLight | null>(null);
+  const blowerPower = useMemo(() => 8, []);
+
+  const instancedRigidBodiesRef = useRef<RapierRigidBody[] | null>(null);
 
   const game = useGame((s) => s.game);
 
@@ -54,16 +66,6 @@ export const LeafBlower = () => {
     }
   });
 
-  const leaves = useMemo(() => {
-    const l = [];
-
-    for (let i = 0; i < 20; i++) {
-      l.push(<Leaf key={`leaf-${i}`} offset={i} mouseRef={mouseRef} />);
-    }
-
-    return l;
-  }, [cursorRef]);
-
   const sunParams = useControls("sun", {
     position: {
       value: [0.7789999999999998, 0.20099999999999996, -8.760353553682876e-17],
@@ -74,6 +76,48 @@ export const LeafBlower = () => {
     color: "#ffad69",
   });
 
+  const leafCount = useMemo(() => 100, []);
+
+  const leafInstances = useMemo(() => {
+    const instances = [];
+
+    for (let i = 0; i < leafCount; i += 1) {
+      instances.push({
+        key: i,
+        position: [
+          (Math.random() - 0.5) * 100,
+          6,
+          30 + (Math.random() - 0.5) * 100,
+        ],
+        rotation: [Math.random(), Math.random(), Math.random()],
+      });
+    }
+    return instances;
+  }, []);
+
+  useFrame(() => {
+    // for every leaf!
+    if (instancedRigidBodiesRef?.current?.length) {
+      instancedRigidBodiesRef?.current?.forEach((rb) => {
+        if (mouseDown) {
+          const { x, y, z } = rb.translation();
+          const position = translationVec.set(x, y, z);
+          if (position.distanceTo(mouseRef.current) < radius) {
+            const xDirection = x - mouseRef.current.x;
+            const zDirection = z - mouseRef.current.z;
+            const forces = {
+              x: xDirection * blowerPower,
+              y: 30,
+              z: zDirection * blowerPower,
+            };
+
+            const force = forceVec.set(forces.x, forces.y, forces.z);
+            rb.applyImpulse(force, true);
+          }
+        }
+      });
+    }
+  });
   return (
     <group ref={ref} position={experienceProperties[game]?.gamePosition}>
       <directionalLight intensity={2} />
@@ -91,7 +135,23 @@ export const LeafBlower = () => {
         color={"#ffffff"}
       />
 
-      {leaves}
+      <InstancedRigidBodies
+        gravityScale={3}
+        instances={leafInstances}
+        ref={instancedRigidBodiesRef}
+      >
+        <instancedMesh castShadow receiveShadow args={[null, null, leafCount]}>
+          <boxGeometry args={[3, 0.4, 4]} />
+          <meshStandardMaterial color={"#ff5757"} />
+        </instancedMesh>
+      </InstancedRigidBodies>
+
+      {/* <Instances material={material} geometry={geometry}>
+        {leaves.map((l, i) => {
+          return <Leaf key={i} {...l} />;
+        })}
+      </Instances> */}
+
       <group ref={cursorRef}>
         <mesh rotation-x={Math.PI * -0.5}>
           <torusGeometry args={[radius, 1]} />
@@ -117,63 +177,10 @@ export const LeafBlower = () => {
             mouseRef.current.set(x, y, z);
           }}
         >
-          <boxGeometry args={[7000, 10000, 1]} />
+          <boxGeometry args={[7000, 10000, 10]} />
           <meshStandardMaterial color={groundParams.color} />
         </mesh>
       </RigidBody>
     </group>
-  );
-};
-
-type LeafProps = {
-  offset: number;
-  mouseRef: MutableRefObject<Vector3>;
-};
-
-const geometry = new TorusKnotGeometry();
-
-const translationVec = new Vector3();
-const forceVec = new Vector3();
-
-const Leaf = ({ offset, mouseRef }: LeafProps) => {
-  const ref = useRef<RapierRigidBody | null>(null);
-  const mouseDown = useGame((s) => s.mouseDown);
-
-  const wind = useMemo(() => {
-    return new Vector3(1, 1, 1);
-  }, []);
-
-  useFrame(() => {
-    if (ref.current) {
-      ref.current.applyImpulse(wind, true);
-      if (mouseDown) {
-        const { x, y, z } = ref.current.translation();
-        const position = translationVec.set(x, y, z);
-        if (position.distanceTo(mouseRef.current) < radius) {
-          const xDirection = x - mouseRef.current.x;
-          const zDirection = z - mouseRef.current.z;
-          const forces = {
-            x: xDirection * 20,
-            y: 50,
-            z: zDirection * 20,
-          };
-
-          const force = forceVec.set(forces.x, forces.y, forces.z);
-          ref.current.applyImpulse(force, true);
-        }
-      }
-    }
-  });
-
-  const leafParams = useControls("leaf", {
-    color: "#18eb94",
-  });
-
-  return (
-    <RigidBody gravityScale={2} ref={ref} position={[0, 30 + offset * 6, 0]}>
-      <mesh castShadow geometry={geometry}>
-        <meshStandardMaterial color={leafParams.color} />
-      </mesh>
-    </RigidBody>
   );
 };

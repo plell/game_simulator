@@ -10,6 +10,7 @@ import { experienceProperties } from "../../../Stores/constants";
 import { useEffect, useRef } from "react";
 import gsap, { Power4 } from "gsap";
 import { Bounce } from "gsap";
+import { AudioPlayer } from "../AudioPlayer";
 
 export const Browser = () => {
   const game = useGame((s) => s.game);
@@ -57,6 +58,8 @@ export const Browser = () => {
         <div>{experienceProperties[game]?.title}</div>
         <Description>{experienceProperties[game]?.description}</Description>
       </Title>
+
+      <AudioPlayer />
 
       {game > 0 ? (
         <Button onPointerDown={() => setGame(game - 1)}>
