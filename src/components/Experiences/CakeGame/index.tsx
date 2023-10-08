@@ -168,18 +168,18 @@ const Points = () => {
   );
 };
 
-const columns = 10;
-const rows = 6;
+const columns = 7;
+const rows = 5;
 const width = 12;
 const height = 12;
 const leftPad = -(width * (columns / 2) - width / 2);
 const topPad = -(height * (rows / 2) - height / 2);
-const tablePadding = 12;
+const tablePadding = 5;
 
 const WoodTable = () => {
   return (
     <group position-y={-5}>
-      <mesh receiveShadow castShadow>
+      <mesh>
         <boxGeometry
           args={[
             columns * width + tablePadding,
@@ -246,14 +246,6 @@ const DonutBox = () => {
 const Donuts = () => {
   // @ts-ignore
   const { nodes } = useGLTF("./models/donut_white.gltf");
-
-  console.log("nodes", nodes);
-
-  Object.keys(nodes).forEach((key: string) => {
-    const mesh: Mesh = nodes[key];
-    mesh.castShadow = true;
-    mesh.receiveShadow = true;
-  });
 
   return (
     <Merged meshes={nodes || []}>
@@ -415,6 +407,10 @@ const Donut = ({ models, position, rotation, id }: DonutProps) => {
     return Math.random() * 10 < 2;
   }, []);
 
+  const iHaveSprinkles = useMemo(() => {
+    return Math.random() * 10 < 7;
+  }, []);
+
   const goTo = (reverse?: boolean) => {
     const myBoxPosition = new Vector3(
       boxPosition.x + selectedDonutIds.length * 5 - 7.3,
@@ -514,11 +510,15 @@ const Donut = ({ models, position, rotation, id }: DonutProps) => {
             {/* frosting */}
             <models.Torus001 color={frostingColor} />
             {/* sprinkle */}
-            <models.Torus001_1 color={sprinkleColor[0]} />
-            {/* sprinkle */}
-            <models.Torus001_2 color={sprinkleColor[1]} />
-            {/* sprinkle */}
-            <models.Torus001_3 color={sprinkleColor[2]} />
+            {iHaveSprinkles && (
+              <>
+                <models.Torus001_1 color={sprinkleColor[0]} />
+                {/* sprinkle */}
+                <models.Torus001_2 color={sprinkleColor[1]} />
+                {/* sprinkle */}
+                <models.Torus001_3 color={sprinkleColor[2]} />
+              </>
+            )}
           </group>
         )}
       </group>
