@@ -59,13 +59,13 @@ export const experienceProperties: ExperienceProps[] = [
     instructions: '',
     cameraControls: false,
     backgroundColor:'#ffffff',
-    game: CakeGame
+    game: CakeGame,
   },
   {
     cameraPosition: new Vector3(0,40,168),
     cameraTarget: new Vector3(0, 0, 0),
     gamePosition: new Vector3(0, 0, 0),
-    title: 'Leaf Blower',
+    title: '',
     description: '',
     instructions: 'Drag to turn the world. Take a look around.',
     cameraControls: false,

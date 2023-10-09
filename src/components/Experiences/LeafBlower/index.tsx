@@ -1,5 +1,6 @@
 import {
   MutableRefObject,
+  Suspense,
   useEffect,
   useLayoutEffect,
   useMemo,
@@ -10,6 +11,7 @@ import {
   Fog,
   Group,
   Matrix4,
+  Mesh,
   MeshBasicMaterial,
   MeshStandardMaterial,
   PointLight,
@@ -30,6 +32,11 @@ import {
 } from "@react-three/rapier";
 import { Instance, Instances, Sky, Trail } from "@react-three/drei";
 import { useControls } from "leva";
+import {
+  useObjectIntersectsMany,
+  useObjectsIntersect,
+} from "../hooks/useObjectsIntersect";
+import { GameProgress } from "../common/GameProgress";
 
 const mouseVec3 = new Vector3();
 const pointLightVec3 = new Vector3();
@@ -57,7 +64,7 @@ export const LeafBlower = () => {
       cursorRef.current.position.lerp(mouseRef.current, 0.1);
       if (pointLightRef.current) {
         pointLightRef.current.position.lerp(
-          pointLightVec3.set(mouseRef.current.x, 50, mouseRef.current.z),
+          pointLightVec3.set(mouseRef.current.x, 30, mouseRef.current.z),
           0.1
         );
       }
@@ -105,7 +112,7 @@ export const LeafBlower = () => {
             const zDirection = z - mouseRef.current.z;
             const forces = {
               x: xDirection * blowerPower,
-              y: 30,
+              y: 40,
               z: zDirection * blowerPower,
             };
 
@@ -116,77 +123,96 @@ export const LeafBlower = () => {
       });
     }
   });
+
+  const sensorRef = useRef<Mesh | null>(null);
+
+  const intersectingObjectCountRef = useObjectIntersectsMany(
+    sensorRef,
+    instancedRigidBodiesRef
+  );
+
+  const gameProgressPosition = useMemo(() => new Vector3(0, 50, 0), []);
+
   return (
-    <group ref={ref} position={experienceProperties[game]?.gamePosition}>
-      <directionalLight intensity={0.8} />
-      <ambientLight intensity={0.4} />
+    <Suspense>
+      <fog attach='fog' color='white' near={100} far={5000} />
+      <group ref={ref} position={experienceProperties[game]?.gamePosition}>
+        <directionalLight intensity={0.8} />
+        <ambientLight intensity={0.4} />
 
-      <fog args={[0xcccccc, 10, 15]} />
+        <GameProgress
+          position={gameProgressPosition}
+          type='bar'
+          max={instancedRigidBodiesRef.current?.length || 1}
+          score={0}
+          scoreInverted
+          scoreRef={intersectingObjectCountRef}
+        />
 
-      <Sky
-        distance={450000}
-        sunPosition={sunParams.position}
-        // inclination={0}
-        // azimuth={0.25}
-      />
-      <pointLight
-        ref={pointLightRef}
-        castShadow
-        intensity={4000}
-        color={mouseDown ? "white" : "gold"}
-      />
+        <Sky distance={450000} sunPosition={sunParams.position} />
+        <pointLight
+          ref={pointLightRef}
+          castShadow
+          intensity={2000}
+          color={mouseDown ? "white" : "gold"}
+        />
 
-      <InstancedRigidBodies
-        gravityScale={3}
-        instances={leafInstances}
-        ref={instancedRigidBodiesRef}
-      >
-        <instancedMesh castShadow receiveShadow args={[null, null, leafCount]}>
-          <boxGeometry args={[3, 0.4, 4]} />
-          <meshStandardMaterial color={"#ff5757"} />
-        </instancedMesh>
-      </InstancedRigidBodies>
-
-      {/* <Instances material={material} geometry={geometry}>
-        {leaves.map((l, i) => {
-          return <Leaf key={i} {...l} />;
-        })}
-      </Instances> */}
-
-      <mesh position={[0, 5, 0]} rotation-x={Math.PI * 0.5}>
-        <torusGeometry args={[80, 1, 4]} />
-        <meshStandardMaterial color={"#ffffff"} roughness={0} />
-      </mesh>
-
-      <group ref={cursorRef}>
-        <mesh rotation-x={Math.PI * -0.5}>
-          <torusGeometry args={[radius, 1]} />
-          <meshBasicMaterial color={mouseDown ? "white" : "gold"} />
-        </mesh>
-        <mesh>
-          <sphereGeometry args={[radius, 20]} />
-          <meshStandardMaterial
-            wireframe
-            color={mouseDown ? "white" : "gold"}
-            transparent
-            opacity={0.2}
-          />
-        </mesh>
-      </group>
-
-      <RigidBody friction={5} type={"fixed"}>
-        <mesh
-          receiveShadow
-          rotation-x={Math.PI * -0.5}
-          onPointerMove={(e) => {
-            const { x, y, z } = e.point;
-            mouseRef.current.set(x, y, z);
-          }}
+        <InstancedRigidBodies
+          gravityScale={3}
+          instances={leafInstances}
+          ref={instancedRigidBodiesRef}
         >
-          <boxGeometry args={[7000, 10000, 10]} />
-          <meshStandardMaterial color={groundParams.color} />
+          <instancedMesh
+            castShadow
+            receiveShadow
+            args={[null, null, leafCount]}
+          >
+            <boxGeometry args={[3, 0.4, 4]} />
+            <meshStandardMaterial color={"#ff5757"} />
+          </instancedMesh>
+        </InstancedRigidBodies>
+
+        <mesh position={[0, 4.5, 0]} rotation-x={Math.PI * 0.5}>
+          <torusGeometry args={[80, 1, 4]} />
+          <meshStandardMaterial color={"#ffffff"} roughness={0} />
         </mesh>
-      </RigidBody>
-    </group>
+
+        {/* sensor */}
+        <mesh position={[0, 20, 0]} ref={sensorRef}>
+          <cylinderGeometry args={[76, 76, 40, 20]} />
+          <meshBasicMaterial transparent opacity={0} wireframe />
+        </mesh>
+
+        <group ref={cursorRef}>
+          <mesh rotation-x={Math.PI * -0.5}>
+            <torusGeometry args={[radius, 1]} />
+            <meshBasicMaterial color={mouseDown ? "white" : "gold"} />
+          </mesh>
+          <mesh>
+            <sphereGeometry args={[radius, 20]} />
+            <meshStandardMaterial
+              wireframe
+              color={mouseDown ? "white" : "gold"}
+              transparent
+              opacity={0.2}
+            />
+          </mesh>
+        </group>
+
+        <RigidBody friction={5} type={"fixed"}>
+          <mesh
+            receiveShadow
+            rotation-x={Math.PI * -0.5}
+            onPointerMove={(e) => {
+              const { x, y, z } = e.point;
+              mouseRef.current.set(x, y, z);
+            }}
+          >
+            <boxGeometry args={[7000, 10000, 10]} />
+            <meshStandardMaterial color={groundParams.color} />
+          </mesh>
+        </RigidBody>
+      </group>
+    </Suspense>
   );
 };

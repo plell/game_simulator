@@ -96,8 +96,13 @@ const CameraController = () => {
 const App = () => {
   const game = useGame((s) => s.game);
   const setMouseDown = useGame((s) => s.setMouseDown);
+  const setLocked = useGame((s) => s.setLocked);
 
   const GameComponent = experienceProperties[game]?.game;
+
+  useEffect(() => {
+    // setLocked(true);
+  }, [game]);
 
   useEffect(() => {
     window.addEventListener("mousedown", handleMouseDown);

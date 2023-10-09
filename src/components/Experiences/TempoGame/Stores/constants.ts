@@ -105,7 +105,6 @@ function generateWorld() {
   }
 
 
-  console.log('worldTiles',worldTiles)
 
   return { worldTiles, worldPatterns }
 }

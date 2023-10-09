@@ -16,10 +16,8 @@ export const Goal = ({ player }: Props) => {
 
   useEffect(() => {
     if (objectsIntersect) {
-      console.log("yes they intersect!");
       setTouched(true);
     } else {
-      console.log("no they dont!");
     }
   }, [objectsIntersect]);
 

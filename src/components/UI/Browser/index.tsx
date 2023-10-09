@@ -104,7 +104,7 @@ const Button = styled.div`
   display: flex;
   align-items: center;
   font-weight: 400;
-  font-size: 70px;
+  font-size: 90px;
   color: #fff;
   transition: color 0.2s;
 

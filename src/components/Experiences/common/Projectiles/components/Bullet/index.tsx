@@ -24,13 +24,8 @@ export const Bullet = ({ self, removeMe }: Props) => {
 
   useEffect(() => {
     if (dead) {
-      console.log("removeMe");
       removeMe(self.id);
     }
-
-    return () => {
-      console.log("im removed!");
-    };
   }, [dead]);
 
   useFrame(() => {

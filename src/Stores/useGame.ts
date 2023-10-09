@@ -5,7 +5,7 @@ const initialGameState = {
     hit: 0,
     bite: 0,
     mouseDown:false,
-    locked: true,
+    locked: false,
     lockClicked: false,
     selectedDonutIds:[],
     score: 0,
