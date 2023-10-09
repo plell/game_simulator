@@ -25,24 +25,24 @@ export const Loading = ({ text }: Props) => {
     }
   });
 
-  const { camera } = useThree();
+  // const { camera } = useThree();
 
-  // revert camera position
-  useEffect(() => {
-    return () => {
-      const position = experienceProperties[game]?.cameraPosition;
-      const target = experienceProperties[game]?.cameraTarget;
+  // // revert camera position
+  // useEffect(() => {
+  //   return () => {
+  //     const position = experienceProperties[game]?.cameraPosition;
+  //     const target = experienceProperties[game]?.cameraTarget;
 
-      if (position && target) {
-        camera.position.set(position.x, position.y, position.z);
-        camera.lookAt(target);
-      }
-    };
-  });
+  //     if (position && target) {
+  //       camera.position.set(position.x, position.y, position.z);
+  //       camera.lookAt(target);
+  //     }
+  //   };
+  // });
 
   return (
     <group>
-      <CameraControls makeDefault maxDistance={2000} />
+      {/* <CameraControls makeDefault maxDistance={2000} /> */}
       <directionalLight />
       <pointLight color={"pink"} position={[0, 0, 8]} intensity={90} />
 

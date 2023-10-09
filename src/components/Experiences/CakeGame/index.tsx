@@ -37,7 +37,6 @@ export const CakeGame = () => {
 
   return (
     <>
-      <color attach='background' args={["#ffffff"]} />
       <group ref={ref} position={experienceProperties[game]?.gamePosition}>
         <Lights />
 
@@ -157,17 +156,31 @@ const Points = () => {
           <group key={i} position-x={pointPositions[i] * 10}>
             <mesh>
               <torusGeometry args={[5, 0.2]} />
-              <meshBasicMaterial
-                color={complete ? "skyblue" : "#ffffff"}
-                transparent
-                opacity={complete ? 1 : 0.04}
-              />
+              {complete ? (
+                <meshStandardMaterial
+                  color={"#ffffff"}
+                  roughness={0}
+                  emissive={"white"}
+                  emissiveIntensity={2}
+                />
+              ) : (
+                <meshBasicMaterial
+                  color={"#ffffff"}
+                  transparent
+                  opacity={0.4}
+                />
+              )}
             </mesh>
 
             {fill && (
               <mesh>
-                <circleGeometry args={[3, 40]} />
-                <meshBasicMaterial color={"#ffffff"} />
+                <circleGeometry args={[2, 40]} />
+                <meshStandardMaterial
+                  color={"white"}
+                  roughness={0}
+                  emissive={"gold"}
+                  emissiveIntensity={3}
+                />
               </mesh>
             )}
           </group>
@@ -177,8 +190,8 @@ const Points = () => {
   );
 };
 
-const columns = 7;
-const rows = 5;
+const columns = 6;
+const rows = 4;
 const width = 12;
 const height = 12;
 const leftPad = -(width * (columns / 2) - width / 2);
@@ -208,7 +221,7 @@ const WoodTable = () => {
   );
 };
 
-const boxPosition = new Vector3(0, 18, 70);
+const boxPosition = new Vector3(0, 18, 50);
 
 const DonutBox = () => {
   const donutBox = useGLTF("./models/donut_box.gltf");
@@ -254,7 +267,7 @@ const DonutBox = () => {
 
 const Donuts = () => {
   // @ts-ignore
-  const { nodes } = useGLTF("./models/donut_white_lesser.gltf");
+  const { nodes } = useGLTF("./models/donut_white_lesser2.gltf");
 
   return (
     <Merged meshes={nodes || []}>
@@ -365,7 +378,7 @@ const getRandomSprinkleColor = () => {
   return sprinkleColors[index];
 };
 
-const focusedScale = 11;
+const focusedScale = 12;
 const regularScale = 10;
 const normalScale = new Vector3(regularScale, regularScale, regularScale);
 

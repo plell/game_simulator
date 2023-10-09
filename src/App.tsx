@@ -2,7 +2,7 @@ import { Canvas, useFrame, useThree } from "@react-three/fiber";
 
 import { Physics } from "@react-three/rapier";
 
-import { Suspense, useEffect, useRef } from "react";
+import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { Leva, useControls } from "leva";
 
 import { Browser } from "./components/UI/Browser";
@@ -23,77 +23,74 @@ import { Perf } from "r3f-perf";
 import styled from "styled-components";
 
 import { ACESFilmicToneMapping, PCFSoftShadowMap, Vector3 } from "three";
+import { useGooseNeck } from "./components/Experiences/hooks/useGooseNeck";
 
 const CameraController = () => {
   const cameraControlsRef = useRef<CameraControls | null>(null);
 
   const game = useGame((s) => s.game);
+  const [enabled, setEnabled] = useState(true);
 
-  const { camera } = useThree();
-
-  // useGooseNeck();
+  // useGooseNeck(cameraControlsRef);
 
   useFrame(() => {
     // console.log(camera.position);
   });
 
-  // const { cameraPosition, cameraTarget } = useControls("camera", {
-  //   cameraPosition: { value: { x: 0, y: 0, z: 0 }, step: 1 },
-  //   cameraTarget: { value: { x: 0, y: 0, z: 0 }, step: 1 },
-  // });
-
-  // useEffect(() => {
-  //   camera.position.set(cameraPosition.x, cameraPosition.y, cameraPosition.z);
-  //   const look = new Vector3(cameraTarget.x, cameraTarget.y, cameraTarget.z);
-  //   camera.lookAt(look);
-
-  //   if (cameraControlsRef.current) {
-  //     cameraControlsRef.current.setLookAt(
-  //       cameraPosition.x,
-  //       cameraPosition.y,
-  //       cameraPosition.z,
-  //       cameraTarget.x,
-  //       cameraTarget.y,
-  //       cameraTarget.z,
-  //       false
-  //     );
-  //   }
-  // }, [cameraPosition, cameraTarget]);
-
   useEffect(() => {
-    const position = experienceProperties[game]?.cameraPosition;
-    const target = experienceProperties[game]?.cameraTarget;
+    const { cameraPosition, cameraTarget, cameraControls } =
+      experienceProperties[game] || {};
 
-    if (position && target) {
-      camera.position.set(position.x, position.y, position.z);
-      camera.lookAt(target);
+    setEnabled(cameraControls);
 
+    if (cameraPosition && cameraTarget) {
       if (cameraControlsRef.current) {
+        cameraControlsRef.current.setPosition(
+          cameraPosition.x,
+          cameraPosition.y,
+          cameraPosition.z,
+          false
+        );
         cameraControlsRef.current.setLookAt(
-          position.x,
-          position.y,
-          position.z,
-          target.x,
-          target.y,
-          target.z,
+          cameraPosition.x,
+          cameraPosition.y,
+          cameraPosition.z,
+          cameraTarget.x,
+          cameraTarget.y,
+          cameraTarget.z,
           false
         );
       }
     }
   }, [game]);
 
-  if (experienceProperties[game]?.cameraControls) {
-    return (
-      <CameraControls
-        ref={cameraControlsRef}
-        boundaryEnclosesCamera
-        makeDefault
-        maxDistance={1000}
-      />
-    );
-  }
+  const cameraProps = useMemo(
+    () =>
+      enabled
+        ? {
+            polarRotateSpeed: 1,
+            azimuthRotateSpeed: 1,
+            smoothTime: 3,
+            minDistance: 90,
+            maxDistance: 500,
+          }
+        : {
+            polarRotateSpeed: 0,
+            azimuthRotateSpeed: 0,
+            smoothTime: 3,
+            minDistance: 90,
+            maxDistance: 500,
+          },
+    [enabled]
+  );
 
-  return null;
+  return (
+    <CameraControls
+      ref={cameraControlsRef}
+      dollySpeed={0.08}
+      {...cameraProps}
+    />
+  );
 };
 
 const App = () => {
@@ -146,6 +143,12 @@ const App = () => {
           {isDevelopment && <Perf position='top-left' />}
 
           <CameraController />
+
+          <color
+            attach='background'
+            args={[experienceProperties[game]?.backgroundColor || "#000000"]}
+          />
+
           <Selection>
             <EffectComposer autoClear={false} multisampling={8}>
               <Bloom

@@ -45,41 +45,32 @@ type ExperienceProps = {
   description: string
   instructions: string
   cameraControls: boolean
+  backgroundColor?: string
   game: () => JSX.Element
 }
 
 export const experienceProperties: ExperienceProps[] = [
   {
-    cameraPosition: new Vector3(0,100,128),
-    cameraTarget: new Vector3(0, -20, 0),
+    cameraPosition: new Vector3(0,100,108),
+    cameraTarget: new Vector3(0, -20, -20),
     gamePosition: new Vector3(0, 0, 0),
     title: '',
     description: '',
     instructions: '',
-    cameraControls: true,
+    cameraControls: false,
+    backgroundColor:'#ffffff',
     game: CakeGame
   },
   {
-    cameraPosition: new Vector3(0, 30,180),
-    cameraTarget: new Vector3(0, 0, -100),
+    cameraPosition: new Vector3(0,40,168),
+    cameraTarget: new Vector3(0, 0, 0),
     gamePosition: new Vector3(0, 0, 0),
     title: 'Leaf Blower',
     description: '',
     instructions: 'Drag to turn the world. Take a look around.',
     cameraControls: false,
     game: LeafBlower
-  },
-  {
-    cameraPosition: new Vector3(0, 0, 23),
-    cameraTarget: new Vector3(0, 0, 0),
-    gamePosition: new Vector3(0, 0, 0),
-    title: 'Earth',
-    description: 'Here you are.',
-    instructions: 'Drag to turn the world. Take a look around.',
-    cameraControls: true,
-    game: Earth
-  },
-  {
+  },{
     cameraPosition: new Vector3(0, 0, 23),
     cameraTarget: new Vector3(0, 0, 0),
     gamePosition: new Vector3(0, 0, 0),
@@ -89,6 +80,18 @@ export const experienceProperties: ExperienceProps[] = [
     cameraControls: false,
     game: SpaceGame
   },
+  {
+    cameraPosition: new Vector3(0, 0, 23),
+    cameraTarget: new Vector3(0, 0, 0),
+    gamePosition: new Vector3(0, 0, 0),
+    title: 'Earth',
+    description: 'Here you are.',
+    instructions: 'Drag to turn the world. Take a look around.',
+    cameraControls: true,
+    
+    game: Earth
+  },
+  
   // {
   //   cameraPosition: new Vector3(0, 0, 60),
   //   cameraTarget: new Vector3(0, 0, 0),
@@ -108,6 +111,7 @@ export const experienceProperties: ExperienceProps[] = [
     description: 'Remember this one?',
     instructions: 'Click to',
     cameraControls: false,
+    backgroundColor:'#000000',
     game:CrocGame
   },
   

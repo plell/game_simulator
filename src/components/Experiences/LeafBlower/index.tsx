@@ -7,6 +7,7 @@ import {
   useState,
 } from "react";
 import {
+  Fog,
   Group,
   Matrix4,
   MeshBasicMaterial,
@@ -51,10 +52,7 @@ export const LeafBlower = () => {
 
   const mouseDown = useGame((s) => s.mouseDown);
 
-  useFrame(({ camera, mouse }) => {
-    // const { x, y, z } = experienceProperties[game].cameraPosition;
-    // // camera.position.lerp(vec3.set(x, y, z * -(mouse.y - 0.1)), 0.01);
-
+  useFrame(() => {
     if (cursorRef.current && mouseRef.current) {
       cursorRef.current.position.lerp(mouseRef.current, 0.1);
       if (pointLightRef.current) {
@@ -68,7 +66,7 @@ export const LeafBlower = () => {
 
   const sunParams = useControls("sun", {
     position: {
-      value: [1.4, 0.1504999999999995, -8.760353553682876e-17],
+      value: [0.7, 0.1504999999999995, -8.760353553682876e-17],
     },
   });
 
@@ -76,7 +74,7 @@ export const LeafBlower = () => {
     color: "#ffad69",
   });
 
-  const leafCount = useMemo(() => 100, []);
+  const leafCount = useMemo(() => 60, []);
 
   const leafInstances = useMemo(() => {
     const instances = [];
@@ -120,8 +118,10 @@ export const LeafBlower = () => {
   });
   return (
     <group ref={ref} position={experienceProperties[game]?.gamePosition}>
-      {/* <directionalLight intensity={1} /> */}
-      <ambientLight intensity={0.2} />
+      <directionalLight intensity={0.8} />
+      <ambientLight intensity={0.4} />
+
+      <fog args={[0xcccccc, 10, 15]} />
 
       <Sky
         distance={450000}
