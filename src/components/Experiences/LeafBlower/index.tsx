@@ -91,7 +91,7 @@ export const LeafBlower = () => {
         key: i,
         position: [
           (Math.random() - 0.5) * 100,
-          6,
+          10,
           30 + (Math.random() - 0.5) * 100,
         ],
         rotation: [Math.random(), Math.random(), Math.random()],
