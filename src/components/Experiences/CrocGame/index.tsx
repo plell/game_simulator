@@ -55,7 +55,12 @@ export const CrocGame = () => {
       <Select
         onChangePointerUp={(e) => {
           if (e.length) {
-            const id = e[0]?.userData?.id || 0;
+            console.log("e", e);
+            const id =
+              e[0]?.userData?.id ||
+              e[1]?.userData?.id ||
+              e[2]?.userData?.id ||
+              0;
 
             scoreUp();
             setHit(id);

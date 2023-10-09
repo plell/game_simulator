@@ -245,7 +245,7 @@ const DonutBox = () => {
 
 const Donuts = () => {
   // @ts-ignore
-  const { nodes } = useGLTF("./models/donut_white.gltf");
+  const { nodes } = useGLTF("./models/donut_white_lesser.gltf");
 
   return (
     <Merged meshes={nodes || []}>

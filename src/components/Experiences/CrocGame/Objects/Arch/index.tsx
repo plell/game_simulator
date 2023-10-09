@@ -1,6 +1,7 @@
 import { Vector3 } from "three";
 
 import { useGLTF } from "@react-three/drei";
+import { useEffect } from "react";
 
 type Props = {
   position: Vector3;
@@ -11,10 +12,12 @@ export type Timeout = ReturnType<typeof setTimeout> | null;
 export const CrocArch = ({ position }: Props) => {
   const crocArch = useGLTF("./models/crocArch.gltf");
 
-  crocArch.scene.children.forEach((mesh) => {
-    mesh.castShadow = true;
-    mesh.receiveShadow = true;
-  });
+  useEffect(() => {
+    crocArch.scene.children.forEach((mesh) => {
+      mesh.castShadow = true;
+      mesh.receiveShadow = true;
+    });
+  }, []);
 
   return (
     <primitive

@@ -68,7 +68,7 @@ export const LeafBlower = () => {
 
   const sunParams = useControls("sun", {
     position: {
-      value: [0.7789999999999998, 0.20099999999999996, -8.760353553682876e-17],
+      value: [1.4, 0.1504999999999995, -8.760353553682876e-17],
     },
   });
 
@@ -120,7 +120,8 @@ export const LeafBlower = () => {
   });
   return (
     <group ref={ref} position={experienceProperties[game]?.gamePosition}>
-      <directionalLight intensity={2} />
+      {/* <directionalLight intensity={1} /> */}
+      <ambientLight intensity={0.2} />
 
       <Sky
         distance={450000}
@@ -132,7 +133,7 @@ export const LeafBlower = () => {
         ref={pointLightRef}
         castShadow
         intensity={4000}
-        color={"#ffffff"}
+        color={mouseDown ? "white" : "gold"}
       />
 
       <InstancedRigidBodies
@@ -155,13 +156,13 @@ export const LeafBlower = () => {
       <group ref={cursorRef}>
         <mesh rotation-x={Math.PI * -0.5}>
           <torusGeometry args={[radius, 1]} />
-          <meshBasicMaterial color={mouseDown ? "blue" : "white"} />
+          <meshBasicMaterial color={mouseDown ? "white" : "gold"} />
         </mesh>
         <mesh>
           <sphereGeometry args={[radius, 20]} />
           <meshStandardMaterial
             wireframe
-            color={mouseDown ? "blue" : "white"}
+            color={mouseDown ? "white" : "gold"}
             transparent
             opacity={0.2}
           />

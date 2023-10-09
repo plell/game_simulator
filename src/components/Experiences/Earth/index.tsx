@@ -22,17 +22,12 @@ export const Earth = () => {
 
       <group ref={groupRef}>
         <mesh ref={ref} userData={{ type: "earth" }}>
-          <sphereGeometry args={[EARTH_RADIUS, 200, 200]} />
+          <sphereGeometry args={[EARTH_RADIUS, 60, 60]} />
           <EarthMaterial />
         </mesh>
 
-        <mesh ref={cloudsRef}>
-          <sphereGeometry args={[EARTH_RADIUS + 0.1, 200, 200]} />
-          <meshStandardMaterial transparent />
-        </mesh>
-
         <mesh>
-          <sphereGeometry args={[EARTH_RADIUS * 30, 200, 200]} />
+          <sphereGeometry args={[EARTH_RADIUS * 30, 60, 60]} />
           <meshStandardMaterial opacity={0.4} side={DoubleSide} transparent />
         </mesh>
       </group>

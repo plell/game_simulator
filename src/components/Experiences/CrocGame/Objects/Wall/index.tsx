@@ -1,18 +1,21 @@
 import { Vector3 } from "three";
 
 import { useGLTF } from "@react-three/drei";
+import { useEffect } from "react";
 
 type Props = {
   position: Vector3;
 };
 
 export const Wall = ({ position }: Props) => {
-  const wallModel = useGLTF("./models/crocWall.gltf");
+  const wallModel = useGLTF("./models/crocWallLess.gltf");
 
-  wallModel.scene.children.forEach((mesh) => {
-    mesh.receiveShadow = true;
-    mesh.castShadow = true;
-  });
+  useEffect(() => {
+    wallModel.scene.children.forEach((mesh) => {
+      mesh.receiveShadow = true;
+      mesh.castShadow = true;
+    });
+  }, []);
 
   return (
     <primitive
@@ -20,11 +23,11 @@ export const Wall = ({ position }: Props) => {
       rotation-y={Math.PI * -0.5}
       object={wallModel.scene.clone()}
       scale={0.2}
-      scale-z={0.15}
+      scale-x={0.3}
     />
   );
 };
 
-useGLTF.preload("./models/crocWall.gltf");
+useGLTF.preload("./models/crocWallLess.gltf");
 
 export default Wall;

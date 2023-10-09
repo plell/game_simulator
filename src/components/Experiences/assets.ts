@@ -4,7 +4,7 @@ import { TextureLoader } from "three";
 
 // models
 const gltfLoader = new GLTFLoader()
-export const crocModel = gltfLoader.load("./models/croc.gltf");
+export const crocModel = gltfLoader.load("./models/croc_less.gltf");
 export const crocArch = gltfLoader.load("./models/crocArch.gltf");
 export const crocWall = gltfLoader.load("./models/crocWall.gltf");
 export const spaceshipModel = gltfLoader.load("./models/spaceship.gltf");

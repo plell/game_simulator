@@ -7,13 +7,16 @@ type Props = {
 };
 
 export const CrocModel = ({ id, disabled }: Props) => {
-  const crocModel = useGLTF("./models/croc.gltf");
+  const crocModel = useGLTF("./models/croc_less.gltf");
 
-  crocModel.scene.children.forEach((mesh) => {
-    mesh.userData = { type: "croc", id };
-    mesh.castShadow = true;
-    mesh.receiveShadow = true;
-  });
+  useEffect(() => {
+    crocModel.scene.children.forEach((mesh) => {
+      console.log("mesh", mesh);
+      mesh.userData = { type: "croc", id };
+      mesh.castShadow = true;
+      mesh.receiveShadow = true;
+    });
+  }, []);
 
   return (
     <primitive
@@ -24,6 +27,6 @@ export const CrocModel = ({ id, disabled }: Props) => {
   );
 };
 
-useGLTF.preload("./models/croc.gltf");
+useGLTF.preload("./models/croc_less.gltf");
 
 export default CrocModel;

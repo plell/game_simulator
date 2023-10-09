@@ -14,7 +14,7 @@ export const Spaceship = ({ position }: Props) => {
   const ref = useRef<Group | null>(null);
   const playerRef = useRef<Group | null>(null);
 
-  const model = useGLTF("./models/spaceship.gltf");
+  const model = useGLTF("./models/spaceship_less.gltf");
 
   model.scene.children.forEach((mesh) => {
     mesh.userData = { type: "spaceship" };
@@ -44,4 +44,4 @@ export const Spaceship = ({ position }: Props) => {
   );
 };
 
-useGLTF.preload("./models/spaceship.gltf");
+useGLTF.preload("./models/spaceship_less.gltf");
