@@ -153,6 +153,11 @@ export const LeafBlower = () => {
         })}
       </Instances> */}
 
+      <mesh position={[0, 5, 0]} rotation-x={Math.PI * 0.5}>
+        <torusGeometry args={[80, 1, 4]} />
+        <meshStandardMaterial color={"#ffffff"} roughness={0} />
+      </mesh>
+
       <group ref={cursorRef}>
         <mesh rotation-x={Math.PI * -0.5}>
           <torusGeometry args={[radius, 1]} />

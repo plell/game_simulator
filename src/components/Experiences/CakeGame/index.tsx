@@ -36,16 +36,19 @@ export const CakeGame = () => {
   }, []);
 
   return (
-    <group ref={ref} position={experienceProperties[game]?.gamePosition}>
-      <Lights />
+    <>
+      <color attach='background' args={["#ffffff"]} />
+      <group ref={ref} position={experienceProperties[game]?.gamePosition}>
+        <Lights />
 
-      <Room />
+        <Room />
 
-      <DonutBox />
-      <Donuts />
-      <WoodTable />
-      <Points />
-    </group>
+        <DonutBox />
+        <Donuts />
+        <WoodTable />
+        <Points />
+      </group>
+    </>
   );
 };
 
@@ -58,6 +61,12 @@ const Room = () => {
         <planeGeometry args={[roomSize, roomSize]} />
         <meshStandardMaterial color={colors[0]} />
       </mesh>
+
+      <mesh position-z={roomSize * -0.5}>
+        <boxGeometry args={[roomSize / 2, 10, 7]} />
+        <meshStandardMaterial color={"white"} transparent opacity={0.6} />
+      </mesh>
+
       <mesh position-x={roomSize * -0.5} rotation-y={Math.PI * 0.5}>
         <planeGeometry args={[roomSize, roomSize]} />
         <meshStandardMaterial color={colors[0]} />
