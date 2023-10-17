@@ -27,9 +27,9 @@ export const Enemy = () => {
     }
   };
 
-  useFrame(({ clock }) => {
+  useFrame((_, delta) => {
     if (ref?.current) {
-      ref.current.position.y -= 0.1;
+      ref.current.position.y -= delta * 5;
 
       if (ref.current.position.y < -30) {
         reset();

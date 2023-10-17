@@ -1,5 +1,4 @@
-import { useFrame } from "@react-three/fiber";
-import { useRef } from "react";
+import { MutableRefObject, useRef } from "react";
 import { Group, Vector3 } from "three";
 import { useFollowCursor } from "../../../hooks/controllers/useFollowCursor";
 import { Projectiles } from "../../../common/Projectiles";
@@ -8,19 +7,13 @@ import { Goal } from "../Goal";
 
 type Props = {
   position: [x: number, y: number, z: number];
+  playerRef: MutableRefObject<Group | null>;
 };
 
-export const Spaceship = ({ position }: Props) => {
+export const Spaceship = ({ position, playerRef }: Props) => {
   const ref = useRef<Group | null>(null);
-  const playerRef = useRef<Group | null>(null);
 
-  const model = useGLTF("./models/spaceship_less.gltf");
-
-  model.scene.children.forEach((mesh) => {
-    mesh.userData = { type: "spaceship" };
-    mesh.castShadow = true;
-    mesh.receiveShadow = true;
-  });
+  const model = useGLTF("./models/spaceship_simple.gltf");
 
   useFollowCursor({ ref: playerRef, lockY: false });
 
@@ -35,8 +28,6 @@ export const Spaceship = ({ position }: Props) => {
             scale={0.2}
           />
         </group>
-
-        <Projectiles player={playerRef} launchPosition={[0, 2, 0]} />
       </group>
 
       <Goal player={playerRef} />
@@ -44,4 +35,4 @@ export const Spaceship = ({ position }: Props) => {
   );
 };
 
-useGLTF.preload("./models/spaceship_less.gltf");
+useGLTF.preload("./models/spaceship_simple.gltf");

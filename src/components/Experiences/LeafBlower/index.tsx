@@ -2,21 +2,16 @@ import {
   MutableRefObject,
   Suspense,
   useEffect,
-  useLayoutEffect,
   useMemo,
   useRef,
   useState,
 } from "react";
 import {
-  Fog,
+  CylinderGeometry,
   Group,
-  Matrix4,
   Mesh,
-  MeshBasicMaterial,
-  MeshStandardMaterial,
   PointLight,
-  Quaternion,
-  TorusKnotGeometry,
+  TorusGeometry,
   Vector3,
 } from "three";
 
@@ -30,13 +25,11 @@ import {
   RapierRigidBody,
   RigidBody,
 } from "@react-three/rapier";
-import { Instance, Instances, Sky, Trail } from "@react-three/drei";
+import { Sky } from "@react-three/drei";
 import { useControls } from "leva";
-import {
-  useObjectIntersectsMany,
-  useObjectsIntersect,
-} from "../hooks/useObjectsIntersect";
+import { useObjectIntersectsMany } from "../hooks/useObjectsIntersect";
 import { GameProgress } from "../common/GameProgress";
+import { LevelProps } from "./constants";
 
 const mouseVec3 = new Vector3();
 const pointLightVec3 = new Vector3();
@@ -58,6 +51,36 @@ export const LeafBlower = () => {
   const game = useGame((s) => s.game);
 
   const mouseDown = useGame((s) => s.mouseDown);
+
+  const [level, setLevel] = useState(1);
+
+  const levelProperties: LevelProps = useMemo(() => {
+    const randomZ = 40 + (Math.random() - 1) * 100;
+    const randFactor = Math.random() - 0.5 < 0 ? -1 : 1;
+    const randomX = (Math.random() - 0.5) * 60 + randomZ * randFactor * 0.2;
+
+    const randomSize = Math.random() * 30 + 10;
+    const props = {
+      color: "#ff5757",
+      dimensions: [randomSize, randomSize, 40, 20],
+      position: [randomX, 5, randomZ],
+      geometry: new CylinderGeometry(randomSize, randomSize, 40, 20),
+      boundaryGeometry: new TorusGeometry(randomSize + 5, 1, 4),
+      boundaryRotation: Math.PI * 0.5,
+    };
+
+    return props;
+  }, [level]);
+
+  useEffect(() => {
+    if (instancedRigidBodiesRef?.current?.length) {
+      const zero = new Vector3();
+      instancedRigidBodiesRef?.current?.forEach((rb) => {
+        rb.setAngvel(zero, true);
+        rb.setLinvel(zero, true);
+      });
+    }
+  }, [level]);
 
   useFrame(() => {
     if (cursorRef.current && mouseRef.current) {
@@ -81,24 +104,31 @@ export const LeafBlower = () => {
     color: "#ffad69",
   });
 
-  const leafCount = useMemo(() => 60, []);
+  const leafCount = useMemo(() => 40, []);
 
   const leafInstances = useMemo(() => {
     const instances = [];
+
+    const center = levelProperties.position;
+    const radius = levelProperties.dimensions[0];
 
     for (let i = 0; i < leafCount; i += 1) {
       instances.push({
         key: i,
         position: [
-          (Math.random() - 0.5) * 100,
+          center[0] + (Math.random() - 0.5) * radius,
           10,
-          30 + (Math.random() - 0.5) * 100,
+          center[2] + (Math.random() - 0.5) * radius,
         ],
-        rotation: [Math.random(), Math.random(), Math.random()],
+        rotation: [
+          Math.random() - 0.5,
+          Math.random() - 0.5,
+          Math.random() - 0.5,
+        ],
       });
     }
     return instances;
-  }, []);
+  }, [levelProperties]);
 
   useFrame(() => {
     // for every leaf!
@@ -118,6 +148,12 @@ export const LeafBlower = () => {
 
             const force = forceVec.set(forces.x, forces.y, forces.z);
             rb.applyImpulse(force, true);
+            const torque = forceVec.set(
+              forces.x * 0.2,
+              forces.y * 0.2,
+              forces.z * 0.2
+            );
+            rb.applyTorqueImpulse(torque, true);
           }
         }
       });
@@ -147,6 +183,8 @@ export const LeafBlower = () => {
           score={0}
           scoreInverted
           scoreRef={intersectingObjectCountRef}
+          setLevel={(l) => setLevel(l)}
+          level={level}
         />
 
         <Sky distance={450000} sunPosition={sunParams.position} />
@@ -168,20 +206,11 @@ export const LeafBlower = () => {
             args={[null, null, leafCount]}
           >
             <boxGeometry args={[3, 0.4, 4]} />
-            <meshStandardMaterial color={"#ff5757"} />
+            <meshStandardMaterial color={levelProperties.color} />
           </instancedMesh>
         </InstancedRigidBodies>
 
-        <mesh position={[0, 4.5, 0]} rotation-x={Math.PI * 0.5}>
-          <torusGeometry args={[80, 1, 4]} />
-          <meshStandardMaterial color={"#ffffff"} roughness={0} />
-        </mesh>
-
-        {/* sensor */}
-        <mesh position={[0, 20, 0]} ref={sensorRef}>
-          <cylinderGeometry args={[76, 76, 40, 20]} />
-          <meshBasicMaterial transparent opacity={0} wireframe />
-        </mesh>
+        <Sensor innerRef={sensorRef} levelProperties={levelProperties} />
 
         <group ref={cursorRef}>
           <mesh rotation-x={Math.PI * -0.5}>
@@ -214,5 +243,27 @@ export const LeafBlower = () => {
         </RigidBody>
       </group>
     </Suspense>
+  );
+};
+
+type SensorProps = {
+  innerRef: MutableRefObject<Mesh | null>;
+  levelProperties: LevelProps;
+};
+
+const Sensor = ({ innerRef, levelProperties }: SensorProps) => {
+  return (
+    <group position={levelProperties.position}>
+      <mesh
+        geometry={levelProperties.boundaryGeometry}
+        rotation-x={levelProperties.boundaryRotation}
+      >
+        <meshStandardMaterial color={"#ffffff"} roughness={0} />
+      </mesh>
+
+      <mesh ref={innerRef} geometry={levelProperties.geometry}>
+        <meshBasicMaterial transparent opacity={0} wireframe />
+      </mesh>
+    </group>
   );
 };

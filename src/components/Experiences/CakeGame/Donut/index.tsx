@@ -33,13 +33,13 @@ export const Donut = ({ models, position, rotation, id }: DonutProps) => {
 
   const { camera } = useThree();
 
-  useFrame(() => {
+  useFrame((_, delta) => {
     if (ref?.current) {
       const newScale = ref.current.scale.lerp(normalScale, 0.2);
       ref.current.scale.set(newScale.x, newScale.y, newScale.z);
 
       if (selected) {
-        ref.current.rotation.x += 0.04;
+        ref.current.rotation.x += delta * 1;
       }
     }
   });

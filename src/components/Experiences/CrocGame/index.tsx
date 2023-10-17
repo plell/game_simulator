@@ -55,7 +55,6 @@ export const CrocGame = () => {
       <Select
         onChangePointerUp={(e) => {
           if (e.length) {
-            console.log("e", e);
             const id =
               e[0]?.userData?.id ||
               e[1]?.userData?.id ||

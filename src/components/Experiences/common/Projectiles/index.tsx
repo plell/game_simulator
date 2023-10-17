@@ -18,6 +18,10 @@ export const Projectiles = ({ player, launchPosition }: Props) => {
     };
   });
 
+  useEffect(() => {
+    console.log(projectiles);
+  }, [projectiles]);
+
   const newProjectile = () => {
     const pCopy = { ...projectiles };
     const id = uuidv4();
@@ -45,14 +49,19 @@ export const Projectiles = ({ player, launchPosition }: Props) => {
   const removeProjectile = (id: string) => {
     const pCopy = { ...projectiles };
     delete pCopy[id];
-    // setProjectiles(pCopy);
+    setProjectiles(pCopy);
   };
 
   return (
     <group>
       {Object.keys(projectiles).map((p) => {
         const self = projectiles[p];
-        return <Bullet self={self} removeMe={removeProjectile} key={self.id} />;
+        if (self) {
+          return (
+            <Bullet self={self} removeMe={removeProjectile} key={self.id} />
+          );
+        }
+        return null;
       })}
     </group>
   );

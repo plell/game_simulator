@@ -11,7 +11,6 @@ export const CrocModel = ({ id, disabled }: Props) => {
 
   useEffect(() => {
     crocModel.scene.children.forEach((mesh) => {
-      console.log("mesh", mesh);
       mesh.userData = { type: "croc", id };
       mesh.castShadow = true;
       mesh.receiveShadow = true;

@@ -1,10 +1,20 @@
 import { useFrame } from "@react-three/fiber";
-import { useEffect, useMemo, useRef } from "react";
-import { DoubleSide, Group, Light, Mesh, MeshStandardMaterial } from "three";
+import { useEffect, useMemo, useRef, useState } from "react";
+import {
+  DoubleSide,
+  Group,
+  Light,
+  Mesh,
+  MeshStandardMaterial,
+  MathUtils,
+} from "three";
 import useGame from "../../../Stores/useGame";
 import { experienceProperties } from "../../../Stores/constants";
 
 import { Loader } from "@react-three/drei";
+
+import vertexShader from "./shaders/vertexShader";
+import fragmentShader from "./shaders/fragmentShader";
 
 const EARTH_RADIUS = 6;
 
@@ -18,39 +28,67 @@ export const Earth = () => {
 
   return (
     <group position={experienceProperties[game]?.gamePosition}>
-      <directionalLight ref={lightRef} intensity={3} position={[0, 0, 90]} />
+      {/* <directionalLight ref={lightRef} intensity={3} position={[0, 0, 90]} /> */}
 
-      <group ref={groupRef}>
-        <mesh ref={ref} userData={{ type: "earth" }}>
-          <sphereGeometry args={[EARTH_RADIUS, 60, 60]} />
-          <EarthMaterial />
-        </mesh>
-
-        <mesh>
-          <sphereGeometry args={[EARTH_RADIUS * 30, 60, 60]} />
-          <meshStandardMaterial opacity={0.4} side={DoubleSide} transparent />
-        </mesh>
-      </group>
-
-      {/* {data?.links.map((link, i) => (
-        // eslint-disable-next-line react/no-array-index-key
-        <CurvedLine key={`curved-${i}`} link={link} />
-      ))} */}
+      <Planet />
     </group>
   );
 };
 
-const EarthMaterial = () => {
-  // Create the material
-  const material = useMemo(
-    () =>
-      new MeshStandardMaterial({
-        toneMapped: true,
-        roughness: 16, // Adjust roughness as needed
-        metalness: 0, // Adjust metalness as needed
-      }),
+const Planet = () => {
+  // This reference will give us direct access to the mesh
+  const ref = useRef<Mesh | null>(null);
+  const [hover, setHover] = useState(false);
+
+  const uniforms = useMemo(
+    () => ({
+      u_intensity: {
+        value: 0.3,
+      },
+      u_time: {
+        value: 0.0,
+      },
+      u_color: {
+        value: 0.0,
+      },
+    }),
     []
   );
 
-  return <meshStandardMaterial {...material} />;
+  useFrame((state) => {
+    const { clock } = state;
+    if (ref?.current) {
+      ref.current.material.uniforms.u_time.value = 0.2 * clock.getElapsedTime();
+
+      ref.current.material.uniforms.u_intensity.value = MathUtils.lerp(
+        ref.current.material.uniforms.u_intensity.value,
+        hover ? 0.95 : 0.25,
+        0.3
+      );
+
+      ref.current.material.uniforms.u_color.value = MathUtils.lerp(
+        ref.current.material.uniforms.u_color.value,
+        hover ? 2 : 1,
+        0.3
+      );
+    }
+  });
+
+  return (
+    <mesh
+      ref={ref}
+      position={[0, 0, 0]}
+      scale={4}
+      onPointerOver={() => setHover(true)}
+      onPointerOut={() => setHover(false)}
+    >
+      <icosahedronGeometry args={[2, 20]} />
+      <shaderMaterial
+        fragmentShader={fragmentShader}
+        vertexShader={vertexShader}
+        uniforms={uniforms}
+        wireframe={false}
+      />
+    </mesh>
+  );
 };

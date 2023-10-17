@@ -7,18 +7,21 @@ import { experienceProperties } from "../../../Stores/constants";
 import { Spaceship } from "./Objects/Spaceship";
 import { Enemy } from "./Objects/Enemy";
 import { useFrame } from "@react-three/fiber";
-import { Goal } from "./Objects/Goal";
+import { Projectiles } from "../common/Projectiles";
 
 export const SpaceGame = () => {
   const ref = useRef<Group | null>(null);
   const cloudRef = useRef<Group | null>(null);
   const cloudRef2 = useRef<Group | null>(null);
+  const playerRef = useRef<Group | null>(null);
 
   const game = useGame((s) => s.game);
 
-  useFrame(() => {
+  useFrame((_, delta) => {
+    const movement = 7 * delta;
+
     if (cloudRef.current) {
-      cloudRef.current.position.y -= 0.1;
+      cloudRef.current.position.y -= movement;
 
       if (cloudRef.current.position.y < -25) {
         cloudRef.current.position.y = 25;
@@ -26,7 +29,7 @@ export const SpaceGame = () => {
     }
 
     if (cloudRef2.current) {
-      cloudRef2.current.position.y -= 0.1;
+      cloudRef2.current.position.y -= movement;
 
       if (cloudRef2.current.position.y < -25) {
         cloudRef2.current.position.y = 25;
@@ -34,7 +37,7 @@ export const SpaceGame = () => {
     }
   });
 
-  const birds = useMemo(() => {
+  const enemies = useMemo(() => {
     const b: any = [];
 
     for (let i = 0; i < 2; i++) {
@@ -46,7 +49,7 @@ export const SpaceGame = () => {
 
   return (
     <group ref={ref} position={experienceProperties[game]?.gamePosition}>
-      <directionalLight position={[5, 5, 60]} intensity={4} />
+      <directionalLight position={[5, 5, 100]} intensity={4} />
 
       <group ref={cloudRef}>
         <Cloud
@@ -68,9 +71,10 @@ export const SpaceGame = () => {
         />
       </group>
 
-      <Spaceship position={[0, -6, 0]} />
+      <Spaceship position={[0, -6, 0]} playerRef={playerRef} />
+      <Projectiles player={playerRef} launchPosition={[0, -4, 0]} />
 
-      {birds}
+      {enemies}
 
       <mesh receiveShadow position-z={-10}>
         <planeGeometry args={[85, 40]} />

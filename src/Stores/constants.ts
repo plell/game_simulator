@@ -51,6 +51,16 @@ type ExperienceProps = {
 
 export const experienceProperties: ExperienceProps[] = [
   {
+    cameraPosition: new Vector3(0,40,168),
+    cameraTarget: new Vector3(0, 0, 0),
+    gamePosition: new Vector3(0, 0, 0),
+    title: '',
+    description: '',
+    instructions: 'Drag to turn the world. Take a look around.',
+    cameraControls: false,
+    game: LeafBlower
+  },
+  {
     cameraPosition: new Vector3(0,100,108),
     cameraTarget: new Vector3(0, -20, -20),
     gamePosition: new Vector3(0, 0, 0),
@@ -61,16 +71,7 @@ export const experienceProperties: ExperienceProps[] = [
     backgroundColor:'#ffffff',
     game: CakeGame,
   },
-  {
-    cameraPosition: new Vector3(0,40,168),
-    cameraTarget: new Vector3(0, 0, 0),
-    gamePosition: new Vector3(0, 0, 0),
-    title: '',
-    description: '',
-    instructions: 'Drag to turn the world. Take a look around.',
-    cameraControls: false,
-    game: LeafBlower
-  },{
+ {
     cameraPosition: new Vector3(0, 0, 23),
     cameraTarget: new Vector3(0, 0, 0),
     gamePosition: new Vector3(0, 0, 0),
@@ -81,14 +82,13 @@ export const experienceProperties: ExperienceProps[] = [
     game: SpaceGame
   },
   {
-    cameraPosition: new Vector3(0, 0, 23),
+    cameraPosition: new Vector3(0, 0, 29),
     cameraTarget: new Vector3(0, 0, 0),
     gamePosition: new Vector3(0, 0, 0),
-    title: 'Earth',
+    title: 'Goo Planet',
     description: 'Here you are.',
     instructions: 'Drag to turn the world. Take a look around.',
     cameraControls: true,
-    
     game: Earth
   },
   

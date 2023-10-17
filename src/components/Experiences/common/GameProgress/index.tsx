@@ -3,6 +3,7 @@ import { Group, Mesh, Vector3 } from "three";
 import useGame from "../../../../Stores/useGame";
 import { useFrame, useThree } from "@react-three/fiber";
 import gsap, { Bounce, Power4 } from "gsap";
+import { Text } from "@react-three/drei";
 
 const pointPositions = [-3, -1, 1, 3];
 
@@ -13,6 +14,8 @@ type Props = {
   position: Vector3;
   scoreRef?: MutableRefObject<number>;
   scoreInverted?: boolean;
+  level?: number;
+  setLevel?: (level: number) => void;
 };
 
 export const GameProgress = ({
@@ -22,6 +25,8 @@ export const GameProgress = ({
   scoreRef,
   position,
   scoreInverted,
+  level,
+  setLevel,
 }: Props) => {
   const ref = useRef<Group | null>(null);
   const [animating, setAnimating] = useState(false);
@@ -63,7 +68,7 @@ export const GameProgress = ({
   }, [refScoreComplete]);
 
   const complete = () => {
-    if (ref.current) {
+    if (ref.current && !animating) {
       setAnimating(true);
       gsap
         .to(ref.current.rotation, {
@@ -74,7 +79,13 @@ export const GameProgress = ({
             "100%": new Vector3(0, Math.PI * 2, 0),
           },
           onComplete: () => {
-            setAnimating(false);
+            if (setLevel && (level === 0 || level)) {
+              setLevel((level += 1));
+            }
+            setTimeout(() => {
+              setRefScoreComplete(false);
+              setAnimating(false);
+            }, 300);
           },
         })
         .play();
@@ -109,9 +120,11 @@ export const GameProgress = ({
       (scoreRef?.current || scoreRef?.current === 0) &&
       progressRef?.current
     ) {
-      const xScale = scoreInverted
-        ? (max - scoreRef?.current) / max
-        : scoreRef?.current / max;
+      const xScale = scoreRef?.current
+        ? scoreInverted
+          ? (max - scoreRef?.current) / max
+          : scoreRef?.current / max
+        : 1;
 
       const yScale = refScoreComplete ? 4 : 1;
       progressRef.current.scale.set(xScale, yScale, 1);
@@ -170,19 +183,24 @@ export const GameProgress = ({
         </>
       ) : (
         <group>
+          <group position-y={5}>
+            <Text fontSize={3}>LEVEL {level}</Text>
+          </group>
           <mesh>
             <planeGeometry args={[90, 1]} />
             <meshStandardMaterial transparent opacity={0.6} />
           </mesh>
 
-          <mesh position-z={0.1} ref={progressRef}>
-            <planeGeometry args={[90, 1]} />
-            <meshStandardMaterial
-              color={"white"}
-              emissive={refScoreComplete ? "white" : "purple"}
-              emissiveIntensity={refScoreComplete ? 1 : 40}
-            />
-          </mesh>
+          {initialized && max > 1 && (
+            <mesh position-z={0.1} ref={progressRef}>
+              <planeGeometry args={[90, 1]} />
+              <meshStandardMaterial
+                color={"white"}
+                emissive={refScoreComplete ? "white" : "purple"}
+                emissiveIntensity={refScoreComplete ? 1 : 40}
+              />
+            </mesh>
+          )}
         </group>
       )}
     </group>
