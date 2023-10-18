@@ -17,12 +17,12 @@ export const useObjectsIntersect = (objectA: IntersectObject, objectB: Intersect
             boundingBoxB.setFromObject(objectB.current);
     
         if (boundingBoxA.intersectsBox(boundingBoxB)) {
-                if (!objectsIntersect) {
-                    setObjectsIntersecting(true);
-                }
-              } else if (objectsIntersect) {
-                setObjectsIntersecting(false);
-              }    
+              if (!objectsIntersect) {
+                  setObjectsIntersecting(true);
+              }
+        } else if (objectsIntersect) {
+          setObjectsIntersecting(false);
+        }    
         }
     })
 
@@ -31,9 +31,6 @@ export const useObjectsIntersect = (objectA: IntersectObject, objectB: Intersect
 };
 
 type IntersectsManyObject = MutableRefObject<RapierRigidBody[] | null>
-
-
-
 
 export const useObjectIntersectsMany = (objectA: IntersectObject, objects: IntersectsManyObject) => {
   
@@ -56,6 +53,40 @@ export const useObjectIntersectsMany = (objectA: IntersectObject, objects: Inter
         
         if (boundingBoxA.intersectsBox(boundingBoxB)) {
           intersectingObjectsCount += 1
+        }
+      })
+
+      intersectingObjectCountRef.current = intersectingObjectsCount
+    }
+  })
+
+  return intersectingObjectCountRef
+};
+
+type IntersectsManyGroupObject = MutableRefObject<Record<string,Mesh | Group | null>>
+
+export const useObjectIntersectsManyB = (objectA: IntersectObject, objects: IntersectsManyGroupObject) => {
+  
+  const boundingBoxA = useMemo(() => new Box3(), []);
+  const boundingBoxB = useMemo(() => new Box3(), []);
+
+  const intersectingObjectCountRef = useRef<string[]>([])
+
+  const reuseableVec = useMemo(()=>new Vector3(),[])
+  const reuseableVec2 = useMemo(()=>new Vector3(),[])
+
+  useFrame(() => {
+    if (objectA?.current && objects?.current) {
+      boundingBoxA.setFromObject(objectA.current);
+      let intersectingObjectsCount: string[] = []
+
+      Object.values(objects.current).forEach((o) => {
+        if (!o) return
+        const { x, y, z } = o.position
+        boundingBoxB.setFromCenterAndSize(reuseableVec.set(x, y, z), reuseableVec2.set(0.02, 0.02, 0.02));
+        
+        if (boundingBoxA.intersectsBox(boundingBoxB)) {
+          intersectingObjectsCount.push(o.userData.id)
         }
       })
 

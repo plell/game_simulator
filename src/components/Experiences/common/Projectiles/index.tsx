@@ -1,14 +1,16 @@
-import { useEffect, useState } from "react";
+import { MutableRefObject, useEffect, useState } from "react";
 import { Group, Vector3 } from "three";
 import { Bullet } from "./components/Bullet";
 import { v4 as uuidv4 } from "uuid";
+import { Refs } from "../../SpaceGame";
 
 type Props = {
   player: React.MutableRefObject<Group | null>;
   launchPosition?: [x: number, y: number, z: number];
+  refs: MutableRefObject<Refs>;
 };
 
-export const Projectiles = ({ player, launchPosition }: Props) => {
+export const Projectiles = ({ refs, player, launchPosition }: Props) => {
   const [projectiles, setProjectiles] = useState<any>({});
 
   useEffect(() => {
@@ -17,10 +19,6 @@ export const Projectiles = ({ player, launchPosition }: Props) => {
       window.removeEventListener("click", newProjectile);
     };
   });
-
-  useEffect(() => {
-    console.log(projectiles);
-  }, [projectiles]);
 
   const newProjectile = () => {
     const pCopy = { ...projectiles };
@@ -58,7 +56,12 @@ export const Projectiles = ({ player, launchPosition }: Props) => {
         const self = projectiles[p];
         if (self) {
           return (
-            <Bullet self={self} removeMe={removeProjectile} key={self.id} />
+            <Bullet
+              self={self}
+              refs={refs}
+              removeMe={removeProjectile}
+              key={self.id}
+            />
           );
         }
         return null;

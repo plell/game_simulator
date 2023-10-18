@@ -1,12 +1,14 @@
 import { useFrame } from "@react-three/fiber";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { MutableRefObject, useEffect, useMemo, useRef, useState } from "react";
 import { Color, Group, MeshStandardMaterial } from "three";
 import { Projectile } from "../../../../../../Stores/types";
+import { Refs } from "../../../../SpaceGame";
 
 type Props = {
   self: Projectile;
   removeMe: (id: string) => void;
+  refs: MutableRefObject<Refs>;
 };
 
 const highlightMaterial = new MeshStandardMaterial({
@@ -17,9 +19,7 @@ const highlightMaterial = new MeshStandardMaterial({
   transparent: true,
 });
 
-export const Bullet = ({ self, removeMe }: Props) => {
-  const ref = useRef<Group | null>(null);
-
+export const Bullet = ({ refs, self, removeMe }: Props) => {
   const [dead, setDead] = useState(false);
 
   useEffect(() => {
@@ -29,17 +29,22 @@ export const Bullet = ({ self, removeMe }: Props) => {
   }, [dead]);
 
   useFrame(() => {
-    if (ref.current) {
-      ref.current.position.y += 0.3;
+    const ref = refs.current[self.id];
+    if (ref) {
+      ref.position.y += 0.3;
 
-      if (ref.current.position.y > 50) {
+      if (ref.position.y > 50) {
         setDead(true);
       }
     }
   });
 
   return (
-    <group ref={ref} position={self?.position}>
+    <group
+      ref={(r: Group) => (refs.current[self.id] = r)}
+      position={self?.position}
+      userData={{ id: self.id }}
+    >
       <mesh material={highlightMaterial}>
         <sphereGeometry args={[0.3, 10, 10]} />
       </mesh>

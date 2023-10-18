@@ -1,12 +1,22 @@
 import { RapierRigidBody, RigidBody } from "@react-three/rapier";
-import { useEffect, useLayoutEffect, useRef } from "react";
+import {
+  MutableRefObject,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 
 import { Timeout } from "../../../CrocGame/Objects/Croc";
 import { useGLTF } from "@react-three/drei";
-import { Group, Vector3 } from "three";
+import { Color, Group, MeshStandardMaterial, Vector3 } from "three";
 import { useFrame } from "@react-three/fiber";
-
-const movementInterval = 1000;
+import { Refs } from "../..";
+import {
+  useObjectIntersectsManyB,
+  useObjectsIntersect,
+} from "../../../hooks/useObjectsIntersect";
 
 const width = 30;
 
@@ -15,33 +25,76 @@ const getRandomX = () => {
 };
 
 const getRandomY = () => {
-  return 20 + Math.random() * 14 - 14 / 2;
+  return 20 + Math.random() * 34 - 14 / 2;
 };
 
-export const Enemy = () => {
+type Props = {
+  projectilesRef: MutableRefObject<Refs>;
+  playerRef: MutableRefObject<Group | null>;
+};
+
+export const Enemy = ({ projectilesRef, playerRef }: Props) => {
   const ref = useRef<Group | null>(null);
+  const materialRef = useRef<MeshStandardMaterial | null>(null);
+  const [color, setColor] = useState(new Color("red"));
+
+  const [spawnPosition, setSpawnPosition] = useState({
+    x: getRandomX(),
+    y: getRandomY(),
+  });
 
   const reset = () => {
     if (ref?.current) {
       ref.current.position.y = 30;
+      setSpawnPosition({ x: getRandomX(), y: getRandomY() });
+      setColor(new Color("red"));
     }
   };
+
+  const { objectsIntersect } = useObjectsIntersect(ref, playerRef);
+
+  useEffect(() => {
+    if (objectsIntersect) {
+      setColor(new Color("black"));
+    }
+  }, [objectsIntersect]);
+
+  const intersect = useObjectIntersectsManyB(ref, projectilesRef);
 
   useFrame((_, delta) => {
     if (ref?.current) {
       ref.current.position.y -= delta * 5;
 
+      if (intersect.current.length > 0) {
+        const id = intersect.current[0];
+        projectilesRef.current[id].position.set(0, 400, 0);
+        hit();
+      }
+
       if (ref.current.position.y < -30) {
         reset();
       }
     }
+
+    if (materialRef.current) {
+      materialRef.current.color = color;
+      // MathUtils.lerp(
+      //     ref.current.material.uniforms.u_color.value,
+      //     hover ? 1.5 : 1,
+      //     0.3
+      //   );
+    }
   });
 
+  const hit = () => {
+    reset();
+  };
+
   return (
-    <group ref={ref} position={[getRandomX(), getRandomY(), 0]}>
+    <group ref={ref} position={[spawnPosition.x, spawnPosition.y, 0]}>
       <mesh>
-        <boxGeometry args={[1, 1, 1]} />
-        <meshStandardMaterial color={"red"} />
+        <boxGeometry args={[2, 1, 1]} />
+        <meshStandardMaterial ref={materialRef} color={"red"} />
       </mesh>
     </group>
   );

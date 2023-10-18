@@ -9,11 +9,16 @@ import { Enemy } from "./Objects/Enemy";
 import { useFrame } from "@react-three/fiber";
 import { Projectiles } from "../common/Projectiles";
 
+export type Refs = Record<string, Group>;
+
 export const SpaceGame = () => {
   const ref = useRef<Group | null>(null);
   const cloudRef = useRef<Group | null>(null);
   const cloudRef2 = useRef<Group | null>(null);
   const playerRef = useRef<Group | null>(null);
+
+  const enemiesRef = useRef<Refs>({});
+  const projectilesRef = useRef<Refs>({});
 
   const game = useGame((s) => s.game);
 
@@ -40,12 +45,15 @@ export const SpaceGame = () => {
   const enemies = useMemo(() => {
     const b: any = [];
 
-    for (let i = 0; i < 2; i++) {
-      b.push(<Enemy key={i + "-bird"} />);
+    for (let i = 0; i < 10; i++) {
+      const id = i + "-bird";
+      b.push(
+        <Enemy key={id} playerRef={playerRef} projectilesRef={projectilesRef} />
+      );
     }
 
     return b;
-  }, []);
+  }, [playerRef, projectilesRef]);
 
   return (
     <group ref={ref} position={experienceProperties[game]?.gamePosition}>
@@ -72,7 +80,12 @@ export const SpaceGame = () => {
       </group>
 
       <Spaceship position={[0, -6, 0]} playerRef={playerRef} />
-      <Projectiles player={playerRef} launchPosition={[0, -4, 0]} />
+
+      <Projectiles
+        refs={projectilesRef}
+        player={playerRef}
+        launchPosition={[0, -4, 0]}
+      />
 
       {enemies}
 

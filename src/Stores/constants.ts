@@ -61,6 +61,7 @@ export const experienceProperties: ExperienceProps[] = [
     cameraControls: false,
     game: LeafBlower
   },
+   
   {
     cameraPosition: new Vector3(0,100,108),
     cameraTarget: new Vector3(0, -20, -20),
@@ -72,8 +73,7 @@ export const experienceProperties: ExperienceProps[] = [
     backgroundColor:'#ffffff',
     game: CakeGame,
   },
-  
- {
+  {
     cameraPosition: new Vector3(0, 0, 23),
     cameraTarget: new Vector3(0, 0, 0),
     gamePosition: new Vector3(0, 0, 0),
@@ -84,6 +84,7 @@ export const experienceProperties: ExperienceProps[] = [
     cameraControls: false,
     game: SpaceGame
   },
+
   {
     cameraPosition: new Vector3(0, 0, 29),
     cameraTarget: new Vector3(0, 0, 0),
@@ -118,7 +119,4 @@ export const experienceProperties: ExperienceProps[] = [
     backgroundColor:'#000000',
     game:CrocGame
   },
-  
-  
-  
 ]
