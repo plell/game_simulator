@@ -71,16 +71,6 @@ export const experienceProperties: ExperienceProps[] = [
     backgroundColor:'#ffffff',
     game: CakeGame,
   },
- {
-    cameraPosition: new Vector3(0, 0, 23),
-    cameraTarget: new Vector3(0, 0, 0),
-    gamePosition: new Vector3(0, 0, 0),
-    title: 'Feed Two Birds with One Scone',
-    description: 'The idea here is to feed the birds.',
-    instructions: 'Click to',
-    cameraControls: false,
-    game: SpaceGame
-  },
   {
     cameraPosition: new Vector3(0, 0, 29),
     cameraTarget: new Vector3(0, 0, 0),
@@ -91,6 +81,17 @@ export const experienceProperties: ExperienceProps[] = [
     cameraControls: true,
     game: Earth
   },
+ {
+    cameraPosition: new Vector3(0, 0, 23),
+    cameraTarget: new Vector3(0, 0, 0),
+    gamePosition: new Vector3(0, 0, 0),
+    title: 'Feed Two Birds with One Scone',
+    description: 'The idea here is to feed the birds.',
+    instructions: 'Click to',
+    cameraControls: false,
+    game: SpaceGame
+  },
+ 
   
   // {
   //   cameraPosition: new Vector3(0, 0, 60),

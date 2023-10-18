@@ -16,6 +16,7 @@ type Props = {
   scoreInverted?: boolean;
   level?: number;
   setLevel?: (level: number) => void;
+  levelSuffix?: string;
 };
 
 export const GameProgress = ({
@@ -27,6 +28,7 @@ export const GameProgress = ({
   scoreInverted,
   level,
   setLevel,
+  levelSuffix,
 }: Props) => {
   const ref = useRef<Group | null>(null);
   const [animating, setAnimating] = useState(false);
@@ -184,23 +186,29 @@ export const GameProgress = ({
       ) : (
         <group>
           <group position-y={5}>
-            <Text fontSize={3}>LEVEL {level}</Text>
+            <Text fontSize={7}>
+              {!levelSuffix && "LEVEL "}
+              {level}
+              {levelSuffix && `:00 ${levelSuffix}`}
+            </Text>
           </group>
-          <mesh>
-            <planeGeometry args={[90, 1]} />
-            <meshStandardMaterial transparent opacity={0.6} />
-          </mesh>
-
-          {initialized && max > 1 && (
-            <mesh position-z={0.1} ref={progressRef}>
+          <group position-y={-2}>
+            <mesh>
               <planeGeometry args={[90, 1]} />
-              <meshStandardMaterial
-                color={"white"}
-                emissive={refScoreComplete ? "white" : "purple"}
-                emissiveIntensity={refScoreComplete ? 1 : 40}
-              />
+              <meshStandardMaterial transparent opacity={0.6} />
             </mesh>
-          )}
+
+            {initialized && max > 1 && (
+              <mesh position-z={0.1} ref={progressRef}>
+                <planeGeometry args={[90, 1]} />
+                <meshStandardMaterial
+                  color={"white"}
+                  emissive={refScoreComplete ? "white" : "purple"}
+                  emissiveIntensity={refScoreComplete ? 1 : 40}
+                />
+              </mesh>
+            )}
+          </group>
         </group>
       )}
     </group>

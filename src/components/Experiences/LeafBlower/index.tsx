@@ -11,7 +11,9 @@ import {
   Group,
   Mesh,
   PointLight,
+  RepeatWrapping,
   TorusGeometry,
+  Vector2,
   Vector3,
 } from "three";
 
@@ -25,11 +27,11 @@ import {
   RapierRigidBody,
   RigidBody,
 } from "@react-three/rapier";
-import { Sky } from "@react-three/drei";
+import { Sky, Stars, useTexture } from "@react-three/drei";
 import { useControls } from "leva";
 import { useObjectIntersectsMany } from "../hooks/useObjectsIntersect";
 import { GameProgress } from "../common/GameProgress";
-import { LevelProps } from "./constants";
+import { LevelProps, environmentParamsByLevel } from "./constants";
 
 const mouseVec3 = new Vector3();
 const pointLightVec3 = new Vector3();
@@ -52,7 +54,7 @@ export const LeafBlower = () => {
 
   const mouseDown = useGame((s) => s.mouseDown);
 
-  const [level, setLevel] = useState(1);
+  const [level, setLevel] = useState(5);
 
   const levelProperties: LevelProps = useMemo(() => {
     const randomZ = 40 + (Math.random() - 1) * 100;
@@ -168,13 +170,54 @@ export const LeafBlower = () => {
   );
 
   const gameProgressPosition = useMemo(() => new Vector3(0, 50, 0), []);
+  const repeatTile = useMemo(() => new Vector2(80, 80), []);
+
+  const diffMap = useTexture("textures/sand/aerial_beach_01_diff_1k.jpg");
+  const dispMap = useTexture("textures/sand/aerial_beach_01_disp_1k.jpg");
+
+  diffMap.wrapS = RepeatWrapping;
+  diffMap.wrapT = RepeatWrapping;
+  diffMap.repeat = repeatTile;
+  dispMap.wrapS = RepeatWrapping;
+  dispMap.wrapT = RepeatWrapping;
+  dispMap.repeat = repeatTile;
+
+  const atmosphere = useMemo(() => {
+    return environmentParamsByLevel[level] || {};
+  }, [level]);
 
   return (
     <Suspense>
-      <fog attach='fog' color='white' near={100} far={5000} />
+      <fog
+        attach='fog'
+        // color={fogParams.color}
+        // near={fogParams.near}
+        // far={fogParams.far}
+        color={atmosphere?.fog?.color || "white"}
+        near={atmosphere?.fog?.near || 100}
+        far={atmosphere?.fog?.far || 5000}
+      />
+      {level > 7 && (
+        <Stars
+          radius={1100}
+          depth={10}
+          count={1000}
+          factor={20}
+          saturation={0.5}
+          // fade
+          speed={1}
+        />
+      )}
       <group ref={ref} position={experienceProperties[game]?.gamePosition}>
-        <directionalLight intensity={0.8} />
-        <ambientLight intensity={0.4} />
+        <directionalLight
+          intensity={atmosphere?.directionalLight?.intensity || 0.8}
+        />
+        <ambientLight intensity={atmosphere?.ambientLight?.intensity || 0.4} />
+
+        <Sky
+          distance={450000}
+          sunPosition={atmosphere?.sky?.position || sunParams.position}
+        />
 
         <GameProgress
           position={gameProgressPosition}
@@ -183,15 +226,21 @@ export const LeafBlower = () => {
           score={0}
           scoreInverted
           scoreRef={intersectingObjectCountRef}
-          setLevel={(l) => setLevel(l)}
+          setLevel={(l) => {
+            if (l < 13) {
+              setLevel(l);
+            } else {
+              setLevel(5);
+            }
+          }}
           level={level}
+          levelSuffix='PM'
         />
 
-        <Sky distance={450000} sunPosition={sunParams.position} />
         <pointLight
           ref={pointLightRef}
           castShadow
-          intensity={2000}
+          intensity={atmosphere?.pointLight?.intensity || 2000}
           color={mouseDown ? "white" : "gold"}
         />
 
@@ -238,7 +287,12 @@ export const LeafBlower = () => {
             }}
           >
             <boxGeometry args={[7000, 10000, 10]} />
-            <meshStandardMaterial color={groundParams.color} />
+            <meshStandardMaterial
+              map={diffMap}
+              displacementMap={dispMap}
+              displacementScale={0.2}
+              color={groundParams.color}
+            />
           </mesh>
         </RigidBody>
       </group>
