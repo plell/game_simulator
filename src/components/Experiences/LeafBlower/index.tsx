@@ -9,7 +9,6 @@ import {
 import {
   CylinderGeometry,
   Group,
-  Material,
   MathUtils,
   Mesh,
   MeshStandardMaterial,
@@ -99,6 +98,9 @@ export const LeafBlower = () => {
           pointLightVec3.set(mouseRef.current.x, 30, mouseRef.current.z),
           0.1
         );
+        if (level > 11) {
+          pointLightRef.current.intensity = 10;
+        }
       }
     }
   });
@@ -276,8 +278,12 @@ export const LeafBlower = () => {
 
         <group ref={cursorRef}>
           <mesh rotation-x={Math.PI * -0.5}>
-            <torusGeometry args={[radius, 1]} />
-            <meshBasicMaterial color={mouseDown ? "white" : "gold"} />
+            <torusGeometry args={[radius, 0.5]} />
+            <meshBasicMaterial
+              color={mouseDown ? "white" : "gold"}
+              transparent
+              opacity={level > 11 ? 0.1 : 0.3}
+            />
           </mesh>
           <mesh>
             <sphereGeometry args={[radius, 20]} />

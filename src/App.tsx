@@ -96,24 +96,26 @@ const CameraController = () => {
 const App = () => {
   const game = useGame((s) => s.game);
   const setMouseDown = useGame((s) => s.setMouseDown);
-  const setLocked = useGame((s) => s.setLocked);
 
   const GameComponent = experienceProperties[game]?.game;
 
-  useEffect(() => {
-    // setLocked(true);
-  }, [game]);
+  const [firstClick, setFirstClick] = useState(false);
 
   useEffect(() => {
     window.addEventListener("mousedown", handleMouseDown);
     window.addEventListener("mouseup", handleMouseUp);
+    window.addEventListener("touchstart", handleMouseDown);
+    window.addEventListener("touchend", handleMouseDown);
     return () => {
       window.removeEventListener("mousedown", handleMouseDown);
       window.removeEventListener("mouseup", handleMouseUp);
+      window.removeEventListener("touchstart", handleMouseDown);
+      window.removeEventListener("touchend", handleMouseUp);
     };
   });
 
   const handleMouseDown = () => {
+    if (!firstClick) setFirstClick(true);
     setMouseDown(true);
   };
 
@@ -125,7 +127,10 @@ const App = () => {
     <>
       <Anchor id='anchor' />
 
+      {!firstClick && <ClickMe>CLICK TO PLAY</ClickMe>}
+
       <Browser />
+
       <Leva hidden={!isDevelopment} />
 
       <Canvas
@@ -187,6 +192,21 @@ const Anchor = styled.div`
   user-select: none;
   height: 100%;
   width: 100%;
+`;
+
+const ClickMe = styled.div`
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  font-size: 26px;
+  font-weight: 300;
+  color: #f1f1f1;
+  align-items: center;
+  user-select: none;
+  pointer-events: none;
+  height: 100%;
+  width: 100%;
+  z-index: 100;
 `;
 
 export default App;

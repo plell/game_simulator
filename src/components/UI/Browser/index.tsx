@@ -1,13 +1,8 @@
-import {
-  MdArrowCircleLeft,
-  MdArrowCircleRight,
-  MdLock,
-  MdLockOutline,
-} from "react-icons/md";
+import { MdArrowCircleLeft, MdArrowCircleRight } from "react-icons/md";
 import styled from "styled-components";
 import useGame from "../../../Stores/useGame";
 import { experienceProperties } from "../../../Stores/constants";
-import { useEffect, useRef } from "react";
+import { MutableRefObject, useEffect, useRef } from "react";
 import gsap, { Power4 } from "gsap";
 import { Bounce } from "gsap";
 import { AudioPlayer } from "../AudioPlayer";
@@ -20,6 +15,7 @@ export const Browser = () => {
   const locked = useGame((s) => s.locked);
 
   const forwardButton = useRef(null);
+  const backButton = useRef(null);
 
   const nopeAnimation = () => {
     if (forwardButton.current) {
@@ -38,19 +34,25 @@ export const Browser = () => {
 
   useEffect(() => {
     if (!locked && forwardButton.current) {
+      spin(forwardButton);
+    }
+  }, [locked]);
+
+  const spin = (ref: MutableRefObject<HTMLElement | null>) => {
+    if (ref.current) {
       gsap
-        .to(forwardButton.current, {
+        .to(ref.current, {
           duration: 1,
           ease: Power4.easeOut,
           keyframes: {
             "0%": { transform: "rotateY(90deg)", color: "#fff" },
-            "50%": { transform: "rotateY(180deg)", color: "skyblue" },
+            "50%": { transform: "rotateY(180deg)", color: "#fff" },
             "100%": { transform: "rotateY(0deg)", color: "#fff" },
           },
         })
         .play();
     }
-  }, [locked]);
+  };
 
   return (
     <Overlay>
@@ -59,10 +61,34 @@ export const Browser = () => {
         <Description>{experienceProperties[game]?.description}</Description>
       </Title>
 
-      <AudioPlayer />
+      <Footer>
+        <Tag>David Plell's Portfolio</Tag>
+
+        <FlexRow>
+          <FlexRowItem>
+            <a href='https://github.com/plell' target='_blank'>
+              <Image src={"images/github.png"} size={40} />
+            </a>
+          </FlexRowItem>
+          <FlexRowItem>
+            <a href='https://www.linkedin.com/in/davidplell/' target='_blank'>
+              <Image src={"images/linkedin.png"} size={40} />
+            </a>
+          </FlexRowItem>
+          <FlexRowItem>
+            <AudioPlayer />
+          </FlexRowItem>
+        </FlexRow>
+      </Footer>
 
       {game > 0 ? (
-        <Button onPointerDown={() => setGame(game - 1)}>
+        <Button
+          ref={backButton}
+          onPointerDown={() => {
+            spin(backButton);
+            setGame(game - 1);
+          }}
+        >
           <MdArrowCircleLeft />
         </Button>
       ) : (
@@ -75,6 +101,7 @@ export const Browser = () => {
             nopeAnimation();
           } else {
             setGame(game + 1);
+            spin(forwardButton);
           }
         }}
       >
@@ -83,6 +110,29 @@ export const Browser = () => {
     </Overlay>
   );
 };
+
+const FlexRow = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const FlexRowItem = styled.div`
+  display: flex;
+  margin-left: 30px;
+`;
+
+const Footer = styled.div`
+  position: absolute;
+  flex-wrap: wrap;
+  pointer-events: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  bottom: 0px;
+  left: 0px;
+  min-width: calc(100% - 40px);
+  padding: 20px;
+`;
 
 const Title = styled.div`
   position: absolute;
@@ -98,13 +148,21 @@ const Description = styled.div`
   color: #f1f1f1;
 `;
 
+const Tag = styled.div`
+  font-size: 26px;
+  font-weight: 300;
+
+  color: #f1f1f1;
+`;
+
 const Button = styled.div`
   pointer-events: auto;
+  user-select: none;
   cursor: pointer;
   display: flex;
   align-items: center;
   font-weight: 400;
-  font-size: 90px;
+  font-size: 70px;
   color: #fff;
   transition: color 0.2s;
 
@@ -130,4 +188,20 @@ const Overlay = styled.div`
   font-weight: 900;
   color: #fff;
   z-index: 10;
+`;
+
+type ImageProps = {
+  src: string;
+  size: number;
+};
+
+const Image = styled.img<ImageProps>`
+  pointer-events: auto;
+  cursor: pointer;
+  background-image: ${({ src }) => `url(${src})`};
+  background-size: contain;
+  background-repeat: no-repeat;
+  width: ${(p) => p.size}px;
+  height: ${(p) => p.size}px;
+  border-radius: 100%;
 `;

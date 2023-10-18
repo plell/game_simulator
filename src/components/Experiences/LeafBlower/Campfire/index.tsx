@@ -86,7 +86,7 @@ export const Campfire = () => {
       <pointLight
         position={[0, 0, 0]}
         castShadow
-        intensity={7000}
+        intensity={5000}
         color={"orange"}
       />
       <mesh

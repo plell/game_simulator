@@ -8,10 +8,11 @@ import { LeafBlower } from "../components/Experiences/LeafBlower";
 
 const { origin } = window.location
 
-export const isDevelopment = !!(
-  origin === 'http://localhost:3000' ||
-  origin === 'http://localhost:5173'
-)
+export const isDevelopment = false
+// !!(
+//   origin === 'http://localhost:3000' ||
+//   origin === 'http://localhost:5173'
+// )
 
 export const debounce = (fn: () => void, ms = 300) => {
   let timeoutId: ReturnType<typeof setTimeout>;
