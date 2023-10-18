@@ -1,29 +1,13 @@
 import { useFrame } from "@react-three/fiber";
-import { useEffect, useMemo, useRef, useState } from "react";
-import {
-  DoubleSide,
-  Group,
-  Light,
-  Mesh,
-  MeshStandardMaterial,
-  MathUtils,
-} from "three";
+import { useMemo, useRef, useState } from "react";
+import { Mesh, MathUtils } from "three";
 import useGame from "../../../Stores/useGame";
 import { experienceProperties } from "../../../Stores/constants";
-
-import { Loader } from "@react-three/drei";
 
 import vertexShader from "./shaders/vertexShader";
 import fragmentShader from "./shaders/fragmentShader";
 
-const EARTH_RADIUS = 6;
-
 export const Earth = () => {
-  const ref = useRef<Mesh | null>(null);
-  const groupRef = useRef<Group | null>(null);
-  const lightRef = useRef<THREE.DirectionalLight | null>(null);
-  const cloudsRef = useRef<THREE.Mesh | null>(null);
-
   const game = useGame((s) => s.game);
 
   return (

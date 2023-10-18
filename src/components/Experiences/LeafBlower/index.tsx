@@ -35,6 +35,7 @@ import { useControls } from "leva";
 import { useObjectIntersectsMany } from "../hooks/useObjectsIntersect";
 import { GameProgress } from "../common/GameProgress";
 import { LevelProps, environmentParamsByLevel } from "./constants";
+import { Campfire } from "./Campfire";
 
 const mouseVec3 = new Vector3();
 const pointLightVec3 = new Vector3();
@@ -240,14 +241,7 @@ export const LeafBlower = () => {
           levelSuffix=':00 PM'
         />
 
-        {level > 10 && (
-          <pointLight
-            position={[0, 20, 100]}
-            castShadow
-            intensity={7000}
-            color={"orange"}
-          />
-        )}
+        {level > 10 && <Campfire />}
 
         <pointLight
           ref={pointLightRef}
@@ -333,7 +327,7 @@ const Sensor = ({
     if (ringMaterial.current) {
       ringMaterial.current.emissiveIntensity = MathUtils.lerp(
         ringMaterial.current.emissiveIntensity,
-        intersectingObjectCountRef.current < 1 ? 2 : 0,
+        intersectingObjectCountRef.current < 1 ? 1.6 : 0,
         0.1
       );
     }
