@@ -241,7 +241,7 @@ export const LeafBlower = () => {
           levelSuffix=':00 PM'
         />
 
-        {level > 10 && <Campfire />}
+        {level === 11 && <Campfire />}
 
         <pointLight
           ref={pointLightRef}
