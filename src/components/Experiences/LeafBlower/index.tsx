@@ -197,9 +197,10 @@ export const LeafBlower = () => {
     <Suspense>
       <fog
         attach='fog'
-        color={atmosphere?.fog?.color || "white"}
-        near={atmosphere?.fog?.near || 100}
-        far={atmosphere?.fog?.far || 5000}
+        color={"white"}
+        near={100}
+        far={5000}
+        {...atmosphere?.fog}
       />
       {level > 7 && (
         <Stars
@@ -210,6 +211,7 @@ export const LeafBlower = () => {
           saturation={0.5}
           // fade
           speed={1}
+          {...atmosphere?.stars}
         />
       )}
       <group ref={ref} position={experienceProperties[game]?.gamePosition}>
@@ -246,8 +248,9 @@ export const LeafBlower = () => {
         <pointLight
           ref={pointLightRef}
           castShadow
-          intensity={atmosphere?.pointLight?.intensity || 2000}
+          intensity={2000}
           color={mouseDown ? "white" : "gold"}
+          {...atmosphere?.pointLight}
         />
 
         <InstancedRigidBodies

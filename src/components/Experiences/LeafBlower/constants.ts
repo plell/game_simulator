@@ -153,6 +153,9 @@ export const environmentParamsByLevel = {
         sky: {
             position:[0.7, -4.604999999999995, -8.760353553682876e-17],
         },
+        stars: {
+            speed:2,  
+        },
         ambientLight: {
             intensity: 0.04
         },
