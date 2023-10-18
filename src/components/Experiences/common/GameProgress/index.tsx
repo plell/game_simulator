@@ -17,6 +17,7 @@ type Props = {
   level?: number;
   setLevel?: (level: number) => void;
   levelSuffix?: string;
+  levelPrefix?: string;
   hideText?: boolean;
 };
 
@@ -30,6 +31,7 @@ export const GameProgress = ({
   level,
   setLevel,
   levelSuffix,
+  levelPrefix,
   hideText,
 }: Props) => {
   const ref = useRef<Group | null>(null);
@@ -130,7 +132,7 @@ export const GameProgress = ({
           : scoreRef?.current / max
         : 1;
 
-      const yScale = refScoreComplete ? 4 : 1;
+      const yScale = refScoreComplete ? 2 : 1;
       progressRef.current.scale.set(xScale, yScale, 1);
 
       if (initialized && !refScoreComplete) {
@@ -190,9 +192,9 @@ export const GameProgress = ({
           {!hideText && (
             <group position-y={5}>
               <Text fontSize={7}>
-                {!levelSuffix && "LEVEL "}
+                {levelPrefix}
                 {level}
-                {levelSuffix && `:00 ${levelSuffix}`}
+                {levelSuffix}
               </Text>
             </group>
           )}

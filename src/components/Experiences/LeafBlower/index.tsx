@@ -9,7 +9,10 @@ import {
 import {
   CylinderGeometry,
   Group,
+  Material,
+  MathUtils,
   Mesh,
+  MeshStandardMaterial,
   PointLight,
   RepeatWrapping,
   TorusGeometry,
@@ -41,6 +44,7 @@ const forceVec = new Vector3();
 
 const radius = 20;
 
+const firstLevel = 6;
 const lastLevel = 12;
 
 export const LeafBlower = () => {
@@ -56,7 +60,7 @@ export const LeafBlower = () => {
 
   const mouseDown = useGame((s) => s.mouseDown);
 
-  const [level, setLevel] = useState(5);
+  const [level, setLevel] = useState(firstLevel);
 
   const levelProperties: LevelProps = useMemo(() => {
     const randomZ = 40 + (Math.random() - 1) * 100;
@@ -192,9 +196,6 @@ export const LeafBlower = () => {
     <Suspense>
       <fog
         attach='fog'
-        // color={fogParams.color}
-        // near={fogParams.near}
-        // far={fogParams.far}
         color={atmosphere?.fog?.color || "white"}
         near={atmosphere?.fog?.near || 100}
         far={atmosphere?.fog?.far || 5000}
@@ -232,12 +233,21 @@ export const LeafBlower = () => {
             if (l < lastLevel + 1) {
               setLevel(l);
             } else {
-              setLevel(5);
+              setLevel(firstLevel);
             }
           }}
           level={level}
-          levelSuffix='PM'
+          levelSuffix=':00 PM'
         />
+
+        {level > 10 && (
+          <pointLight
+            position={[0, 20, 100]}
+            castShadow
+            intensity={7000}
+            color={"orange"}
+          />
+        )}
 
         <pointLight
           ref={pointLightRef}
@@ -261,7 +271,11 @@ export const LeafBlower = () => {
           </instancedMesh>
         </InstancedRigidBodies>
 
-        <Sensor innerRef={sensorRef} levelProperties={levelProperties} />
+        <Sensor
+          innerRef={sensorRef}
+          levelProperties={levelProperties}
+          intersectingObjectCountRef={intersectingObjectCountRef}
+        />
 
         <group ref={cursorRef}>
           <mesh rotation-x={Math.PI * -0.5}>
@@ -305,16 +319,39 @@ export const LeafBlower = () => {
 type SensorProps = {
   innerRef: MutableRefObject<Mesh | null>;
   levelProperties: LevelProps;
+  intersectingObjectCountRef: MutableRefObject<number>;
 };
 
-const Sensor = ({ innerRef, levelProperties }: SensorProps) => {
+const Sensor = ({
+  innerRef,
+  levelProperties,
+  intersectingObjectCountRef,
+}: SensorProps) => {
+  const ringMaterial = useRef<MeshStandardMaterial | null>(null);
+
+  useFrame(() => {
+    if (ringMaterial.current) {
+      ringMaterial.current.emissiveIntensity = MathUtils.lerp(
+        ringMaterial.current.emissiveIntensity,
+        intersectingObjectCountRef.current < 1 ? 2 : 0,
+        0.1
+      );
+    }
+  });
+
   return (
     <group position={levelProperties.position}>
       <mesh
         geometry={levelProperties.boundaryGeometry}
         rotation-x={levelProperties.boundaryRotation}
       >
-        <meshStandardMaterial color={"#ffffff"} roughness={0} />
+        <meshStandardMaterial
+          ref={ringMaterial}
+          color={"#ffffff"}
+          roughness={0}
+          emissive={"#ffffff"}
+          emissiveIntensity={0}
+        />
       </mesh>
 
       <mesh ref={innerRef} geometry={levelProperties.geometry}>
