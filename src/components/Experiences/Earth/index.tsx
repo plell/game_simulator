@@ -55,8 +55,7 @@ const Planet = () => {
     []
   );
 
-  useFrame((state) => {
-    const { clock } = state;
+  useFrame(({ clock }, delta) => {
     if (ref?.current) {
       ref.current.material.uniforms.u_time.value = 0.2 * clock.getElapsedTime();
 
@@ -68,9 +67,11 @@ const Planet = () => {
 
       ref.current.material.uniforms.u_color.value = MathUtils.lerp(
         ref.current.material.uniforms.u_color.value,
-        hover ? 2 : 1,
+        hover ? 1.5 : 1,
         0.3
       );
+
+      ref.current.rotation.y += delta * 0.6;
     }
   });
 

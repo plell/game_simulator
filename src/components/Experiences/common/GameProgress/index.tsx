@@ -17,6 +17,7 @@ type Props = {
   level?: number;
   setLevel?: (level: number) => void;
   levelSuffix?: string;
+  hideText?: boolean;
 };
 
 export const GameProgress = ({
@@ -29,6 +30,7 @@ export const GameProgress = ({
   level,
   setLevel,
   levelSuffix,
+  hideText,
 }: Props) => {
   const ref = useRef<Group | null>(null);
   const [animating, setAnimating] = useState(false);
@@ -185,13 +187,15 @@ export const GameProgress = ({
         </>
       ) : (
         <group>
-          <group position-y={5}>
-            <Text fontSize={7}>
-              {!levelSuffix && "LEVEL "}
-              {level}
-              {levelSuffix && `:00 ${levelSuffix}`}
-            </Text>
-          </group>
+          {!hideText && (
+            <group position-y={5}>
+              <Text fontSize={7}>
+                {!levelSuffix && "LEVEL "}
+                {level}
+                {levelSuffix && `:00 ${levelSuffix}`}
+              </Text>
+            </group>
+          )}
           <group position-y={-2}>
             <mesh>
               <planeGeometry args={[90, 1]} />

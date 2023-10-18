@@ -41,6 +41,8 @@ const forceVec = new Vector3();
 
 const radius = 20;
 
+const lastLevel = 12;
+
 export const LeafBlower = () => {
   const ref = useRef<Group | null>(null);
   const cursorRef = useRef<Group | null>(null);
@@ -227,7 +229,7 @@ export const LeafBlower = () => {
           scoreInverted
           scoreRef={intersectingObjectCountRef}
           setLevel={(l) => {
-            if (l < 13) {
+            if (l < lastLevel + 1) {
               setLevel(l);
             } else {
               setLevel(5);

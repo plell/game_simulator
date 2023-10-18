@@ -88,6 +88,7 @@ export const experienceProperties: ExperienceProps[] = [
     title: 'Feed Two Birds with One Scone',
     description: 'The idea here is to feed the birds.',
     instructions: 'Click to',
+    backgroundColor:'#000000',
     cameraControls: false,
     game: SpaceGame
   },
