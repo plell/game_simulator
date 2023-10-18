@@ -8,7 +8,21 @@ import Hammer from "./Objects/Hammer";
 import Wall from "./Objects/Wall";
 import CrocArch from "./Objects/Arch";
 import { experienceProperties } from "../../../Stores/constants";
-import { Lights } from "../../Lights";
+
+const Lights = () => {
+  return (
+    <group position={[0, 5, 0]}>
+      <ambientLight intensity={0.04} />
+      <pointLight
+        color={"yellow"}
+        intensity={200}
+        position={[-9, 4, 4]}
+        castShadow
+      />
+      <hemisphereLight args={["red", "pink"]} intensity={0.4} />
+    </group>
+  );
+};
 
 export const CrocGame = () => {
   const ref = useRef<Group | null>(null);

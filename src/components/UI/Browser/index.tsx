@@ -81,19 +81,21 @@ export const Browser = () => {
         </FlexRow>
       </Footer>
 
-      {game > 0 ? (
-        <Button
-          ref={backButton}
-          onPointerDown={() => {
-            spin(backButton);
-            setGame(game - 1);
-          }}
-        >
-          <MdArrowCircleLeft />
-        </Button>
-      ) : (
-        <div />
-      )}
+      <Button
+        ref={backButton}
+        style={{ opacity: game < 1 ? 0.07 : 1 }}
+        onPointerDown={() => {
+          spin(backButton);
+          if (game < 1) {
+            return;
+          }
+
+          setGame(game - 1);
+        }}
+      >
+        <MdArrowCircleLeft />
+      </Button>
+
       <Button
         ref={forwardButton}
         onPointerDown={() => {

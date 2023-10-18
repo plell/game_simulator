@@ -72,26 +72,27 @@ export const experienceProperties: ExperienceProps[] = [
     backgroundColor:'#ffffff',
     game: CakeGame,
   },
-  {
-    cameraPosition: new Vector3(0, 0, 29),
-    cameraTarget: new Vector3(0, 0, 0),
-    gamePosition: new Vector3(0, 0, 0),
-    title: 'Goo Planet',
-    description: 'Here you are.',
-    instructions: 'Drag to turn the world. Take a look around.',
-    cameraControls: true,
-    game: Earth
-  },
+  
  {
     cameraPosition: new Vector3(0, 0, 23),
     cameraTarget: new Vector3(0, 0, 0),
     gamePosition: new Vector3(0, 0, 0),
-    title: 'Feed Two Birds with One Scone',
-    description: 'The idea here is to feed the birds.',
+    title: '',
+    description: '',
     instructions: 'Click to',
     backgroundColor:'#000000',
     cameraControls: false,
     game: SpaceGame
+  },
+  {
+    cameraPosition: new Vector3(0, 0, 29),
+    cameraTarget: new Vector3(0, 0, 0),
+    gamePosition: new Vector3(0, 0, 0),
+    title: '',
+    description: '',
+    instructions: 'Drag to turn the world. Take a look around.',
+    cameraControls: true,
+    game: Earth
   },
  
   
@@ -107,11 +108,11 @@ export const experienceProperties: ExperienceProps[] = [
   // },
   
   {
-    cameraPosition: new Vector3(0, 20, 16),
-    cameraTarget: new Vector3(0, 7, 0),
+    cameraPosition: new Vector3(0, 18, 14),
+    cameraTarget: new Vector3(0, 0, -5),
     gamePosition: new Vector3(0, 0, 0),
-    title: 'Whac-a-croc',
-    description: 'Remember this one?',
+    title: '',
+    description: '',
     instructions: 'Click to',
     cameraControls: false,
     backgroundColor:'#000000',

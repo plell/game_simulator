@@ -12,8 +12,10 @@ export const CrocModel = ({ id, disabled }: Props) => {
   useEffect(() => {
     crocModel.scene.children.forEach((mesh) => {
       mesh.userData = { type: "croc", id };
-      mesh.castShadow = true;
-      mesh.receiveShadow = true;
+      if (!mesh.name.includes("Plane")) {
+        mesh.castShadow = true;
+        mesh.receiveShadow = true;
+      }
     });
   }, []);
 

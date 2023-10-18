@@ -41,17 +41,20 @@ const Planet = () => {
 
   useFrame(({ clock }, delta) => {
     if (ref?.current) {
-      ref.current.material.uniforms.u_time.value = 0.2 * clock.getElapsedTime();
+      const elapsed = clock.getElapsedTime();
+      ref.current.material.uniforms.u_time.value = 0.2 * elapsed;
+
+      const value = Math.sin(elapsed) + 0.5;
 
       ref.current.material.uniforms.u_intensity.value = MathUtils.lerp(
         ref.current.material.uniforms.u_intensity.value,
-        hover ? 0.95 : 0.25,
+        value,
         0.3
       );
 
       ref.current.material.uniforms.u_color.value = MathUtils.lerp(
         ref.current.material.uniforms.u_color.value,
-        hover ? 1.5 : 1,
+        1,
         0.3
       );
 
