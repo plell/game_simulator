@@ -66,26 +66,37 @@ export const Browser = () => {
   return (
     <>
       {showAboutMe && <AboutMe />}
-      <Overlay>
+      <Overlay isMobile={isMobile}>
         <Title style={{ lineHeight: "40px" }}>
           <div>{experienceProperties[game]?.title}</div>
           <Description>{experienceProperties[game]?.description}</Description>
         </Title>
 
         <Footer style={{ background: showAboutMe ? "#00000088" : "" }}>
-          <Tag style={{ lineHeight: "40px" }}>David Plell's Portfolio</Tag>
+          {!isMobile && (
+            <Tag style={{ lineHeight: "40px" }}>David Plell's Portfolio</Tag>
+          )}
 
           <FlexRow>
-            <FlexRowItem>
-              <a href='https://github.com/plell' target='_blank'>
-                <Image src={"images/github.png"} size={36} />
-              </a>
-            </FlexRowItem>
-            <FlexRowItem>
-              <a href='https://www.linkedin.com/in/davidplell/' target='_blank'>
-                <Image src={"images/linkedin.png"} size={36} />
-              </a>
-            </FlexRowItem>
+            {!isMobile && (
+              <>
+                <FlexRowItem>
+                  <a href='https://github.com/plell' target='_blank'>
+                    <Image src={"images/github.png"} size={36} />
+                  </a>
+                </FlexRowItem>
+                <ItemSpacer />
+                <FlexRowItem>
+                  <a
+                    href='https://www.linkedin.com/in/davidplell/'
+                    target='_blank'
+                  >
+                    <Image src={"images/linkedin.png"} size={36} />
+                  </a>
+                </FlexRowItem>
+                <ItemSpacer />
+              </>
+            )}
             <FlexRowItem>
               <AudioPlayer />
             </FlexRowItem>
@@ -93,6 +104,7 @@ export const Browser = () => {
         </Footer>
 
         <Button
+          isMobile={isMobile}
           ref={backButton}
           onPointerDown={() => {
             spin(backButton);
@@ -108,6 +120,7 @@ export const Browser = () => {
         </Button>
 
         <Button
+          isMobile={isMobile}
           ref={forwardButton}
           onPointerDown={() => {
             let toGame = game + 1;
@@ -131,9 +144,12 @@ const FlexRow = styled.div`
   flex-wrap: wrap;
 `;
 
+const ItemSpacer = styled.div`
+  width: 30px;
+`;
+
 const FlexRowItem = styled.div`
   display: flex;
-  margin-left: 30px;
 `;
 
 const Footer = styled.div`
@@ -171,14 +187,18 @@ const Tag = styled.div`
   color: #f1f1f1;
 `;
 
-const Button = styled.div`
+type ButtonProps = {
+  isMobile?: boolean;
+};
+
+const Button = styled.div<ButtonProps>`
   pointer-events: auto;
   user-select: none;
   cursor: pointer;
   display: flex;
   align-items: center;
   font-weight: 400;
-  font-size: 70px;
+  font-size: ${(p) => (p.isMobile ? "40px" : "70px")};
   color: #fff;
   transition: color 0.2s;
 
@@ -188,13 +208,17 @@ const Button = styled.div`
   }
 `;
 
-const Overlay = styled.div`
+type OverlayProps = {
+  isMobile?: boolean;
+};
+
+const Overlay = styled.div<OverlayProps>`
   position: absolute;
   top: 0px;
   left: 0px;
-  width: calc(100% - 100px);
+  width: calc(100% - ${(p) => (p.isMobile ? "20px" : "100px")});
   height: calc(100% - 100px);
-  padding: 50px;
+  padding: ${(p) => (p.isMobile ? "50px 10px" : "50px")};
   display: flex;
   justify-content: space-between;
   align-items: center;

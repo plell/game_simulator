@@ -7,7 +7,6 @@ import useGame from "../../../Stores/useGame";
 
 export const AboutMe = () => {
   const ref = useRef(null);
-  const cafeRef = useRef(null);
   const setGame = useGame((s) => s.setGame);
 
   const [renderCafe, setRenderCafe] = useState(false);
@@ -29,7 +28,7 @@ export const AboutMe = () => {
     >
       <TopFlexRow>
         <FlexRowItem>
-          <BigTitle>Modern Web Experiences</BigTitle>
+          <BigTitle isMobile={isMobile}>Modern Web Experiences</BigTitle>
         </FlexRowItem>
         <FlexRowItem>
           <TopDescription>by David Plell</TopDescription>
@@ -54,7 +53,7 @@ export const AboutMe = () => {
           <Title>Social Media Platform</Title>
         </FlexRowItem>
         <FlexRowItem>
-          <Description>
+          <Description isMobile={isMobile}>
             Sphinx Community is a Web3 sidekick social media platform that I
             built from the ground up using React, Golang and PostgreSQL. Here
             you can meet other Sphinx Chat app users, join Sphinx Chat tribes,
@@ -77,7 +76,7 @@ export const AboutMe = () => {
           <Title>Machine Learning Model Visualization</Title>
         </FlexRowItem>
         <FlexRowItem>
-          <Description>
+          <Description isMobile={isMobile}>
             Second Brain is an application that collects data for an open source
             machine learning bank. I designed and built the UI using React Three
             Fiber. My goal was to encourage community participation by bringing
@@ -93,7 +92,7 @@ export const AboutMe = () => {
           <Title>Online Payment and Order Management</Title>
         </FlexRowItem>
         <FlexRowItem>
-          <Description>
+          <Description isMobile={isMobile}>
             I built this white label e-commerce template with React, Golang, SQL
             backend - dockerized and served from DigitalOcean. Payments are
             powered by the Stripe API. Communications are powered by the Gmail
@@ -131,8 +130,12 @@ export const AboutMe = () => {
 const Spacer = styled.div`
   min-height: 60px;
 `;
-const BigTitle = styled.div`
-  font-size: 60px;
+
+type BTProps = {
+  isMobile?: boolean;
+};
+const BigTitle = styled.div<BTProps>`
+  font-size: ${(p) => (p.isMobile ? "50px" : "60px")};
   font-weight: 200;
 `;
 
@@ -159,11 +162,14 @@ const LinkTitle = styled.div`
   }
 `;
 
-const Description = styled.div`
+type DescriptionProps = {
+  isMobile?: boolean;
+};
+const Description = styled.div<DescriptionProps>`
   font-size: 28px;
   font-weight: 300;
   line-height: 39px;
-  margin: 30px 0px 60px 40px;
+  margin: 30px 0px 60px ${(p) => (p.isMobile ? "0" : "40px")};
   color: #f1f1f1;
   padding: 12px;
   background: #00000022;

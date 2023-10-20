@@ -1,5 +1,5 @@
 import { useFrame } from "@react-three/fiber";
-import { useMemo, useRef, useState } from "react";
+import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { Mesh, MathUtils } from "three";
 import useGame from "../../../Stores/useGame";
 import { experienceProperties } from "../../../Stores/constants";
@@ -10,14 +10,26 @@ import fragmentShader from "./shaders/fragmentShader";
 export const Earth = () => {
   const game = useGame((s) => s.game);
 
+  const [init, setInit] = useState(false);
+
+  useEffect(() => {
+    const to = setTimeout(() => setInit(true), 100);
+
+    return () => {
+      clearTimeout(to);
+    };
+  }, []);
+
   return (
     <group position={experienceProperties[game]?.gamePosition}>
       {/* <directionalLight ref={lightRef} intensity={3} position={[0, 0, 90]} /> */}
 
-      <Planet />
+      {init && <Planet />}
     </group>
   );
 };
+
+const scale = 3;
 
 const Planet = () => {
   // This reference will give us direct access to the mesh
@@ -55,28 +67,34 @@ const Planet = () => {
       ref.current.material.uniforms.u_color.value = MathUtils.lerp(
         ref.current.material.uniforms.u_color.value,
         1,
-        0.3
+        0.003
       );
 
-      ref.current.rotation.y += delta * 0.6;
+      ref.current.rotation.y += delta * 0.4;
+
+      const newScale = MathUtils.lerp(ref.current.scale.x, scale, 0.05);
+
+      ref.current.scale.set(newScale, newScale, newScale);
     }
   });
 
   return (
-    <mesh
-      ref={ref}
-      position={[0, 0, 0]}
-      scale={3}
-      onPointerOver={() => setHover(true)}
-      onPointerOut={() => setHover(false)}
-    >
-      <icosahedronGeometry args={[2, 20]} />
-      <shaderMaterial
-        fragmentShader={fragmentShader}
-        vertexShader={vertexShader}
-        uniforms={uniforms}
-        wireframe={false}
-      />
-    </mesh>
+    <Suspense fallback={null}>
+      <mesh
+        ref={ref}
+        position={[0, 0, 0]}
+        scale={0}
+        onPointerOver={() => setHover(true)}
+        onPointerOut={() => setHover(false)}
+      >
+        <icosahedronGeometry args={[2, 20]} />
+        <shaderMaterial
+          fragmentShader={fragmentShader}
+          vertexShader={vertexShader}
+          uniforms={uniforms}
+          wireframe={false}
+        />
+      </mesh>
+    </Suspense>
   );
 };
