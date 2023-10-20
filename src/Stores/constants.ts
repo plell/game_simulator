@@ -48,25 +48,36 @@ type ExperienceProps = {
   cameraControls: boolean
   backgroundColor?: string
   game: () => JSX.Element
+  showAboutMe?: boolean
 }
 
 export const experienceProperties: ExperienceProps[] = [
   {
-    cameraPosition: new Vector3(0,40,168),
+    cameraPosition: new Vector3(0, 0, 29),
     cameraTarget: new Vector3(0, 0, 0),
     gamePosition: new Vector3(0, 0, 0),
     title: '',
     description: '',
     instructions: 'Drag to turn the world. Take a look around.',
+    cameraControls: true,
+    game: Earth,
+    showAboutMe: true
+  },
+  {
+    cameraPosition: new Vector3(0,40,168),
+    cameraTarget: new Vector3(0, 0, 0),
+    gamePosition: new Vector3(0, 0, 0),
+    title: 'High Desert',
+    description: '',
+    instructions: 'Drag to turn the world. Take a look around.',
     cameraControls: false,
     game: LeafBlower
   },
-   
   {
     cameraPosition: new Vector3(0,100,108),
     cameraTarget: new Vector3(0, -20, -20),
     gamePosition: new Vector3(0, 0, 0),
-    title: '',
+    title: 'Donuts',
     description: '',
     instructions: '',
     cameraControls: false,
@@ -77,7 +88,7 @@ export const experienceProperties: ExperienceProps[] = [
     cameraPosition: new Vector3(0, 0, 23),
     cameraTarget: new Vector3(0, 0, 0),
     gamePosition: new Vector3(0, 0, 0),
-    title: '',
+    title: 'Flyer',
     description: '',
     instructions: 'Click to',
     backgroundColor:'#000000',
@@ -85,16 +96,7 @@ export const experienceProperties: ExperienceProps[] = [
     game: SpaceGame
   },
 
-  {
-    cameraPosition: new Vector3(0, 0, 29),
-    cameraTarget: new Vector3(0, 0, 0),
-    gamePosition: new Vector3(0, 0, 0),
-    title: '',
-    description: '',
-    instructions: 'Drag to turn the world. Take a look around.',
-    cameraControls: true,
-    game: Earth
-  },
+ 
  
   
   // {
@@ -112,7 +114,7 @@ export const experienceProperties: ExperienceProps[] = [
     cameraPosition: new Vector3(0, 18, 14),
     cameraTarget: new Vector3(0, 0, -5),
     gamePosition: new Vector3(0, 0, 0),
-    title: '',
+    title: 'Whac-a-croc',
     description: '',
     instructions: 'Click to',
     cameraControls: false,

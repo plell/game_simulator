@@ -66,7 +66,7 @@ const Planet = () => {
     <mesh
       ref={ref}
       position={[0, 0, 0]}
-      scale={4}
+      scale={3}
       onPointerOver={() => setHover(true)}
       onPointerOut={() => setHover(false)}
     >

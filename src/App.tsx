@@ -1,9 +1,9 @@
-import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import { Canvas, useFrame } from "@react-three/fiber";
 
 import { Physics } from "@react-three/rapier";
 
 import { Suspense, useEffect, useMemo, useRef, useState } from "react";
-import { Leva, useControls } from "leva";
+import { Leva } from "leva";
 
 import { Browser } from "./components/UI/Browser";
 import useGame from "./Stores/useGame";
@@ -97,7 +97,7 @@ const App = () => {
   const game = useGame((s) => s.game);
   const setMouseDown = useGame((s) => s.setMouseDown);
 
-  const GameComponent = experienceProperties[game]?.game;
+  const GameComponent = useMemo(() => experienceProperties[game]?.game, [game]);
 
   const [firstClick, setFirstClick] = useState(false);
 
@@ -115,7 +115,10 @@ const App = () => {
   });
 
   const handleMouseDown = () => {
-    if (!firstClick) setFirstClick(true);
+    if (!experienceProperties[game]?.showAboutMe && !firstClick) {
+      setFirstClick(true);
+    }
+
     setMouseDown(true);
   };
 
@@ -127,7 +130,9 @@ const App = () => {
     <>
       <Anchor id='anchor' />
 
-      {!firstClick && <ClickMe>CLICK TO PLAY</ClickMe>}
+      {!experienceProperties[game]?.showAboutMe && !firstClick && (
+        <ClickMe>CLICK TO PLAY</ClickMe>
+      )}
 
       <Browser />
 

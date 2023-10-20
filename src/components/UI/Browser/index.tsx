@@ -2,10 +2,12 @@ import { MdArrowCircleLeft, MdArrowCircleRight } from "react-icons/md";
 import styled from "styled-components";
 import useGame from "../../../Stores/useGame";
 import { experienceProperties } from "../../../Stores/constants";
-import { MutableRefObject, useEffect, useRef } from "react";
+import { MutableRefObject, useEffect, useMemo, useRef } from "react";
 import gsap, { Power4 } from "gsap";
 import { Bounce } from "gsap";
 import { AudioPlayer } from "../AudioPlayer";
+import { AboutMe } from "../AboutMe";
+import { useIsMobile } from "../hooks";
 
 export const Browser = () => {
   const game = useGame((s) => s.game);
@@ -16,6 +18,8 @@ export const Browser = () => {
 
   const forwardButton = useRef(null);
   const backButton = useRef(null);
+
+  const isMobile = useIsMobile();
 
   const nopeAnimation = () => {
     if (forwardButton.current) {
@@ -54,68 +58,77 @@ export const Browser = () => {
     }
   };
 
+  const showAboutMe = useMemo(
+    () => experienceProperties[game]?.showAboutMe,
+    [game]
+  );
+
   return (
-    <Overlay>
-      <Title>
-        <div>{experienceProperties[game]?.title}</div>
-        <Description>{experienceProperties[game]?.description}</Description>
-      </Title>
+    <>
+      {showAboutMe && <AboutMe />}
+      <Overlay>
+        <Title style={{ lineHeight: "40px" }}>
+          <div>{experienceProperties[game]?.title}</div>
+          <Description>{experienceProperties[game]?.description}</Description>
+        </Title>
 
-      <Footer>
-        <Tag>David Plell's Portfolio</Tag>
+        <Footer style={{ background: showAboutMe ? "#00000088" : "" }}>
+          <Tag style={{ lineHeight: "40px" }}>David Plell's Portfolio</Tag>
 
-        <FlexRow>
-          <FlexRowItem>
-            <a href='https://github.com/plell' target='_blank'>
-              <Image src={"images/github.png"} size={40} />
-            </a>
-          </FlexRowItem>
-          <FlexRowItem>
-            <a href='https://www.linkedin.com/in/davidplell/' target='_blank'>
-              <Image src={"images/linkedin.png"} size={40} />
-            </a>
-          </FlexRowItem>
-          <FlexRowItem>
-            <AudioPlayer />
-          </FlexRowItem>
-        </FlexRow>
-      </Footer>
+          <FlexRow>
+            <FlexRowItem>
+              <a href='https://github.com/plell' target='_blank'>
+                <Image src={"images/github.png"} size={36} />
+              </a>
+            </FlexRowItem>
+            <FlexRowItem>
+              <a href='https://www.linkedin.com/in/davidplell/' target='_blank'>
+                <Image src={"images/linkedin.png"} size={36} />
+              </a>
+            </FlexRowItem>
+            <FlexRowItem>
+              <AudioPlayer />
+            </FlexRowItem>
+          </FlexRow>
+        </Footer>
 
-      <Button
-        ref={backButton}
-        style={{ opacity: game < 1 ? 0.07 : 1 }}
-        onPointerDown={() => {
-          spin(backButton);
-          if (game < 1) {
-            return;
-          }
+        <Button
+          ref={backButton}
+          onPointerDown={() => {
+            spin(backButton);
 
-          setGame(game - 1);
-        }}
-      >
-        <MdArrowCircleLeft />
-      </Button>
+            let toGame = game - 1;
+            if (toGame < 0) {
+              toGame = experienceProperties.length - 1;
+            }
+            setGame(toGame);
+          }}
+        >
+          <MdArrowCircleLeft />
+        </Button>
 
-      <Button
-        ref={forwardButton}
-        onPointerDown={() => {
-          if (locked) {
-            nopeAnimation();
-          } else {
-            setGame(game + 1);
+        <Button
+          ref={forwardButton}
+          onPointerDown={() => {
+            let toGame = game + 1;
+            if (toGame > experienceProperties.length - 1) {
+              toGame = 0;
+            }
+            setGame(toGame);
             spin(forwardButton);
-          }
-        }}
-      >
-        {locked ? null : <MdArrowCircleRight />}
-      </Button>
-    </Overlay>
+          }}
+        >
+          {locked ? null : <MdArrowCircleRight />}
+        </Button>
+      </Overlay>
+    </>
   );
 };
 
 const FlexRow = styled.div`
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
 `;
 
 const FlexRowItem = styled.div`
@@ -140,7 +153,9 @@ const Title = styled.div`
   position: absolute;
   top: 0px;
   left: 0px;
-  padding: 40px;
+  padding: 20px;
+  font-size: 26px;
+  font-weight: 300;
 `;
 
 const Description = styled.div`
@@ -153,7 +168,6 @@ const Description = styled.div`
 const Tag = styled.div`
   font-size: 26px;
   font-weight: 300;
-
   color: #f1f1f1;
 `;
 
