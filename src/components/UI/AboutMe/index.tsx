@@ -85,7 +85,7 @@ export const AboutMe = () => {
           </Description>
         </FlexRowItem>
         <MediaItem>
-          <Image src='/images/secondbrain2.png' />
+          <Image src='/images/secondbrain2.jpg' />
         </MediaItem>
       </FlexRow>
       <FlexRow>
