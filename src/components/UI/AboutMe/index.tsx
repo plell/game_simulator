@@ -22,7 +22,7 @@ export const AboutMe = () => {
         const scrollTop: number = ref?.current?.scrollTop;
         const scrollHeight: number = ref?.current?.scrollHeight;
 
-        if (scrollTop > scrollHeight / 2 && !renderCafe) {
+        if (scrollTop > scrollHeight / 1.6 && !renderCafe) {
           setRenderCafe(true);
         }
       }}
@@ -80,8 +80,8 @@ export const AboutMe = () => {
           <Description>
             Second Brain is an application that collects data for an open source
             machine learning bank. I designed and built the UI using React Three
-            Fiber. My goal was to encourage community data contributions by
-            indicating the daily growth of the knowledge graph.
+            Fiber. My goal was to encourage community participation by bringing
+            the daily evolution of the knowledge graph to life.
           </Description>
         </FlexRowItem>
         <MediaItem>
@@ -94,10 +94,10 @@ export const AboutMe = () => {
         </FlexRowItem>
         <FlexRowItem>
           <Description>
-            I built this dynamic white label e-commerce template with React,
-            Golang, SQL backend, dockerized and served from DigitalOcean.
-            Payments are powered by the Stripe API. Communications powered by
-            Gmail and Google calendar APIs.
+            I built this white label e-commerce template with React, Golang, SQL
+            backend - dockerized and served from DigitalOcean. Payments are
+            powered by the Stripe API. Communications are powered by the Gmail
+            and Google calendar APIs.
           </Description>
         </FlexRowItem>
         <MediaItem>
@@ -108,7 +108,9 @@ export const AboutMe = () => {
               height={670}
               width={"100%"}
               onLoad={() => {
-                window.scrollTo(0, 0);
+                setTimeout(() => {
+                  window.scrollTo(0, 0);
+                }, 50);
 
                 setTimeout(() => {
                   window.scrollTo(0, 0);
