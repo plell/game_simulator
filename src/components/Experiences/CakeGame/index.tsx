@@ -6,6 +6,8 @@ import {
   MeshStandardMaterial,
   PointLight,
   PointLightHelper,
+  RepeatWrapping,
+  Vector2,
   Vector3,
 } from "three";
 
@@ -23,7 +25,6 @@ import { GameProgress } from "../common/GameProgress";
 
 export const CakeGame = () => {
   const ref = useRef<Group | null>(null);
-  const pointLightRef = useRef<PointLight | null>(null);
 
   const game = useGame((s) => s.game);
   const setSelectedDonutIds = useGame((s) => s.setSelectedDonutIds);
@@ -58,46 +59,71 @@ export const CakeGame = () => {
   );
 };
 
+const windowWidth = roomSize / 2 - 50;
 const Room = () => {
   const diffMap = useTexture("textures/wood/raw_plank_wall_diff_1k.jpg");
-  const dispMap = useTexture("textures/wood/raw_plank_wall_disp_1k.jpg");
+  const repeatTile = useMemo(() => new Vector2(4, 4), []);
+  diffMap.wrapS = RepeatWrapping;
+  diffMap.wrapT = RepeatWrapping;
+  diffMap.repeat = repeatTile;
+
   return (
     <group rotation-y={Math.PI * -0.25}>
-      <mesh position-z={roomSize * -0.5}>
+      <mesh receiveShadow position-z={roomSize * -0.5}>
         <planeGeometry args={[roomSize, roomSize]} />
         <meshStandardMaterial color={colors[0]} />
       </mesh>
 
-      <mesh position-z={roomSize * -0.5}>
-        <boxGeometry args={[roomSize / 2, 10, 7]} />
-        <meshStandardMaterial color={"white"} transparent opacity={0.6} />
+      {/* window */}
+
+      <rectAreaLight
+        position-z={roomSize * -0.5 + 0.2}
+        position-y={40}
+        // rotation-y={Math.PI}
+        castShadow
+        intensity={1.5}
+        width={windowWidth}
+        height={120}
+      />
+
+      <mesh
+        receiveShadow
+        castShadow
+        position-z={roomSize * -0.5}
+        position-y={-20}
+      >
+        <boxGeometry args={[windowWidth, 1, 60]} />
+        <meshStandardMaterial color={"white"} />
       </mesh>
 
-      <mesh position-x={roomSize * -0.5} rotation-y={Math.PI * 0.5}>
+      <mesh
+        receiveShadow
+        position-x={roomSize * -0.5}
+        rotation-y={Math.PI * 0.5}
+      >
         <planeGeometry args={[roomSize, roomSize]} />
-        <meshStandardMaterial color={colors[0]} />
+        <meshStandardMaterial color={"white"} />
       </mesh>
 
-      <mesh position-y={roomSize * -0.5} rotation-x={Math.PI * -0.5}>
+      <mesh
+        receiveShadow
+        position-y={roomSize * -0.5}
+        rotation-x={Math.PI * -0.5}
+      >
         <planeGeometry args={[roomSize, roomSize]} />
-        <meshStandardMaterial
-          color={colors[0]}
-          roughnessMap={dispMap}
-          map={diffMap}
-          displacementMap={dispMap}
-        />
+        <meshStandardMaterial map={diffMap} />
       </mesh>
     </group>
   );
 };
 
-const columns = 6;
+const columns = 12;
 const rows = 4;
 const width = 12;
 const height = 12;
 const leftPad = -(width * (columns / 2) - width / 2);
 const topPad = -(height * (rows / 2) - height / 2);
-const tablePadding = 5;
+const tablePadding = 0;
 
 const WoodTable = () => {
   return (
@@ -115,7 +141,7 @@ const WoodTable = () => {
           metalness={1}
           roughness={0.8}
           transparent
-          opacity={0.7}
+          // opacity={0.7}
         />
       </mesh>
     </group>

@@ -296,22 +296,27 @@ export const LeafBlower = () => {
           </mesh>
         </group>
 
+        <mesh
+          receiveShadow
+          rotation-x={Math.PI * -0.5}
+          onPointerMove={(e) => {
+            const { x, y, z } = e.point;
+            mouseRef.current.set(x, y, z);
+          }}
+        >
+          <boxGeometry args={[4000, 5000, 10]} />
+          <meshStandardMaterial
+            map={diffMap}
+            displacementMap={dispMap}
+            displacementScale={0.2}
+            color={groundParams.color}
+          />
+        </mesh>
+
         <RigidBody friction={5} type={"fixed"}>
-          <mesh
-            receiveShadow
-            rotation-x={Math.PI * -0.5}
-            onPointerMove={(e) => {
-              const { x, y, z } = e.point;
-              mouseRef.current.set(x, y, z);
-            }}
-          >
-            <boxGeometry args={[7000, 10000, 10]} />
-            <meshStandardMaterial
-              map={diffMap}
-              displacementMap={dispMap}
-              displacementScale={0.2}
-              color={groundParams.color}
-            />
+          <mesh rotation-x={Math.PI * -0.5}>
+            <boxGeometry args={[500, 1000, 10]} />
+            <meshBasicMaterial transparent opacity={0} />
           </mesh>
         </RigidBody>
       </group>
