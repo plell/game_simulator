@@ -117,7 +117,7 @@ const Room = () => {
   );
 };
 
-const columns = 12;
+const columns = 7;
 const rows = 4;
 const width = 12;
 const height = 12;
@@ -139,7 +139,7 @@ const WoodTable = () => {
 
         <meshStandardMaterial
           metalness={1}
-          roughness={0.8}
+          roughness={0.6}
           transparent
           // opacity={0.7}
         />

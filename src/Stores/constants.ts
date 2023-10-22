@@ -5,6 +5,9 @@ import { Earth } from "../components/Experiences/Earth";
 import { SpaceGame } from "../components/Experiences/SpaceGame";
 import { CrocGame } from "../components/Experiences/CrocGame";
 import { LeafBlower } from "../components/Experiences/LeafBlower";
+import { ToppleGame } from "../components/Experiences/ToppleGame";
+import { RaceGame } from "../components/Experiences/RaceGame";
+import Interface from "../components/Experiences/RaceGame/Interface";
 
 const { origin } = window.location
 
@@ -41,6 +44,9 @@ export const postDebounce = (key:string, fn: () => void, ms = 300) => {
 type ExperienceProps = {
   cameraPosition: Vector3
   cameraTarget: Vector3
+  cameraNear: number
+  cameraFar:number
+  
   gamePosition: Vector3
   title: string
   description: string
@@ -48,6 +54,7 @@ type ExperienceProps = {
   cameraControls: boolean
   backgroundColor?: string
   game: () => JSX.Element
+  uiComponent?: () => JSX.Element
   showAboutMe?: boolean
 }
 
@@ -56,6 +63,8 @@ export const experienceProperties: ExperienceProps[] = [
     cameraPosition: new Vector3(0, 0, 29),
     cameraTarget: new Vector3(0, 0, 0),
     gamePosition: new Vector3(0, 0, 0),
+    cameraNear: 10,
+    cameraFar: 2500,
     title: '',
     description: '',
     instructions: 'Drag to turn the world. Take a look around.',
@@ -66,6 +75,8 @@ export const experienceProperties: ExperienceProps[] = [
   {
     cameraPosition: new Vector3(0,40,168),
     cameraTarget: new Vector3(0, 0, 0),
+    cameraNear: 10,
+    cameraFar: 2500,
     gamePosition: new Vector3(0, 0, 0),
     title: '',
     description: '',
@@ -76,6 +87,8 @@ export const experienceProperties: ExperienceProps[] = [
   {
     cameraPosition: new Vector3(0,100,108),
     cameraTarget: new Vector3(0, -20, -20),
+    cameraNear: 10,
+    cameraFar: 2500,
     gamePosition: new Vector3(0, 0, 0),
     title: '',
     description: '',
@@ -87,6 +100,8 @@ export const experienceProperties: ExperienceProps[] = [
   {
     cameraPosition: new Vector3(0, 0, 23),
     cameraTarget: new Vector3(0, 0, 0),
+    cameraNear: 10,
+    cameraFar: 2500,
     gamePosition: new Vector3(0, 0, 0),
     title: '',
     description: '',
@@ -113,6 +128,8 @@ export const experienceProperties: ExperienceProps[] = [
   {
     cameraPosition: new Vector3(0, 18, 14),
     cameraTarget: new Vector3(0, 0, -5),
+    cameraNear: 10,
+    cameraFar: 2500,
     gamePosition: new Vector3(0, 0, 0),
     title: '',
     description: '',
@@ -120,5 +137,19 @@ export const experienceProperties: ExperienceProps[] = [
     cameraControls: false,
     backgroundColor:'#000000',
     game:CrocGame
+  },
+  {
+    cameraPosition: new Vector3(0,0,0),
+    cameraTarget: new Vector3(0, 0, 0),
+    cameraNear: 0.1,
+    cameraFar: 500,
+    gamePosition: new Vector3(0, 0, 0),
+    title: '',
+    description: '',
+    instructions: 'Drag to turn the world. Take a look around.',
+    cameraControls: false,
+    backgroundColor:'#000000',
+    game: RaceGame,
+    uiComponent:Interface
   },
 ]

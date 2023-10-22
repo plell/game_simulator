@@ -1,4 +1,4 @@
-import { Canvas, useFrame } from "@react-three/fiber";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
 
 import { Physics } from "@react-three/rapier";
 
@@ -17,13 +17,12 @@ import {
 } from "@react-three/postprocessing";
 import { BlendFunction, Resolution } from "postprocessing";
 
-import { CameraControls } from "@react-three/drei";
+import { CameraControls, KeyboardControls } from "@react-three/drei";
 import { Perf } from "r3f-perf";
 
 import styled from "styled-components";
 
 import { ACESFilmicToneMapping, PCFSoftShadowMap, Vector3 } from "three";
-import { useGooseNeck } from "./components/Experiences/hooks/useGooseNeck";
 
 const CameraController = () => {
   const cameraControlsRef = useRef<CameraControls | null>(null);
@@ -31,17 +30,22 @@ const CameraController = () => {
   const game = useGame((s) => s.game);
   const [enabled, setEnabled] = useState(true);
 
-  // useGooseNeck(cameraControlsRef);
-
-  useFrame(() => {
-    // console.log(camera.position);
-  });
+  const { camera } = useThree();
 
   useEffect(() => {
-    const { cameraPosition, cameraTarget, cameraControls } =
-      experienceProperties[game] || {};
+    const {
+      cameraPosition,
+      cameraTarget,
+      cameraControls,
+      cameraNear,
+      cameraFar,
+    } = experienceProperties[game] || {};
 
     setEnabled(cameraControls);
+
+    camera.near = cameraNear;
+    camera.far = cameraFar;
+    camera.updateProjectionMatrix();
 
     if (cameraPosition && cameraTarget) {
       if (cameraControlsRef.current) {
@@ -98,6 +102,10 @@ const App = () => {
   const setMouseDown = useGame((s) => s.setMouseDown);
 
   const GameComponent = useMemo(() => experienceProperties[game]?.game, [game]);
+  const UIComponent = useMemo(
+    () => experienceProperties[game]?.uiComponent,
+    [game]
+  );
 
   const [firstClick, setFirstClick] = useState(false);
 
@@ -138,55 +146,81 @@ const App = () => {
 
       <Leva hidden={!isDevelopment} />
 
-      <Canvas
-        gl={{
-          toneMappingExposure: 3,
-          toneMapping: ACESFilmicToneMapping,
-          antialias: true,
-        }}
-        shadows={{
-          type: PCFSoftShadowMap,
-        }}
-        camera={{
-          fov: 45,
-          near: 10,
-          far: 2500,
-          position: experienceProperties[0].cameraPosition,
-        }}
+      <KeyboardControls
+        map={[
+          {
+            name: "forward",
+            keys: ["ArrowUp", "KeyW"],
+          },
+          {
+            name: "backward",
+            keys: ["ArrowDown", "KeyS"],
+          },
+          {
+            name: "left",
+            keys: ["ArrowLeft", "KeyA"],
+          },
+          {
+            name: "right",
+            keys: ["ArrowRight", "KeyD"],
+          },
+          {
+            name: "jump",
+            keys: ["Space"],
+          },
+        ]}
       >
-        <Suspense fallback={null}>
-          {isDevelopment && <Perf position='top-left' />}
+        {UIComponent && <UIComponent />}
+        <Canvas
+          gl={{
+            toneMappingExposure: 3,
+            toneMapping: ACESFilmicToneMapping,
+            antialias: true,
+          }}
+          shadows={{
+            type: PCFSoftShadowMap,
+          }}
+          camera={{
+            fov: 45,
+            near: 10,
+            far: 2500,
+            position: experienceProperties[0].cameraPosition,
+          }}
+        >
+          <Suspense fallback={null}>
+            {isDevelopment && <Perf position='top-left' />}
 
-          <CameraController />
+            <CameraController />
 
-          <color
-            attach='background'
-            args={[experienceProperties[game]?.backgroundColor || "#000000"]}
-          />
+            <color
+              attach='background'
+              args={[experienceProperties[game]?.backgroundColor || "#000000"]}
+            />
 
-          <Selection>
-            <EffectComposer autoClear={false} multisampling={8}>
-              <Bloom
-                luminanceThreshold={1}
-                mipmapBlur
-                resolutionX={Resolution.AUTO_SIZE} // The horizontal resolution.
-                resolutionY={Resolution.AUTO_SIZE} // The vertical resolution.
-              />
-              <Outline
-                blur
-                edgeStrength={4}
-                blendFunction={BlendFunction.SCREEN} // set this to BlendFunction.ALPHA for dark outlines
-                hiddenEdgeColor={0xffffff}
-                visibleEdgeColor={0xffffff}
-              />
-            </EffectComposer>
+            <Selection>
+              <EffectComposer autoClear={false} multisampling={8}>
+                <Bloom
+                  luminanceThreshold={1}
+                  mipmapBlur
+                  resolutionX={Resolution.AUTO_SIZE} // The horizontal resolution.
+                  resolutionY={Resolution.AUTO_SIZE} // The vertical resolution.
+                />
+                <Outline
+                  blur
+                  edgeStrength={4}
+                  blendFunction={BlendFunction.SCREEN} // set this to BlendFunction.ALPHA for dark outlines
+                  hiddenEdgeColor={0xffffff}
+                  visibleEdgeColor={0xffffff}
+                />
+              </EffectComposer>
 
-            <Physics gravity={[0, -40, 0]}>
-              {GameComponent && <GameComponent />}
-            </Physics>
-          </Selection>
-        </Suspense>
-      </Canvas>
+              <Physics gravity={[0, -40, 0]}>
+                {GameComponent && <GameComponent />}
+              </Physics>
+            </Selection>
+          </Suspense>
+        </Canvas>
+      </KeyboardControls>
     </>
   );
 };
