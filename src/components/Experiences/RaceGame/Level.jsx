@@ -13,13 +13,13 @@ const sand = loader.load('textures/sand/aerial_beach_01_diff_1k.jpg')
 
 const boxGeometry = new THREE.BoxGeometry(1, 1, 1)
 const floor1Material = new THREE.MeshStandardMaterial({
-    color: 'gold', transparent: true,opacity:0.6
+    color: '#C8B6ED', map: sand,
 })
 
 const floorEnd = new THREE.MeshStandardMaterial({
-    color: 'white', transparent: true,emissive:'#fff',emissiveIntensity:1
+    color: 'white', transparent: true,emissive:'#fff',emissiveIntensity:0.7
 })
-const floor2Material = new THREE.MeshStandardMaterial({ map: sand, color:'gold' })
+const floor2Material = new THREE.MeshStandardMaterial({  color:'#C8B6ED',map: sand })
 const obstacleMaterial = new THREE.MeshStandardMaterial({ color: 'orangered', transparent:true,opacity:0.9})
 const wallMaterial = new THREE.MeshStandardMaterial({ color: 'slategrey', transparent:true,opacity:0.3 })
 
