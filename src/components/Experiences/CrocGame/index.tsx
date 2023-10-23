@@ -1,4 +1,4 @@
-import { Fragment, useMemo, useRef } from "react";
+import { Fragment, useEffect, useMemo, useRef } from "react";
 import { Group, Vector3 } from "three";
 import { Croc } from "./Objects/Croc";
 import { Select } from "@react-three/drei";
@@ -18,6 +18,14 @@ const Lights = () => {
         intensity={200}
         position={[-9, 4, 4]}
         castShadow
+        shadow-bias={-0.001}
+        shadow-mapSize={[512, 512]}
+        shadow-camera-near={1}
+        shadow-camera-far={100}
+        shadow-camera-top={100}
+        shadow-camera-right={100}
+        shadow-camera-bottom={-100}
+        shadow-camera-left={-100}
       />
       <hemisphereLight args={["red", "pink"]} intensity={0.4} />
     </group>
@@ -29,8 +37,23 @@ export const CrocGame = () => {
   const game = useGame((s) => s.game);
   const damage = useGame((s) => s.damage);
   const score = useGame((s) => s.score);
-  const scoreUp = useGame((s) => s.scoreUp);
   const setHit = useGame((s) => s.setHit);
+  const setBite = useGame((s) => s.setBite);
+  const setDamage = useGame((s) => s.setDamage);
+  const setScore = useGame((s) => s.setScore);
+
+  useEffect(() => {
+    return () => {
+      resetGame();
+    };
+  }, []);
+
+  const resetGame = () => {
+    setHit(0);
+    setBite(0);
+    setDamage(0);
+    setScore(0);
+  };
 
   const crocs = useMemo(() => {
     const m = [];
@@ -54,7 +77,7 @@ export const CrocGame = () => {
 
     const amount = 6;
     for (let i = 0; i < amount; i++) {
-      const defaultPosition = new Vector3(i * 5 - 12.5, 1, -2);
+      const defaultPosition = new Vector3(i * 5 - 12.5, 0.7, -2);
       m.push(<Wall key={i + "-wall"} position={defaultPosition} />);
     }
     return m;
@@ -66,22 +89,7 @@ export const CrocGame = () => {
 
       <Hammer />
 
-      <Select
-        onChangePointerUp={(e) => {
-          if (e.length) {
-            const id =
-              e[0]?.userData?.id ||
-              e[1]?.userData?.id ||
-              e[2]?.userData?.id ||
-              0;
-
-            scoreUp();
-            setHit(id);
-          }
-        }}
-      >
-        {crocs}
-      </Select>
+      {crocs}
 
       {walls}
 
@@ -101,9 +109,9 @@ export const CrocGame = () => {
       </mesh>
 
       {/* score and hits */}
-      <Counter title={"HITS"} value={score} position={[-11, 4.4, -6.5]} />
-      <Counter title={"BITES"} value={damage} position={[-6, 4.4, -6.5]} />
-      <Counter title={"HI SCORE"} value={9} position={[-1, 4.4, -6.5]} />
+      <Counter title={"HITS"} value={score} position={[-6, 4.4, -6.5]} />
+      <Counter title={"BITES"} value={damage} position={[6, 4.4, -6.5]} />
+      {/* <Counter title={"HI SCORE"} value={9} position={[-1, 4.4, -6.5]} /> */}
 
       <mesh receiveShadow position-z={-10} rotation-x={Math.PI * -0.5}>
         <planeGeometry args={[26.8, 26]} />

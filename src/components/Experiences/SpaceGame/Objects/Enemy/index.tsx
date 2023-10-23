@@ -8,8 +8,6 @@ import {
   useState,
 } from "react";
 
-import { Timeout } from "../../../CrocGame/Objects/Croc";
-import { useGLTF } from "@react-three/drei";
 import { Color, Group, MeshStandardMaterial, Vector3 } from "three";
 import { useFrame } from "@react-three/fiber";
 import { Refs } from "../..";
@@ -18,7 +16,6 @@ import {
   useObjectsIntersect,
 } from "../../../hooks/useObjectsIntersect";
 import gsap from "gsap";
-import { Power4 } from "gsap";
 
 const width = 30;
 
@@ -69,9 +66,9 @@ export const Enemy = ({ projectilesRef, playerRef }: Props) => {
 
   const intersect = useObjectIntersectsManyB(ref, projectilesRef);
 
-  useFrame((_, delta) => {
+  useFrame(({ clock }, delta) => {
     if (ref?.current) {
-      ref.current.position.y -= delta * 5;
+      ref.current.position.y -= delta * 4;
 
       if (intersect.current.length > 0) {
         const id = intersect.current[0];
@@ -136,5 +133,3 @@ export const Enemy = ({ projectilesRef, playerRef }: Props) => {
     </group>
   );
 };
-
-useGLTF.preload("./models/bird.gltf");

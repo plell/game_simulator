@@ -21,10 +21,12 @@ export const Croc = ({ position, id }: Props) => {
   const crocGroupRef = useRef<Group | null>(null);
   const wallRef = useRef<Mesh | null>(null);
 
+  const scoreUp = useGame((s) => s.scoreUp);
+  const setHit = useGame((s) => s.setHit);
+
   const [speed, setSpeed] = useState(0);
   const [direction, setDirection] = useState(1);
 
-  const setHit = useGame((s) => s.setHit);
   const hit = useGame((s) => s.hit);
   const damageUp = useGame((s) => s.damageUp);
 
@@ -73,19 +75,22 @@ export const Croc = ({ position, id }: Props) => {
         reuseableVec.set(crocPosition.x, crocPosition.y, newZ),
         0.03
       );
-
-      crocGroupRef.current.position.set(
-        crocPosition.x,
-        crocPosition.y,
-        crocPosition.z
-      );
     }
   });
 
   return (
     <group>
       <group ref={crocGroupRef} position={position}>
-        <CrocModel disabled={true} id={id} />
+        <mesh
+          onPointerDown={() => {
+            scoreUp();
+            setHit(id);
+          }}
+        >
+          <boxGeometry args={[2.3, 4, 5]} />
+          <meshStandardMaterial color='white' transparent opacity={0} />
+        </mesh>
+        <CrocModel id={id} />
       </group>
 
       <mesh ref={wallRef} position={[position.x, position.y, 1]}>

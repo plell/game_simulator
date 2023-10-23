@@ -5,9 +5,10 @@ import { useObjectsIntersect } from "../../../hooks/useObjectsIntersect";
 
 type Props = {
   player: MutableRefObject<Group | null>;
+  addToScore?: (s: number) => void;
 };
 
-export const Goal = ({ player }: Props) => {
+export const Goal = ({ player, addToScore }: Props) => {
   const ref = useRef<Group | null>(null);
   const [touched, setTouched] = useState(false);
   const [rate, setRate] = useState(1);
@@ -17,9 +18,14 @@ export const Goal = ({ player }: Props) => {
   useEffect(() => {
     if (objectsIntersect) {
       setTouched(true);
-    } else {
     }
   }, [objectsIntersect]);
+
+  useEffect(() => {
+    if (touched && addToScore) {
+      addToScore(1);
+    }
+  }, [touched]);
 
   const reset = () => {
     if (ref?.current) {
@@ -38,7 +44,7 @@ export const Goal = ({ player }: Props) => {
       const rotation = Math.PI * 0.35;
       ref.current.rotation.x = rotation + Math.sin(elapsed * 4) * 0.05;
 
-      ref.current.position.y -= 0.08;
+      ref.current.position.y -= 0.2;
       ref.current.position.x = Math.sin(elapsed * rate) * 15;
 
       if (touched) {

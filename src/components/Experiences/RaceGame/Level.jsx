@@ -42,7 +42,6 @@ function BlockEnd({ position = [0, 0, 0] }) {
     const ref = useRef(null)
 
     useFrame(({clock},delta) => {
-        console.log('ref.current',ref.current)
         if (ref.current) {
             ref.current.rotation.y += 1 * delta 
             ref.current.rotation.z = Math.sin(clock.getElapsedTime()*8) * 0.1 

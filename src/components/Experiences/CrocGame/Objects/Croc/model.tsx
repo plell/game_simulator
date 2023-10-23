@@ -3,10 +3,9 @@ import { useEffect } from "react";
 
 type Props = {
   id: number | string;
-  disabled: boolean;
 };
 
-export const CrocModel = ({ id, disabled }: Props) => {
+export const CrocModel = ({ id }: Props) => {
   const crocModel = useGLTF("./models/croc_less.gltf");
 
   useEffect(() => {

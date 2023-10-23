@@ -106,7 +106,7 @@ export const Browser = () => {
         <Button
           isMobile={isMobile}
           ref={backButton}
-          onPointerDown={() => {
+          onClick={() => {
             spin(backButton);
 
             let toGame = game - 1;
@@ -122,7 +122,7 @@ export const Browser = () => {
         <Button
           isMobile={isMobile}
           ref={forwardButton}
-          onPointerDown={() => {
+          onClick={() => {
             let toGame = game + 1;
             if (toGame > experienceProperties.length - 1) {
               toGame = 0;

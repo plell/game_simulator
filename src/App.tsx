@@ -110,9 +110,7 @@ const App = () => {
   const [firstClick, setFirstClick] = useState(false);
 
   useEffect(() => {
-    setTimeout(() => {
-      setFirstClick(false);
-    }, 200);
+    setFirstClick(false);
   }, [game]);
 
   useEffect(() => {

@@ -19,6 +19,7 @@ type Props = {
   levelSuffix?: string;
   levelPrefix?: string;
   hideText?: boolean;
+  scale?: number;
 };
 
 export const GameProgress = ({
@@ -33,6 +34,7 @@ export const GameProgress = ({
   levelSuffix,
   levelPrefix,
   hideText,
+  scale = 1,
 }: Props) => {
   const ref = useRef<Group | null>(null);
   const [animating, setAnimating] = useState(false);
@@ -107,7 +109,7 @@ export const GameProgress = ({
           ease: Bounce.easeOut,
           keyframes: {
             "0%": position,
-            "50%": position.clone().lerp(camera.position, 0.2),
+            "50%": position.clone().lerp(camera.position, 0.2 * scale),
             "100%": position,
           },
           onComplete: () => {
@@ -146,7 +148,7 @@ export const GameProgress = ({
   });
 
   return (
-    <group ref={ref} position={position}>
+    <group ref={ref} position={position} scale={scale}>
       {type === "points" ? (
         <>
           {pointPositions.map((_, i) => {

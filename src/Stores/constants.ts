@@ -101,7 +101,7 @@ export const experienceProperties: ExperienceProps[] = [
   },
  
   {
-    cameraPosition: new Vector3(0, 0, 26),
+    cameraPosition: new Vector3(0, 0, 32),
     cameraTarget: new Vector3(0, 0, 0),
     cameraNear: 10,
     cameraFar: 2500,
@@ -109,7 +109,7 @@ export const experienceProperties: ExperienceProps[] = [
     title: '',
     description: '',
     instructions: 'Click to play',
-    backgroundColor:'#000000',
+    backgroundColor:'skyblue',
     cameraControls: false,
     game: SpaceGame
   },
@@ -129,7 +129,7 @@ export const experienceProperties: ExperienceProps[] = [
   // },
   
   {
-    cameraPosition: new Vector3(0, 18, 14),
+    cameraPosition: new Vector3(0, 22, 20),
     cameraTarget: new Vector3(0, 0, -5),
     cameraNear: 10,
     cameraFar: 2500,
