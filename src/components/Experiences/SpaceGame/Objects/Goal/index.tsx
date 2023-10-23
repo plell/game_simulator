@@ -55,8 +55,8 @@ export const Goal = ({ player }: Props) => {
   return (
     <group position-y={30} ref={ref}>
       <mesh rotation-x={Math.PI}>
-        <torusGeometry args={[0.4, 0.2]} />
-        <meshNormalMaterial />
+        <torusGeometry args={[2, 0.2]} />
+        <meshStandardMaterial emissive={"gold"} emissiveIntensity={2} />
       </mesh>
     </group>
   );

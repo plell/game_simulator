@@ -51,7 +51,7 @@ type ExperienceProps = {
   gamePosition: Vector3
   title: string
   description: string
-  instructions: string
+  instructions?: string
   cameraControls: boolean
   backgroundColor?: string
   game: () => JSX.Element
@@ -68,10 +68,24 @@ export const experienceProperties: ExperienceProps[] = [
     cameraFar: 2500,
     title: '',
     description: '',
-    instructions: 'Drag to turn the world. Take a look around.',
     cameraControls: true,
     game: Earth,
-    showAboutMe: true
+    showAboutMe: true,
+
+  },
+   {
+    cameraPosition: new Vector3(0,0,40),
+    cameraTarget: new Vector3(0, 0, 0),
+    cameraNear: 10,
+    cameraFar: 2500,
+    gamePosition: new Vector3(0, 0, 0),
+    title: '',
+    description: '',
+    instructions: 'Drag to turn',
+    cameraControls: true,
+    backgroundColor:'hotpink',
+    game: Donut,
+    
   },
   {
     cameraPosition: new Vector3(0,40,168),
@@ -81,32 +95,20 @@ export const experienceProperties: ExperienceProps[] = [
     gamePosition: new Vector3(0, 0, 0),
     title: '',
     description: '',
-    instructions: 'Drag to turn the world. Take a look around.',
+    instructions: 'Click to play',
     cameraControls: false,
     game: LeafBlower
   },
+ 
   {
-    cameraPosition: new Vector3(0,0,40),
+    cameraPosition: new Vector3(0, 0, 26),
     cameraTarget: new Vector3(0, 0, 0),
     cameraNear: 10,
     cameraFar: 2500,
     gamePosition: new Vector3(0, 0, 0),
     title: '',
     description: '',
-    instructions: '',
-    cameraControls: true,
-    backgroundColor:'hotpink',
-    game: Donut,
-  },
-  {
-    cameraPosition: new Vector3(0, 0, 23),
-    cameraTarget: new Vector3(0, 0, 0),
-    cameraNear: 10,
-    cameraFar: 2500,
-    gamePosition: new Vector3(0, 0, 0),
-    title: '',
-    description: '',
-    instructions: 'Click to',
+    instructions: 'Click to play',
     backgroundColor:'#000000',
     cameraControls: false,
     game: SpaceGame
@@ -134,7 +136,7 @@ export const experienceProperties: ExperienceProps[] = [
     gamePosition: new Vector3(0, 0, 0),
     title: '',
     description: '',
-    instructions: 'Click to',
+    instructions: 'Click to play',
     cameraControls: false,
     backgroundColor:'#000000',
     game:CrocGame
@@ -147,7 +149,7 @@ export const experienceProperties: ExperienceProps[] = [
     gamePosition: new Vector3(0, 0, 0),
     title: '',
     description: '',
-    instructions: 'Drag to turn the world. Take a look around.',
+    instructions: '',
     cameraControls: false,
     backgroundColor:'#000000',
     game: RaceGame,

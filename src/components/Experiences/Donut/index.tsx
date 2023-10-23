@@ -14,7 +14,7 @@ import {
 import { useCursorHover } from "../hooks/useCursorHover";
 import { useFrame } from "@react-three/fiber";
 import { normalScale, data } from "./constants";
-import { Instance, Instances, Merged, useGLTF } from "@react-three/drei";
+import { Instance, Instances, useGLTF } from "@react-three/drei";
 
 const sprinkleMaterial = new MeshBasicMaterial();
 const sprinkleGeometry = new CylinderGeometry(0.2, 0.2, 1.3);

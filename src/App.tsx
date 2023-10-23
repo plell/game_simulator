@@ -110,6 +110,12 @@ const App = () => {
   const [firstClick, setFirstClick] = useState(false);
 
   useEffect(() => {
+    setTimeout(() => {
+      setFirstClick(false);
+    }, 200);
+  }, [game]);
+
+  useEffect(() => {
     window.addEventListener("mousedown", handleMouseDown);
     window.addEventListener("mouseup", handleMouseUp);
     window.addEventListener("touchstart", handleMouseDown);
@@ -123,7 +129,7 @@ const App = () => {
   });
 
   const handleMouseDown = () => {
-    if (!experienceProperties[game]?.showAboutMe && !firstClick) {
+    if (!firstClick) {
       setFirstClick(true);
     }
 
@@ -138,8 +144,8 @@ const App = () => {
     <>
       <Anchor id='anchor' />
 
-      {!experienceProperties[game]?.showAboutMe && !firstClick && (
-        <ClickMe>CLICK TO PLAY</ClickMe>
+      {experienceProperties[game]?.instructions && !firstClick && (
+        <ClickMe>{experienceProperties[game]?.instructions}</ClickMe>
       )}
 
       <Browser />

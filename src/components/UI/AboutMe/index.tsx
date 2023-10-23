@@ -43,14 +43,14 @@ export const AboutMe = () => {
         <FlexRowItem>
           <LinkTitle onClick={() => setGame(1)}>
             <MdArrowForward size={30} style={{ marginRight: 10 }} />
-            Continue to games
+            Continue to demos
           </LinkTitle>
         </FlexRowItem>
       </FlexRow>
       <Spacer />
       <FlexRow>
         <FlexRowItem>
-          <Title>Social Media Platform</Title>
+          <Title>Online Community Tools</Title>
         </FlexRowItem>
         <FlexRowItem>
           <Description isMobile={isMobile}>
@@ -73,7 +73,7 @@ export const AboutMe = () => {
       </FlexRow>
       <FlexRow>
         <FlexRowItem>
-          <Title>Machine Learning Model Visualization</Title>
+          <Title>Data Visualization Tools</Title>
         </FlexRowItem>
         <FlexRowItem>
           <Description isMobile={isMobile}>
@@ -89,7 +89,7 @@ export const AboutMe = () => {
       </FlexRow>
       <FlexRow>
         <FlexRowItem>
-          <Title>Online Payment and Order Management</Title>
+          <Title>Online Shopping and Order Management Tools</Title>
         </FlexRowItem>
         <FlexRowItem>
           <Description isMobile={isMobile}>

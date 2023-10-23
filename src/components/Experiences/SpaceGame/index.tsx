@@ -1,5 +1,5 @@
 import { useMemo, useRef } from "react";
-import { Group } from "three";
+import { Group, Vector3 } from "three";
 import { Cloud } from "@react-three/drei";
 import useGame from "../../../Stores/useGame";
 import { experienceProperties } from "../../../Stores/constants";
@@ -10,13 +10,14 @@ import { useFrame } from "@react-three/fiber";
 import { Projectiles } from "../common/Projectiles";
 
 export type Refs = Record<string, Group>;
+const mouseVec3 = new Vector3();
 
 export const SpaceGame = () => {
   const ref = useRef<Group | null>(null);
   const cloudRef = useRef<Group | null>(null);
   const cloudRef2 = useRef<Group | null>(null);
   const playerRef = useRef<Group | null>(null);
-
+  const mouseRef = useRef<Vector3>(mouseVec3);
   const enemiesRef = useRef<Refs>({});
   const projectilesRef = useRef<Refs>({});
 
@@ -57,7 +58,7 @@ export const SpaceGame = () => {
 
   return (
     <group ref={ref} position={experienceProperties[game]?.gamePosition}>
-      <directionalLight position={[5, 5, 100]} intensity={4} />
+      <directionalLight position={[5, 5, 100]} intensity={3} />
 
       <group ref={cloudRef}>
         <Cloud
@@ -79,7 +80,22 @@ export const SpaceGame = () => {
         />
       </group>
 
-      <Spaceship position={[0, -6, 0]} playerRef={playerRef} />
+      <group position-y={-6}>
+        <Spaceship
+          position={[0, 0, 0]}
+          mouseRef={mouseRef}
+          playerRef={playerRef}
+        />
+        <mesh
+          onPointerMove={(e) => {
+            const { x, y, z } = e.point;
+            mouseRef.current.set(x, y, z);
+          }}
+        >
+          <planeGeometry args={[145, 80]} />
+          <meshStandardMaterial transparent opacity={0} />
+        </mesh>
+      </group>
 
       <Projectiles
         refs={projectilesRef}
@@ -89,8 +105,8 @@ export const SpaceGame = () => {
 
       {enemies}
 
-      <mesh receiveShadow position-z={-10}>
-        <planeGeometry args={[85, 40]} />
+      <mesh receiveShadow position-z={-20}>
+        <planeGeometry args={[145, 80]} />
         <meshStandardMaterial color={"skyblue"} />
       </mesh>
     </group>

@@ -17,6 +17,8 @@ import {
   useObjectIntersectsManyB,
   useObjectsIntersect,
 } from "../../../hooks/useObjectsIntersect";
+import gsap from "gsap";
+import { Power4 } from "gsap";
 
 const width = 30;
 
@@ -37,6 +39,7 @@ export const Enemy = ({ projectilesRef, playerRef }: Props) => {
   const ref = useRef<Group | null>(null);
   const materialRef = useRef<MeshStandardMaterial | null>(null);
   const [color, setColor] = useState(new Color("red"));
+  const [animating, setAnimating] = useState(false);
 
   const [spawnPosition, setSpawnPosition] = useState({
     x: getRandomX(),
@@ -44,10 +47,15 @@ export const Enemy = ({ projectilesRef, playerRef }: Props) => {
   });
 
   const reset = () => {
+    setAnimating(false);
     if (ref?.current) {
       ref.current.position.y = 30;
+      ref.current.rotation.z = 0;
+      if (materialRef.current) {
+        materialRef.current.opacity = 1;
+      }
       setSpawnPosition({ x: getRandomX(), y: getRandomY() });
-      setColor(new Color("red"));
+      setColor(color.set("red"));
     }
   };
 
@@ -55,7 +63,7 @@ export const Enemy = ({ projectilesRef, playerRef }: Props) => {
 
   useEffect(() => {
     if (objectsIntersect) {
-      setColor(new Color("black"));
+      setColor(color.set("black"));
     }
   }, [objectsIntersect]);
 
@@ -77,24 +85,53 @@ export const Enemy = ({ projectilesRef, playerRef }: Props) => {
     }
 
     if (materialRef.current) {
-      materialRef.current.color = color;
-      // MathUtils.lerp(
-      //     ref.current.material.uniforms.u_color.value,
-      //     hover ? 1.5 : 1,
-      //     0.3
-      //   );
+      materialRef.current.color.lerp(color, 0.4);
     }
   });
 
   const hit = () => {
-    reset();
+    if (!animating && ref.current) {
+      setAnimating(true);
+      setColor(color.set("white"));
+      gsap
+        .to(ref.current.rotation, {
+          duration: 0.3,
+          keyframes: {
+            "0%": new Vector3(0, 0, 0),
+            "100%": new Vector3(0, Math.PI * 2, 0),
+          },
+          onComplete: () => {
+            reset();
+          },
+        })
+        .play();
+
+      const opacity = {
+        value: 1,
+      };
+
+      gsap
+        .to(opacity, {
+          duration: 0.2,
+          keyframes: {
+            "0%": { value: 1 },
+            "100%": { value: 0 },
+          },
+          onUpdate: () => {
+            if (materialRef.current) {
+              materialRef.current.opacity = opacity.value;
+            }
+          },
+        })
+        .play();
+    }
   };
 
   return (
     <group ref={ref} position={[spawnPosition.x, spawnPosition.y, 0]}>
       <mesh>
         <boxGeometry args={[2, 1, 1]} />
-        <meshStandardMaterial ref={materialRef} color={"red"} />
+        <meshStandardMaterial ref={materialRef} transparent />
       </mesh>
     </group>
   );
