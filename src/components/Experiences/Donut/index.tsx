@@ -17,13 +17,12 @@ import { normalScale, data } from "./constants";
 import { Instance, Instances, Merged, useGLTF } from "@react-three/drei";
 
 const sprinkleMaterial = new MeshBasicMaterial();
-const sprinkleGeometry = new CylinderGeometry(0.2, 0.3, 1);
+const sprinkleGeometry = new CylinderGeometry(0.2, 0.2, 1.3);
 
 export const Donut = () => {
   const [focused, setFocused] = useState(false);
 
   const donut = useGLTF("./models/donut.glb");
-  const sprinkle = useGLTF("./models/sprinkle.glb");
 
   useEffect(() => {
     donut.scene.children.forEach((mesh) => {
@@ -64,7 +63,8 @@ export const Donut = () => {
       <hemisphereLight args={["#ffffff", "yellow"]} intensity={2} />
 
       <Instances
-        range={200}
+        range={2080}
+        castShadow
         material={sprinkleMaterial}
         geometry={sprinkleGeometry}
       >
