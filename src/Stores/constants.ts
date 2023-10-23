@@ -8,6 +8,7 @@ import { LeafBlower } from "../components/Experiences/LeafBlower";
 import { ToppleGame } from "../components/Experiences/ToppleGame";
 import { RaceGame } from "../components/Experiences/RaceGame";
 import Interface from "../components/Experiences/RaceGame/Interface";
+import { Donut } from "../components/Experiences/Donut";
 
 const { origin } = window.location
 
@@ -85,17 +86,17 @@ export const experienceProperties: ExperienceProps[] = [
     game: LeafBlower
   },
   {
-    cameraPosition: new Vector3(0,100,108),
-    cameraTarget: new Vector3(0, -20, -20),
+    cameraPosition: new Vector3(0,0,40),
+    cameraTarget: new Vector3(0, 0, 0),
     cameraNear: 10,
     cameraFar: 2500,
     gamePosition: new Vector3(0, 0, 0),
     title: '',
     description: '',
     instructions: '',
-    cameraControls: false,
-    backgroundColor:'#ffffff',
-    game: CakeGame,
+    cameraControls: true,
+    backgroundColor:'hotpink',
+    game: Donut,
   },
   {
     cameraPosition: new Vector3(0, 0, 23),

@@ -102,7 +102,6 @@ export default function Player()
         const bodyPosition = body.current.translation()
 
         
-
         // Camera
         const cameraPosition = new THREE.Vector3()
         cameraPosition.copy(bodyPosition)
