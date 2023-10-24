@@ -55,9 +55,8 @@ export const AboutMe = () => {
           <Description isMobile={isMobile}>
             Sphinx Community is a Web3 sidekick social media platform that I
             built from the ground up using React, Golang and PostgreSQL. Here
-            you can meet other Sphinx Chat app users, join Sphinx Chat tribes,
-            earn badges, and claim coding bounties. What you see below is the
-            live site - try it out!
+            you can meet other Sphinx Chat users, join Sphinx tribes, earn
+            badges, and claim coding bounties. Try it out!
           </Description>
         </FlexRowItem>
         <MediaItem>

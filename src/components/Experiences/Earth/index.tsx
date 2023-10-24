@@ -1,6 +1,6 @@
 import { useFrame } from "@react-three/fiber";
 import { Suspense, useEffect, useMemo, useRef, useState } from "react";
-import { Mesh, MathUtils } from "three";
+import { Mesh, MathUtils, Vector2 } from "three";
 import useGame from "../../../Stores/useGame";
 import { experienceProperties } from "../../../Stores/constants";
 
@@ -35,6 +35,28 @@ const Planet = () => {
   // This reference will give us direct access to the mesh
   const ref = useRef<Mesh | null>(null);
   const [hover, setHover] = useState(false);
+
+  // useEffect(() => {
+  //   window.addEventListener("mousemove", handleMoveMove);
+
+  //   return () => {
+  //     window.removeEventListener("mousemove", handleMoveMove);
+  //   };
+  // });
+
+  // const cursor = useRef({ x: 0, y: 0 });
+
+  // const handleMoveMove = (e) => {
+  //   const { target, pageX, pageY } = e;
+  //   const { offsetHeight, offsetWidth } = target;
+
+  //   const x = pageX / offsetWidth;
+  //   const y = pageY / offsetHeight;
+
+  //   cursor.current = { x, y };
+
+  //   console.log("e", x, y);
+  // };
 
   const uniforms = useMemo(
     () => ({
