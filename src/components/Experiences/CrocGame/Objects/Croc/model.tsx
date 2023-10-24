@@ -27,6 +27,4 @@ export const CrocModel = ({ id }: Props) => {
   );
 };
 
-useGLTF.preload("./models/croc_less.gltf");
-
 export default CrocModel;

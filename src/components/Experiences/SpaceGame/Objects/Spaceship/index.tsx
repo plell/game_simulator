@@ -44,5 +44,3 @@ export const Spaceship = ({ position, playerRef, mouseRef }: Props) => {
     </>
   );
 };
-
-useGLTF.preload("./models/spaceship_simple.gltf");

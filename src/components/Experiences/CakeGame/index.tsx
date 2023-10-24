@@ -1,15 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import {
-  DoubleSide,
-  Group,
-  Mesh,
-  MeshStandardMaterial,
-  PointLight,
-  PointLightHelper,
-  RepeatWrapping,
-  Vector2,
-  Vector3,
-} from "three";
+import { Group, Mesh, Vector3 } from "three";
 
 import useGame from "../../../Stores/useGame";
 import { experienceProperties } from "../../../Stores/constants";
@@ -61,12 +51,6 @@ export const CakeGame = () => {
 
 const windowWidth = roomSize / 2 - 50;
 const Room = () => {
-  const diffMap = useTexture("textures/wood/raw_plank_wall_diff_1k.jpg");
-  const repeatTile = useMemo(() => new Vector2(4, 4), []);
-  diffMap.wrapS = RepeatWrapping;
-  diffMap.wrapT = RepeatWrapping;
-  diffMap.repeat = repeatTile;
-
   return (
     <group rotation-y={Math.PI * -0.25}>
       <mesh receiveShadow position-z={roomSize * -0.5}>
@@ -111,7 +95,7 @@ const Room = () => {
         rotation-x={Math.PI * -0.5}
       >
         <planeGeometry args={[roomSize, roomSize]} />
-        <meshStandardMaterial map={diffMap} />
+        <meshStandardMaterial />
       </mesh>
     </group>
   );

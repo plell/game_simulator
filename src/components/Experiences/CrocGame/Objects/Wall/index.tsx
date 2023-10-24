@@ -28,6 +28,4 @@ export const Wall = ({ position }: Props) => {
   );
 };
 
-useGLTF.preload("./models/crocWallLess.gltf");
-
 export default Wall;
