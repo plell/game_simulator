@@ -96,6 +96,7 @@ export const experienceProperties: ExperienceProps[] = [
     title: '',
     description: '',
     instructions: 'Click to play',
+    
     cameraControls: false,
     game: LeafBlower
   },
@@ -109,7 +110,7 @@ export const experienceProperties: ExperienceProps[] = [
     title: '',
     description: '',
     instructions: 'Click to play',
-    // backgroundColor:'skyblue',
+    
     cameraControls: false,
     game: SpaceGame
   },
@@ -138,7 +139,6 @@ export const experienceProperties: ExperienceProps[] = [
     description: '',
     instructions: 'Click to play',
     cameraControls: false,
-    // backgroundColor:'#000000',
     game:CrocGame
   },
   {

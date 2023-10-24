@@ -22,7 +22,9 @@ import { Perf } from "r3f-perf";
 
 import styled from "styled-components";
 
-import { ACESFilmicToneMapping, PCFSoftShadowMap, Vector3 } from "three";
+import { ACESFilmicToneMapping, Color, PCFSoftShadowMap, Vector3 } from "three";
+
+const color = new Color("#000000");
 
 const CameraController = () => {
   const cameraControlsRef = useRef<CameraControls | null>(null);
@@ -30,7 +32,12 @@ const CameraController = () => {
   const game = useGame((s) => s.game);
   const [enabled, setEnabled] = useState(true);
 
-  const { camera } = useThree();
+  const { camera, scene } = useThree();
+
+  useEffect(() => {
+    const { backgroundColor } = experienceProperties[game];
+    scene.background = backgroundColor ? color.set(backgroundColor) : null;
+  }, [game]);
 
   useEffect(() => {
     const {
@@ -195,13 +202,6 @@ const App = () => {
             {isDevelopment && <Perf position='top-left' />}
 
             <CameraController />
-
-            {experienceProperties[game]?.backgroundColor && (
-              <color
-                attach='background'
-                args={[experienceProperties[game].backgroundColor || "#000000"]}
-              />
-            )}
 
             <Selection>
               <EffectComposer autoClear={false} multisampling={8}>

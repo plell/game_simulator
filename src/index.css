@@ -3,7 +3,7 @@ html, body, #root {
   height:100%;
   width:100%;
   background-color: black;
-  background-image: url('/public/images/bg_tile.png');
+  background-image: url('/images/bg_tile.png');
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
