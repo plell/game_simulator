@@ -13,7 +13,7 @@ import {
 
 import { useCursorHover } from "../hooks/useCursorHover";
 import { useFrame } from "@react-three/fiber";
-import { normalScale, data } from "./constants";
+import { normalScale, data, rainbowColors } from "./constants";
 import { Instance, Instances, useGLTF } from "@react-three/drei";
 
 const sprinkleMaterial = new MeshBasicMaterial();
@@ -70,7 +70,7 @@ export const Donut = () => {
       >
         <group ref={sprinkleRef} position={[0, 0, 0]}>
           {data.map((props, i) => (
-            <Shoe key={i} {...props} />
+            <Sprinkle key={i} {...props} />
           ))}
         </group>
       </Instances>
@@ -87,9 +87,15 @@ export const Donut = () => {
   );
 };
 
-function Shoe({ random, color = new Color(), ...props }) {
+function Sprinkle({ random, color = new Color(), ...props }) {
   const ref = useRef<typeof Instance | null>(null);
   const [hovered, setHover] = useState(false);
+
+  const myColor = useMemo(
+    () => rainbowColors[Math.floor(Math.random() * rainbowColors.length)],
+    []
+  );
+
   useFrame((state) => {
     const t = state.clock.getElapsedTime() + random * 10000;
     if (ref.current) {
@@ -104,7 +110,7 @@ function Shoe({ random, color = new Color(), ...props }) {
         ref.current.scale.z =
           MathUtils.lerp(ref.current.scale.z, hovered ? 1.4 : 1, 0.1);
       ref.current.color.lerp(
-        color.set(hovered ? "red" : "white"),
+        color.set(hovered ? myColor : "white"),
         hovered ? 1 : 0.1
       );
     }

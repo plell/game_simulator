@@ -64,7 +64,7 @@ export const SpaceGame = () => {
       <directionalLight position={[5, 5, 100]} intensity={3} />
 
       <GameProgress
-        position={new Vector3(0, 6, 10)}
+        position={new Vector3(0, 3, 10)}
         type='points'
         max={4}
         score={score}

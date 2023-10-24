@@ -101,7 +101,7 @@ export const experienceProperties: ExperienceProps[] = [
   },
  
   {
-    cameraPosition: new Vector3(0, 0, 32),
+    cameraPosition: new Vector3(0, 0, 23),
     cameraTarget: new Vector3(0, 0, 0),
     cameraNear: 10,
     cameraFar: 2500,

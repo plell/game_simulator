@@ -1,7 +1,6 @@
-import styled, { IStyledComponent } from "styled-components";
-
+import styled from "styled-components";
 import { useRef, useState } from "react";
-import { MdArrowDownward, MdArrowForward } from "react-icons/md";
+import { MdArrowForward } from "react-icons/md";
 import { useIsMobile } from "../hooks";
 import useGame from "../../../Stores/useGame";
 
@@ -50,7 +49,7 @@ export const AboutMe = () => {
       <Spacer />
       <FlexRow>
         <FlexRowItem>
-          <Title>Online Community Tools</Title>
+          <Title>Online Community</Title>
         </FlexRowItem>
         <FlexRowItem>
           <Description isMobile={isMobile}>
@@ -73,7 +72,7 @@ export const AboutMe = () => {
       </FlexRow>
       <FlexRow>
         <FlexRowItem>
-          <Title>Data Visualization Tools</Title>
+          <Title>Data Visualization</Title>
         </FlexRowItem>
         <FlexRowItem>
           <Description isMobile={isMobile}>
@@ -89,7 +88,7 @@ export const AboutMe = () => {
       </FlexRow>
       <FlexRow>
         <FlexRowItem>
-          <Title>Online Shopping and Order Management Tools</Title>
+          <Title>Online Shopping and Order Management</Title>
         </FlexRowItem>
         <FlexRowItem>
           <Description isMobile={isMobile}>
