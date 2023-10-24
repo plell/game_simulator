@@ -196,10 +196,12 @@ const App = () => {
 
             <CameraController />
 
-            <color
-              attach='background'
-              args={[experienceProperties[game]?.backgroundColor || "#000000"]}
-            />
+            {experienceProperties[game]?.backgroundColor && (
+              <color
+                attach='background'
+                args={[experienceProperties[game].backgroundColor || "#000000"]}
+              />
+            )}
 
             <Selection>
               <EffectComposer autoClear={false} multisampling={8}>

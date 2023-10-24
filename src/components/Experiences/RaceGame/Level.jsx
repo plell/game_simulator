@@ -21,7 +21,7 @@ const floorEnd = new THREE.MeshStandardMaterial({
 })
 const floor2Material = new THREE.MeshStandardMaterial({  color:'#C8B6ED',map: sand })
 const obstacleMaterial = new THREE.MeshStandardMaterial({ color: 'orangered', transparent:true,opacity:0.9})
-const wallMaterial = new THREE.MeshStandardMaterial({ color: 'slategrey', transparent:true,opacity:0.3 })
+const wallMaterial = new THREE.MeshStandardMaterial({ color: 'slategrey', transparent:true,opacity:1 })
 
 function BlockStart({ position = [0, 0, 0] }) {
     return <group position={position}>
