@@ -9,6 +9,8 @@ type Props = {
 
 export type Timeout = ReturnType<typeof setTimeout> | null;
 
+useGLTF.preload("./models/crocArch.gltf");
+
 export const CrocArch = ({ position }: Props) => {
   const crocArch = useGLTF("./models/crocArch.gltf");
 

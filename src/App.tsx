@@ -17,7 +17,7 @@ import {
 } from "@react-three/postprocessing";
 import { BlendFunction, Resolution } from "postprocessing";
 
-import { CameraControls, KeyboardControls } from "@react-three/drei";
+import { CameraControls, KeyboardControls, Preload } from "@react-three/drei";
 import { Perf } from "r3f-perf";
 
 import styled from "styled-components";
@@ -200,6 +200,8 @@ const App = () => {
         >
           <Suspense fallback={null}>
             {isDevelopment && <Perf position='top-left' />}
+
+            <Preload all />
 
             <CameraController />
 

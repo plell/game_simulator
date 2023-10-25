@@ -7,6 +7,8 @@ type Props = {
   position: Vector3;
 };
 
+useGLTF.preload("./models/crocWallLess.gltf");
+
 export const Wall = ({ position }: Props) => {
   const wallModel = useGLTF("./models/crocWallLess.gltf");
 

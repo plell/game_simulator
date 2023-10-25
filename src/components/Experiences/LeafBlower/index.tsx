@@ -47,6 +47,9 @@ const radius = 20;
 const firstLevel = 6;
 const lastLevel = 12;
 
+useTexture.preload("textures/sand/aerial_beach_01_diff_1k.jpg");
+useTexture.preload("textures/sand/aerial_beach_01_disp_1k.jpg");
+
 export const LeafBlower = () => {
   const ref = useRef<Group | null>(null);
   const cursorRef = useRef<Group | null>(null);

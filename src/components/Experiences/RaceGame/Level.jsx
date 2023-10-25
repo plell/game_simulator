@@ -35,6 +35,8 @@ function BlockStart({ position = [0, 0, 0] }) {
     </group>
 }
 
+useGLTF.preload("./models/hamburger.glb");
+
 function BlockEnd({ position = [0, 0, 0] }) {
 
     const phase = useGame(s => s.phase)
@@ -221,9 +223,7 @@ function Bounds({length = 1}) {
 function Level({ count = 4, types = [BlockSpinner, BlockAxe, BlockLimbo] }) {
     const blockSeed = useGame(s=>s.blockSeed)
     const blocks = useMemo(() => {
-        console.log('count', count)
-        console.log('blockSeed', blockSeed)
-        console.log('types',types)
+        
         const blocks = []
         for (let i = 0; i < count; i++) {
             const randomIndex = Math.floor(Math.random() * types.length)

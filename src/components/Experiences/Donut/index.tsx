@@ -2,13 +2,9 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import {
   Color,
   CylinderGeometry,
-  DirectionalLight,
   Group,
   MathUtils,
-  Mesh,
   MeshBasicMaterial,
-  MeshStandardMaterial,
-  Vector3,
 } from "three";
 
 import { useCursorHover } from "../hooks/useCursorHover";
@@ -18,6 +14,8 @@ import { Instance, Instances, useGLTF } from "@react-three/drei";
 
 const sprinkleMaterial = new MeshBasicMaterial();
 const sprinkleGeometry = new CylinderGeometry(0.2, 0.2, 1.3);
+
+useGLTF.preload("./models/donut.glb");
 
 export const Donut = () => {
   const [focused, setFocused] = useState(false);

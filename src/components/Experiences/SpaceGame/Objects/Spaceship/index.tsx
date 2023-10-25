@@ -13,6 +13,8 @@ type Props = {
 const tiltStrength = 0.1;
 const reuseableVec3 = new Vector3();
 
+useGLTF.preload("./models/spaceship.gltf");
+
 export const Spaceship = ({ position, playerRef, mouseRef }: Props) => {
   const model = useGLTF("./models/spaceship.gltf");
 

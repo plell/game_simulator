@@ -5,6 +5,8 @@ type Props = {
   id: number | string;
 };
 
+useGLTF.preload("./models/croc_less.gltf");
+
 export const CrocModel = ({ id }: Props) => {
   const crocModel = useGLTF("./models/croc_less.gltf");
 
