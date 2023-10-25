@@ -1,6 +1,6 @@
 import { useFrame } from "@react-three/fiber";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Group, Mesh, Vector3 } from "three";
+import { Group, MathUtils, Mesh, Vector3 } from "three";
 import useGame from "../../../../../Stores/useGame";
 import { CrocModel } from "./model";
 import { useObjectsIntersect } from "../../../hooks/useObjectsIntersect";
@@ -15,26 +15,25 @@ const reuseableVec = new Vector3();
 
 export type Timeout = ReturnType<typeof setTimeout> | null;
 
-const movementRange = 4;
+const movementRange = {
+  min: -10,
+  max: 0,
+};
+
+const origin = new Vector3(1, 1, 1);
 
 export const Croc = ({ position, id }: Props) => {
   const crocGroupRef = useRef<Group | null>(null);
   const wallRef = useRef<Mesh | null>(null);
-
   const scoreUp = useGame((s) => s.scoreUp);
   const setHit = useGame((s) => s.setHit);
 
-  const [speed, setSpeed] = useState(0);
-  const [direction, setDirection] = useState(1);
+  const [destination, setDestination] = useState(movementRange.min);
 
   const hit = useGame((s) => s.hit);
   const damageUp = useGame((s) => s.damageUp);
 
   const bonked = useMemo(() => hit === id, [hit, id]);
-
-  useEffect(() => {
-    changeSpeed();
-  }, []);
 
   useEffect(() => {
     if (bonked) {
@@ -47,34 +46,41 @@ export const Croc = ({ position, id }: Props) => {
 
   useEffect(() => {
     if (objectsIntersect) {
-      damageUp();
+      doDamage();
     }
-    setDirection(direction * -1);
   }, [objectsIntersect]);
 
   const takeDamage = () => {
-    console.log("ouch!");
-    changeSpeed();
+    setDestination(movementRange.min);
+    if (crocGroupRef.current) {
+      const scale = 0.7;
+      crocGroupRef.current.scale.set(1, scale, 1);
+    }
   };
 
-  const changeSpeed = useCallback(() => {
-    const random = Math.floor(Math.random() * 12) + 1;
-    setSpeed(random);
-  }, [direction]);
+  const doDamage = () => {
+    damageUp();
+    setDestination(movementRange.min);
+  };
 
-  useFrame(({ clock }) => {
+  useFrame(() => {
+    if (crocGroupRef.current) {
+      crocGroupRef.current.scale.lerp(origin, 0.08);
+    }
     if (crocGroupRef?.current) {
-      const elapsedTime = clock.getElapsedTime();
-
-      const newZ =
-        Math.cos(elapsedTime * speed * 0.1) * movementRange + position.z;
-
       const crocPosition = crocGroupRef?.current.position;
 
       crocPosition.lerp(
-        reuseableVec.set(crocPosition.x, crocPosition.y, newZ),
-        0.03
+        reuseableVec.set(crocPosition.x, crocPosition.y, destination),
+        0.015
       );
+
+      if (
+        destination !== movementRange.max &&
+        crocPosition.z < movementRange.min + 1
+      ) {
+        setDestination(movementRange.max);
+      }
     }
   });
 
