@@ -85,49 +85,14 @@ export const AboutMe = () => {
           <Image src='/images/secondbrain2.jpg' />
         </MediaItem>
       </FlexRow>
-      <FlexRow>
-        <FlexRowItem>
-          <Title>Front-to-Back Payment API integrations</Title>
-        </FlexRowItem>
-        <FlexRowItem>
-          <Description isMobile={isMobile}>
-            I built this white label e-commerce website with React, Golang/SQL,
-            docker, and serve it from DigitalOcean. Payments are powered by the
-            Stripe API. Communications are powered by the Gmail and Google
-            calendar APIs.
-          </Description>
-        </FlexRowItem>
-        <MediaItem>
-          {renderCafe && (
-            <iframe
-              style={{ border: "none" }}
-              src={"https://www.lazycow.cafe"}
-              height={670}
-              width={"100%"}
-              onLoad={() => {
-                setTimeout(() => {
-                  window.scrollTo(0, 0);
-                }, 50);
 
-                setTimeout(() => {
-                  window.scrollTo(0, 0);
-                }, 100);
-
-                setTimeout(() => {
-                  window.scrollTo(0, 0);
-                }, 200);
-              }}
-            />
-          )}
-        </MediaItem>
-      </FlexRow>
       <FlexRow>
         <FlexRowItem>
           <Title>Immersive Experiences</Title>
         </FlexRowItem>
         <FlexRowItem>
           <Description isMobile={isMobile}>
-            I build games and other 3D experience with React and ThreeJS.{" "}
+            I build games and other 3D experiences with React and ThreeJS.{" "}
             <LinkTitle style={{ fontWeight: 800 }} onClick={() => setGame(1)}>
               &nbsp;Try them out!
             </LinkTitle>
