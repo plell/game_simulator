@@ -61,7 +61,7 @@ export const SpaceGame = () => {
 
   return (
     <group ref={ref} position={experienceProperties[game]?.gamePosition}>
-      <directionalLight position={[5, 5, 100]} intensity={3} />
+      <directionalLight position={[5, 5, 100]} intensity={3.4} />
 
       <GameProgress
         position={new Vector3(0, 3, 10)}

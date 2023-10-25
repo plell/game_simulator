@@ -14,9 +14,9 @@ export const Projectiles = ({ refs, player, launchPosition }: Props) => {
   const [projectiles, setProjectiles] = useState<any>({});
 
   useEffect(() => {
-    window.addEventListener("click", newProjectile);
+    window.addEventListener("mousedown", newProjectile);
     return () => {
-      window.removeEventListener("click", newProjectile);
+      window.removeEventListener("mousedown", newProjectile);
     };
   });
 
