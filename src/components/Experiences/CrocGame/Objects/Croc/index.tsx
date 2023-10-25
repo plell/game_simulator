@@ -1,10 +1,9 @@
 import { useFrame } from "@react-three/fiber";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Group, MathUtils, Mesh, Vector3 } from "three";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { Group, Mesh, Vector3 } from "three";
 import useGame from "../../../../../Stores/useGame";
 import { CrocModel } from "./model";
 import { useObjectsIntersect } from "../../../hooks/useObjectsIntersect";
-import { ImpactCloud } from "../../../common/ImpactCloud";
 
 type Props = {
   position: Vector3;
