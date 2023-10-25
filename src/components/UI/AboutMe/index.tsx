@@ -49,14 +49,14 @@ export const AboutMe = () => {
       <Spacer />
       <FlexRow>
         <FlexRowItem>
-          <Title>Online Community</Title>
+          <Title>Clean and Intuitive UI</Title>
         </FlexRowItem>
         <FlexRowItem>
           <Description isMobile={isMobile}>
             Sphinx Community is a Web3 sidekick social media platform that I
             built from the ground up using React, Golang and PostgreSQL. Here
-            you can meet other Sphinx Chat users, join Sphinx tribes, earn
-            badges, and claim coding bounties. Try it out!
+            you can meet Sphinx Chat users, join Sphinx tribes, earn badges, and
+            claim coding bounties.
           </Description>
         </FlexRowItem>
         <MediaItem>
@@ -71,7 +71,7 @@ export const AboutMe = () => {
       </FlexRow>
       <FlexRow>
         <FlexRowItem>
-          <Title>Data Visualization</Title>
+          <Title>Intentional Data Visualization</Title>
         </FlexRowItem>
         <FlexRowItem>
           <Description isMobile={isMobile}>
@@ -87,14 +87,14 @@ export const AboutMe = () => {
       </FlexRow>
       <FlexRow>
         <FlexRowItem>
-          <Title>Online Shopping and Order Management</Title>
+          <Title>Front-to-Back Payment API integrations</Title>
         </FlexRowItem>
         <FlexRowItem>
           <Description isMobile={isMobile}>
-            I built this white label e-commerce template with React, Golang, SQL
-            backend - dockerized and served from DigitalOcean. Payments are
-            powered by the Stripe API. Communications are powered by the Gmail
-            and Google calendar APIs.
+            I built this white label e-commerce website with React, Golang/SQL,
+            docker, and serve it from DigitalOcean. Payments are powered by the
+            Stripe API. Communications are powered by the Gmail and Google
+            calendar APIs.
           </Description>
         </FlexRowItem>
         <MediaItem>
@@ -120,6 +120,19 @@ export const AboutMe = () => {
             />
           )}
         </MediaItem>
+      </FlexRow>
+      <FlexRow>
+        <FlexRowItem>
+          <Title>Immersive Experiences</Title>
+        </FlexRowItem>
+        <FlexRowItem>
+          <Description isMobile={isMobile}>
+            I build games and other 3D experience with React and ThreeJS.{" "}
+            <LinkTitle style={{ fontWeight: 800 }} onClick={() => setGame(1)}>
+              &nbsp;Try them out!
+            </LinkTitle>
+          </Description>
+        </FlexRowItem>
       </FlexRow>
     </Overlay>
   );
@@ -165,6 +178,7 @@ type DescriptionProps = {
 };
 const Description = styled.div<DescriptionProps>`
   font-size: 28px;
+  display: flex;
   font-weight: 300;
   line-height: 39px;
   margin: 30px 0px 60px ${(p) => (p.isMobile ? "0" : "40px")};
