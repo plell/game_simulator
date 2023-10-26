@@ -6,6 +6,7 @@ export default create(subscribeWithSelector((set) => {
         phase: 'ready',
         startTime: 0,
         endTime: 0,
+        blocksCount: 4,
         blockSeed: 0,
         start: () => {
             set((state) =>

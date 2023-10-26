@@ -119,9 +119,11 @@ export default function Player()
         state.camera.position.copy(smoothedCameraPosition)
         state.camera.lookAt(smoothedCameraTarget)
 
-
+    
+        const endPosition = -(blocksCount * 3 + 2)
+        
         // phases
-        if (bodyPosition.z < -(blocksCount * 4 + 2)) {
+        if (bodyPosition.z < endPosition) {
             end()
         }
         if (bodyPosition.y < -5) {

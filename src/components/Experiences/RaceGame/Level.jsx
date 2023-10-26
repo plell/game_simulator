@@ -73,7 +73,6 @@ function BlockEnd({ position = [0, 0, 0] }) {
             receiveShadow />
         
             <primitive ref={ref} object={hamburger.scene} scale={0.2} />
-        
     </group>
 }
 
