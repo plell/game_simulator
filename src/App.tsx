@@ -89,7 +89,7 @@ const CameraController = () => {
             polarRotateSpeed: 0,
             azimuthRotateSpeed: 0,
             smoothTime: 3,
-            minDistance: 90,
+            minDistance: 20,
             maxDistance: 500,
           },
     [enabled]

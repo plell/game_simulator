@@ -44,7 +44,7 @@ export const Goal = ({ player, addToScore }: Props) => {
       const rotation = Math.PI * 0.35;
       ref.current.rotation.x = rotation + Math.sin(elapsed * 4) * 0.05;
 
-      ref.current.position.y -= 0.2;
+      ref.current.position.y -= 0.1;
       ref.current.position.x = Math.sin(elapsed * rate) * 15;
 
       if (touched) {

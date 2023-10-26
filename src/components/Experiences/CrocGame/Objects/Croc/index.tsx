@@ -20,6 +20,7 @@ const movementRange = {
 };
 
 const origin = new Vector3(1, 1, 1);
+const baseSpeed = 0.3;
 
 export const Croc = ({ position, id }: Props) => {
   const crocGroupRef = useRef<Group | null>(null);
@@ -27,7 +28,7 @@ export const Croc = ({ position, id }: Props) => {
   const score = useGame((s) => s.score);
   const scoreUp = useGame((s) => s.scoreUp);
   const setHit = useGame((s) => s.setHit);
-  const [speed, setSpeed] = useState(1);
+  const [speed, setSpeed] = useState(baseSpeed);
   const [multiplier, setMultiplier] = useState(0.8);
 
   const [destination, setDestination] = useState(movementRange.min);
@@ -66,8 +67,8 @@ export const Croc = ({ position, id }: Props) => {
     if (destination === movementRange.min) {
       setSpeed(3);
     } else {
-      const rand = Math.random();
-      setSpeed(1 + rand);
+      const rand = Math.random() * 0.01;
+      setSpeed(baseSpeed + rand);
     }
   }, [destination]);
 
