@@ -53,10 +53,15 @@ export const AboutMe = () => {
         </FlexRowItem>
         <FlexRowItem>
           <Description isMobile={isMobile}>
-            Sphinx Community is a Web3 sidekick social media platform that I
-            built from the ground up using React, Golang and PostgreSQL. Here
-            you can meet Sphinx Chat users, join Sphinx tribes, earn badges, and
-            claim coding bounties.
+            <span>
+              <Link href='https://community.sphinx.chat/p' target='_blank'>
+                Sphinx Community
+              </Link>
+            </span>
+            &nbsp;is a Web3 sidekick social media platform that I built from the
+            ground up using React, Golang and PostgreSQL. Here you can meet
+            Sphinx Chat users, join Sphinx tribes, earn badges, and claim coding
+            bounties.
           </Description>
         </FlexRowItem>
         <MediaItem>
@@ -92,10 +97,10 @@ export const AboutMe = () => {
         </FlexRowItem>
         <FlexRowItem>
           <Description isMobile={isMobile}>
-            I build games and other 3D experiences with React and ThreeJS.{" "}
-            <LinkTitle style={{ fontWeight: 800 }} onClick={() => setGame(1)}>
-              &nbsp;Try them out!
-            </LinkTitle>
+            <span>
+              <Link onClick={() => setGame(1)}>Try them out!</Link>
+            </span>
+            &nbsp;I build games and other 3D experiences with React and ThreeJS.
           </Description>
         </FlexRowItem>
       </FlexRow>
@@ -126,9 +131,10 @@ const Title = styled.div`
   font-weight: 900;
 `;
 
-const LinkTitle = styled.div`
+const LinkTitle = styled.a`
   font-size: 28px;
   font-weight: 300;
+  color: skyblue;
   display: flex;
   align-items: center;
   cursor: pointer;
@@ -141,9 +147,22 @@ const LinkTitle = styled.div`
 type DescriptionProps = {
   isMobile?: boolean;
 };
+
+const Link = styled.a`
+  color: skyblue;
+  font-size: 28px;
+  font-weight: 300;
+  color: skyblue;
+
+  cursor: pointer;
+  opacity: 0.9;
+  &:hover {
+    opacity: 1;
+  }
+`;
 const Description = styled.div<DescriptionProps>`
   font-size: 28px;
-  display: flex;
+
   font-weight: 300;
   line-height: 39px;
   margin: 30px 0px 60px ${(p) => (p.isMobile ? "0" : "40px")};
