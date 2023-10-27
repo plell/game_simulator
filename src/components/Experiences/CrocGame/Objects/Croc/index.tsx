@@ -41,10 +41,10 @@ export const Croc = ({ position, id }: Props) => {
   useEffect(() => {
     if (score > 10 && multiplier !== 1.2) {
       setMultiplier(1.2);
-    } else if (score > 20 && multiplier !== 1.3) {
-      setMultiplier(1.3);
-    } else if (score > 30 && multiplier !== 1.5) {
-      setMultiplier(1.5);
+    } else if (score > 20 && multiplier !== 1.8) {
+      setMultiplier(1.8);
+    } else if (score > 30 && multiplier !== 2.5) {
+      setMultiplier(2.5);
     }
   }, [score]);
 
@@ -67,7 +67,7 @@ export const Croc = ({ position, id }: Props) => {
     if (destination === movementRange.min) {
       setSpeed(3);
     } else {
-      const rand = Math.random() * 0.01;
+      const rand = Math.random() * 0.04;
       setSpeed(baseSpeed + rand);
     }
   }, [destination]);
