@@ -223,7 +223,7 @@ const MediaItem = styled.div`
 
   overflow: hidden;
 
-  box-shadow: 0px 0px 4px 0px #ffffffbb;
+  box-shadow: 0px 0px 4px 0px #ffffff77;
 `;
 
 type ImageProps = {
