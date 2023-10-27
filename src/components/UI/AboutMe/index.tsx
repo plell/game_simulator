@@ -139,9 +139,7 @@ const LinkTitle = styled.a`
   align-items: center;
   cursor: pointer;
   opacity: 0.9;
-  background: -webkit-linear-gradient(0.5turn, #fff, skyblue);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+
   &:hover {
     opacity: 1;
   }
@@ -153,14 +151,12 @@ type DescriptionProps = {
 
 const Link = styled.a`
   font-size: 28px;
-  font-weight: 200;
+
   color: skyblue;
-  text-decoration: underline;
+
   cursor: pointer;
   opacity: 0.9;
-  background: -webkit-linear-gradient(0.5turn, #fff, skyblue);
-  -webkit-background-clip: text;
-  // -webkit-text-fill-color: transparent;
+
   &:hover {
     opacity: 1;
   }
