@@ -20,7 +20,7 @@ const movementRange = {
 };
 
 const origin = new Vector3(1, 1, 1);
-const baseSpeed = 0.3;
+const baseSpeed = 0.5;
 
 export const Croc = ({ position, id }: Props) => {
   const crocGroupRef = useRef<Group | null>(null);
@@ -86,7 +86,7 @@ export const Croc = ({ position, id }: Props) => {
     setDestination(movementRange.min);
   };
 
-  useFrame(() => {
+  useFrame((_, delta) => {
     if (crocGroupRef.current) {
       crocGroupRef.current.scale.lerp(origin, 0.1);
     }
@@ -95,7 +95,7 @@ export const Croc = ({ position, id }: Props) => {
 
       crocPosition.lerp(
         reuseableVec.set(crocPosition.x, crocPosition.y, destination),
-        0.01 * speed * multiplier
+        0.01 * speed * multiplier * (delta * 100)
       );
 
       if (
