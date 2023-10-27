@@ -76,7 +76,7 @@ export const AboutMe = () => {
       </FlexRow>
       <FlexRow>
         <FlexRowItem>
-          <Title>Intentional Data Visualization</Title>
+          <Title>Creative Data Visualization</Title>
         </FlexRowItem>
         <FlexRowItem>
           <Description isMobile={isMobile}>
@@ -98,7 +98,7 @@ export const AboutMe = () => {
         <FlexRowItem>
           <Description isMobile={isMobile}>
             <span>
-              <Link onClick={() => setGame(1)}>Try them out!</Link>
+              <Link onClick={() => setGame(1)}>Try them out.</Link>
             </span>
             &nbsp;I build games and other 3D experiences with React and ThreeJS.
           </Description>
@@ -127,8 +127,8 @@ const TopDescription = styled.div`
 `;
 
 const Title = styled.div`
-  font-size: 40px;
-  font-weight: 900;
+  font-size: 50px;
+  font-weight: 200;
 `;
 
 const LinkTitle = styled.a`
@@ -139,6 +139,9 @@ const LinkTitle = styled.a`
   align-items: center;
   cursor: pointer;
   opacity: 0.9;
+  background: -webkit-linear-gradient(0.5turn, #fff, skyblue);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
   &:hover {
     opacity: 1;
   }
@@ -149,25 +152,27 @@ type DescriptionProps = {
 };
 
 const Link = styled.a`
-  color: skyblue;
   font-size: 28px;
-  font-weight: 300;
+  font-weight: 200;
   color: skyblue;
-
+  text-decoration: underline;
   cursor: pointer;
   opacity: 0.9;
+  background: -webkit-linear-gradient(0.5turn, #fff, skyblue);
+  -webkit-background-clip: text;
+  // -webkit-text-fill-color: transparent;
   &:hover {
     opacity: 1;
   }
 `;
 const Description = styled.div<DescriptionProps>`
   font-size: 28px;
-
   font-weight: 300;
   line-height: 39px;
-  margin: 30px 0px 60px ${(p) => (p.isMobile ? "0" : "40px")};
+  margin: ${(p) => (p.isMobile ? "0" : "40px")} 0px 60px
+    ${(p) => (p.isMobile ? "0" : "40px")};
   color: #f1f1f1;
-  padding: 12px;
+  padding: 20px;
   background: #00000022;
 `;
 
