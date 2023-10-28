@@ -49,7 +49,7 @@ export const AboutMe = () => {
       <Spacer />
       <FlexRow>
         <FlexRowItem>
-          <Title>Clean and Intuitive UI</Title>
+          <Title>Clean and Flexible UI</Title>
         </FlexRowItem>
         <FlexRowItem>
           <Description isMobile={isMobile}>
@@ -76,7 +76,7 @@ export const AboutMe = () => {
       </FlexRow>
       <FlexRow>
         <FlexRowItem>
-          <Title>Creative Data Visualization</Title>
+          <Title>Creative Solutions</Title>
         </FlexRowItem>
         <FlexRowItem>
           <Description isMobile={isMobile}>
@@ -98,7 +98,7 @@ export const AboutMe = () => {
         <FlexRowItem>
           <Description isMobile={isMobile}>
             <span>
-              <Link onClick={() => setGame(1)}>Try them out.</Link>
+              <Link onClick={() => setGame(1)}>Try them out!</Link>
             </span>
             &nbsp;I build games and other 3D experiences with React and ThreeJS.
           </Description>
@@ -165,8 +165,7 @@ const Description = styled.div<DescriptionProps>`
   font-size: 28px;
   font-weight: 300;
   line-height: 39px;
-  margin: ${(p) => (p.isMobile ? "0" : "40px")} 0px 60px
-    ${(p) => (p.isMobile ? "0" : "40px")};
+  margin: 40px 0 60px;
   color: #f1f1f1;
   padding: 20px;
   background: #00000022;
