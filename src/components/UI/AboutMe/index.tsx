@@ -76,7 +76,7 @@ export const AboutMe = () => {
       </FlexRow>
       <FlexRow>
         <FlexRowItem>
-          <Title>Creative Solutions</Title>
+          <Title>Creative Designs</Title>
         </FlexRowItem>
         <FlexRowItem>
           <Description isMobile={isMobile}>
