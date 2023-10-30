@@ -94,7 +94,7 @@ const Planet = () => {
 
       ref.current.rotation.y += delta * 0.4;
 
-      const newScale = MathUtils.lerp(ref.current.scale.x, scale, 0.05);
+      const newScale = MathUtils.lerp(ref.current.scale.x, scale, 0.006);
 
       ref.current.scale.set(newScale, newScale, newScale);
     }

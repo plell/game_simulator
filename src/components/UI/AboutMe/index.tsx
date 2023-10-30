@@ -1,30 +1,39 @@
 import styled from "styled-components";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { MdArrowForward } from "react-icons/md";
-import { useIsMobile } from "../hooks";
+import { useIsMobile, useIsOnScreen } from "../hooks";
 import useGame from "../../../Stores/useGame";
+import { FadeLeft } from "../FadeLeft/index.tsx";
+import { Cued } from "../Cued";
 
 export const AboutMe = () => {
   const ref = useRef(null);
-  const setGame = useGame((s) => s.setGame);
 
-  const [renderCafe, setRenderCafe] = useState(false);
+  const setGame = useGame((s) => s.setGame);
+  const [iFrameLoaded, setIFrameLoaded] = useState(false);
 
   const isMobile = useIsMobile();
 
-  return (
-    <Overlay
-      isMobile={isMobile}
-      ref={ref}
-      onScroll={(e) => {
-        const scrollTop: number = ref?.current?.scrollTop;
-        const scrollHeight: number = ref?.current?.scrollHeight;
+  const cue1Ref = useRef(null);
+  const cue2Ref = useRef(null);
+  const [cueMounted1, setCueMounted1] = useState(false);
+  const [cueMounted2, setCueMounted2] = useState(false);
 
-        if (scrollTop > scrollHeight / 1.6 && !renderCafe) {
-          setRenderCafe(true);
-        }
-      }}
-    >
+  const cueIsOnScreen1 = useIsOnScreen(cue1Ref);
+  const cueIsOnScreen2 = useIsOnScreen(cue2Ref);
+
+  useEffect(() => {
+    if (!cueMounted2 && cueIsOnScreen2) {
+      setCueMounted2(true);
+    }
+  }, [cueIsOnScreen2]);
+
+  const startTimeout = () => {
+    setIFrameLoaded(true);
+  };
+
+  return (
+    <Overlay isMobile={isMobile} ref={ref}>
       <TopFlexRow>
         <FlexRowItem>
           <BigTitle isMobile={isMobile}>Modern Web Experiences</BigTitle>
@@ -32,10 +41,6 @@ export const AboutMe = () => {
         <FlexRowItem>
           <TopDescription>by David Plell</TopDescription>
         </FlexRowItem>
-
-        {/* <FlexRowItem style={{ marginTop: 80 }}>
-          <MdArrowDownward color={"#fff"} size={50} />
-        </FlexRowItem> */}
       </TopFlexRow>
       <Spacer />
       <FlexRow style={{ marginBottom: 60 }}>
@@ -47,6 +52,7 @@ export const AboutMe = () => {
         </FlexRowItem>
       </FlexRow>
       <Spacer />
+
       <FlexRow>
         <FlexRowItem>
           <Title>Clean and Flexible UI</Title>
@@ -64,52 +70,71 @@ export const AboutMe = () => {
             bounties.
           </Description>
         </FlexRowItem>
+
         <MediaItem>
-          <iframe
-            seamless
-            style={{ border: "none" }}
+          <Image src='/images/sphinxCommunity.jpg' />
+          {/* <iframe
+            onLoad={() => {
+              startTimeout();
+            }}
+            style={{
+              border: "none",
+              // display: iFrameLoaded ? "block" : "none",
+            }}
             src={"https://community.sphinx.chat/p"}
             height={700}
             width={"100%"}
-          />
-        </MediaItem>
-      </FlexRow>
-      <FlexRow>
-        <FlexRowItem>
-          <Title>Creative Designs</Title>
-        </FlexRowItem>
-        <FlexRowItem>
-          <Description isMobile={isMobile}>
-            Second Brain is an application that collects data for an open source
-            machine learning bank. I designed and built the UI using React Three
-            Fiber. My goal was to encourage community participation by bringing
-            the daily evolution of the knowledge graph to life.
-          </Description>
-        </FlexRowItem>
-        <MediaItem>
-          <Image src='/images/secondbrain2.jpg' />
+          /> */}
         </MediaItem>
       </FlexRow>
 
-      <FlexRow>
-        <FlexRowItem>
-          <Title>Immersive Experiences</Title>
-        </FlexRowItem>
-        <FlexRowItem>
-          <Description isMobile={isMobile}>
-            <span>
-              <Link onClick={() => setGame(1)}>Try them out!</Link>
-            </span>
-            &nbsp;I build games and other 3D experiences with React and ThreeJS.
-          </Description>
-        </FlexRowItem>
-      </FlexRow>
+      <Cued>
+        <FlexRow>
+          <FlexRowItem>
+            <Title>Creative Designs</Title>
+          </FlexRowItem>
+          <FlexRowItem>
+            <Description isMobile={isMobile}>
+              Second Brain is an application that collects data for an open
+              source machine learning bank. I designed and built the UI using
+              React Three Fiber. My goal was to encourage community
+              participation by bringing the daily evolution of the knowledge
+              graph to life.
+            </Description>
+          </FlexRowItem>
+          <MediaItem>
+            <Image src='/images/secondbrain2.jpg' />
+          </MediaItem>
+        </FlexRow>
+      </Cued>
+
+      <Cued>
+        <FlexRow>
+          <FlexRowItem>
+            <Title>Immersive Experiences</Title>
+          </FlexRowItem>
+          <FlexRowItem>
+            <Description isMobile={isMobile}>
+              <span>
+                <Link onClick={() => setGame(1)}>Try them out!</Link>
+              </span>
+              &nbsp;I build games and other 3D experiences with React and
+              ThreeJS.
+              <Height />
+            </Description>
+          </FlexRowItem>
+        </FlexRow>
+      </Cued>
     </Overlay>
   );
 };
 
 const Spacer = styled.div`
   min-height: 60px;
+`;
+
+const Height = styled.div`
+  height: 400px;
 `;
 
 type BTProps = {

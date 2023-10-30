@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, RefObject, useMemo } from 'react';
 
 function getIsMobile() {
   // definition of mobile width, this is the trigger to switch
@@ -42,3 +42,24 @@ function useScreenWidth() {
 }
 
 export { useIsMobile, useScreenWidth, getScreenWidth, getIsMobile, screenWidthOffset }
+
+
+export const useIsOnScreen = (ref: RefObject<HTMLElement>) => {
+
+  const [isIntersecting, setIntersecting] = useState(false)
+
+  const observer = useMemo(() => new IntersectionObserver(
+    ([entry]) => setIntersecting(entry.isIntersecting)
+  ), [ref])
+
+
+  useEffect(() => {
+    if (ref.current) {
+      observer.observe(ref.current)
+    }
+    
+    return () => observer.disconnect()
+  }, [])
+
+  return isIntersecting
+}

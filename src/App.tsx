@@ -82,14 +82,14 @@ const CameraController = () => {
             polarRotateSpeed: 1,
             azimuthRotateSpeed: 1,
             smoothTime: 3,
-            minDistance: 30,
+            minDistance: 2,
             maxDistance: 500,
           }
         : {
             polarRotateSpeed: 0,
             azimuthRotateSpeed: 0,
             smoothTime: 3,
-            minDistance: 20,
+            minDistance: 2,
             maxDistance: 500,
           },
     [enabled]
@@ -145,6 +145,8 @@ const App = () => {
     setMouseDown(false);
   };
 
+  console.log("pixelRatio", window.devicePixelRatio);
+
   return (
     <>
       <Anchor id='anchor' />
@@ -186,7 +188,6 @@ const App = () => {
           gl={{
             toneMappingExposure: 3,
             toneMapping: ACESFilmicToneMapping,
-            antialias: true,
           }}
           shadows={{
             type: PCFSoftShadowMap,
