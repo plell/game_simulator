@@ -12,15 +12,25 @@ export const Cued = (props: Props) => {
 
   const cueRef = useRef(null);
 
+  const [init, setInit] = useState(false);
   const [cueMounted, setCueMounted] = useState(false);
 
   const cueIsOnScreen = useIsOnScreen(cueRef);
 
   useEffect(() => {
-    if (!cueMounted && cueIsOnScreen) {
+    const initTimer = setTimeout(() => {
+      setInit(true);
+    }, 200);
+    return () => {
+      clearTimeout(initTimer);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (init && !cueMounted && cueIsOnScreen) {
       setCueMounted(true);
     }
-  }, [cueIsOnScreen]);
+  }, [cueIsOnScreen, init]);
 
   return (
     <>

@@ -109,7 +109,7 @@ export const AboutMe = () => {
       </Cued>
 
       <Cued>
-        <FlexRow>
+        <FlexRow style={{ marginBottom: 500 }}>
           <FlexRowItem>
             <Title>Immersive Experiences</Title>
           </FlexRowItem>
@@ -120,7 +120,6 @@ export const AboutMe = () => {
               </span>
               &nbsp;I build games and other 3D experiences with React and
               ThreeJS.
-              <Height />
             </Description>
           </FlexRowItem>
         </FlexRow>
@@ -131,10 +130,6 @@ export const AboutMe = () => {
 
 const Spacer = styled.div`
   min-height: 60px;
-`;
-
-const Height = styled.div`
-  height: 400px;
 `;
 
 type BTProps = {
@@ -191,6 +186,7 @@ const Description = styled.div<DescriptionProps>`
   font-weight: 300;
   line-height: 39px;
   margin: 40px 0 60px;
+  width: 100%;
   color: #f1f1f1;
   padding: 20px;
   background: #00000022;
