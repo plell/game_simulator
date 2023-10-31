@@ -20,12 +20,14 @@ type Props = {
   levelPrefix?: string;
   hideText?: boolean;
   scale?: number;
+  intensity?: number;
 };
 
 export const GameProgress = ({
   type,
   max,
   score,
+  intensity,
   scoreRef,
   position,
   scoreInverted,
@@ -46,6 +48,8 @@ export const GameProgress = ({
   const { camera } = useThree();
 
   const [initialized, setInitialized] = useState(false);
+
+  const scoreComplete = useMemo(() => score > max - 1, [score, max]);
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -123,24 +127,17 @@ export const GameProgress = ({
   const progressRef = useRef<Mesh | null>(null);
 
   useFrame(() => {
-    if (
-      type === "bar" &&
-      (scoreRef?.current || scoreRef?.current === 0) &&
-      progressRef?.current
-    ) {
-      const xScale = scoreRef?.current
-        ? scoreInverted
-          ? (max - scoreRef?.current) / max
-          : scoreRef?.current / max
-        : 1;
+    const s = score || scoreRef?.current;
+    if (type === "bar" && (s || s === 0) && progressRef?.current) {
+      const xScale = s ? (scoreInverted ? (max - s) / max : s / max) : 1;
 
-      const yScale = refScoreComplete ? 2 : 1;
+      const yScale = scoreComplete || refScoreComplete ? 2 : 1;
       progressRef.current.scale.set(xScale, yScale, 1);
 
-      if (initialized && !refScoreComplete) {
-        const s = scoreInverted ? max - scoreRef?.current : scoreRef?.current;
+      if (initialized && !(scoreComplete || refScoreComplete)) {
+        const s_ = scoreInverted ? max - s : s;
 
-        if (s > max - 1) {
+        if (s_ > max - 1) {
           setRefScoreComplete(true);
         }
       }
@@ -153,12 +150,12 @@ export const GameProgress = ({
         <>
           {pointPositions.map((_, i) => {
             const fill = i + 1 <= score;
-            const complete = score > max - 1;
+
             return (
               <group key={i} position-x={pointPositions[i] * 10}>
                 <mesh>
                   <torusGeometry args={[5, 0.2]} />
-                  {complete ? (
+                  {scoreComplete ? (
                     <meshStandardMaterial
                       color={"#ffffff"}
                       roughness={0}
@@ -207,12 +204,20 @@ export const GameProgress = ({
             </mesh>
 
             {initialized && max > 1 && (
-              <mesh position-z={0.1} ref={progressRef}>
+              <mesh position-z={0.1} ref={progressRef} scale-x={0}>
                 <planeGeometry args={[90, 1]} />
                 <meshStandardMaterial
                   color={"white"}
-                  emissive={refScoreComplete ? "white" : "purple"}
-                  emissiveIntensity={refScoreComplete ? 1 : 40}
+                  emissive={
+                    refScoreComplete || scoreComplete
+                      ? "white"
+                      : score < 0
+                      ? "red"
+                      : "purple"
+                  }
+                  emissiveIntensity={
+                    refScoreComplete || scoreComplete ? 1 : intensity || 40
+                  }
                 />
               </mesh>
             )}

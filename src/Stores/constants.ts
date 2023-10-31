@@ -10,6 +10,7 @@ import { RaceGame } from "../components/Experiences/RaceGame";
 import Interface from "../components/Experiences/RaceGame/Interface";
 import { Donut } from "../components/Experiences/Donut";
 import { HalloweenGame } from "../components/Experiences/HalloweenGame";
+import { WhackASoul } from "../components/Experiences/WhackASoul";
 
 const { origin } = window.location
 
@@ -156,18 +157,17 @@ export const experienceProperties: ExperienceProps[] = [
     game: RaceGame,
     uiComponent:Interface
   },
-  // {
-  //   cameraPosition: new Vector3(0,0,5),
-  //   cameraTarget: new Vector3(0, 0, 0),
-  //   cameraNear: 1,
-  //   cameraFar: 500,
-  //   gamePosition: new Vector3(0, 0, 0),
-  //   title: '',
-  //   description: '',
-  //   instructions: 'Drag to turn',
-  //   cameraControls: true,
-  //   backgroundColor:'black',
-  //   game: HalloweenGame,
-    
-  // },
+  {
+    cameraPosition: new Vector3(0,11,16),
+    cameraTarget: new Vector3(0, 3, 0),
+    cameraNear: 1,
+    cameraFar: 500,
+    gamePosition: new Vector3(0, 0, 0),
+    title: '',
+    description: '',
+    instructions: 'Click to play',
+    cameraControls: false,
+    backgroundColor:'#000000',
+    game: WhackASoul,
+  },
 ]

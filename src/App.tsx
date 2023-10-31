@@ -145,8 +145,6 @@ const App = () => {
     setMouseDown(false);
   };
 
-  console.log("pixelRatio", window.devicePixelRatio);
-
   return (
     <>
       <Anchor id='anchor' />
