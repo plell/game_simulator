@@ -38,7 +38,7 @@ const intensityScale = {
 };
 
 const Pumpkin = () => {
-  const pumpkin = useGLTF("./models/pumpkin.gltf");
+  const pumpkin = useGLTF("./models/pumpkin.glb");
 
   const lightRef = useRef<PointLight | null>(null);
 
