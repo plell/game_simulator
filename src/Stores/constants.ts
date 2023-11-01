@@ -1,24 +1,20 @@
 import { Vector3 } from "three";
-import { CakeGame } from "../components/Experiences/CakeGame";
-import { TempoGame } from "../components/Experiences/TempoGame";
+// import { TempoGame } from "../components/Experiences/TempoGame";
 import { Earth } from "../components/Experiences/Earth";
 import { SpaceGame } from "../components/Experiences/SpaceGame";
 import { CrocGame } from "../components/Experiences/CrocGame";
 import { LeafBlower } from "../components/Experiences/LeafBlower";
-import { ToppleGame } from "../components/Experiences/ToppleGame";
 import { RaceGame } from "../components/Experiences/RaceGame";
 import Interface from "../components/Experiences/RaceGame/Interface";
 import { Donut } from "../components/Experiences/Donut";
-import { HalloweenGame } from "../components/Experiences/HalloweenGame";
-import { WhackASoul } from "../components/Experiences/WhackASoul";
+// import { WhackASoul } from "../components/Experiences/WhackASoul";
 
 const { origin } = window.location
 
-export const isDevelopment = false
-// !!(
-//   origin === 'http://localhost:3000' ||
-//   origin === 'http://localhost:5173'
-// )
+export const isDevelopment = !!(
+  origin === 'http://localhost:3000' ||
+  origin === 'http://localhost:5173'
+)
 
 var isChromium = window.chrome;
 var winNav = window.navigator;
