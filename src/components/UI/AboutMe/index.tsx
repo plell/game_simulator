@@ -3,34 +3,14 @@ import { useEffect, useRef, useState } from "react";
 import { MdArrowForward } from "react-icons/md";
 import { useIsMobile, useIsOnScreen } from "../hooks";
 import useGame from "../../../Stores/useGame";
-import { FadeLeft } from "../FadeLeft/index.tsx";
 import { Cued } from "../Cued";
 
 export const AboutMe = () => {
   const ref = useRef(null);
 
   const setGame = useGame((s) => s.setGame);
-  const [iFrameLoaded, setIFrameLoaded] = useState(false);
 
   const isMobile = useIsMobile();
-
-  const cue1Ref = useRef(null);
-  const cue2Ref = useRef(null);
-  const [cueMounted1, setCueMounted1] = useState(false);
-  const [cueMounted2, setCueMounted2] = useState(false);
-
-  const cueIsOnScreen1 = useIsOnScreen(cue1Ref);
-  const cueIsOnScreen2 = useIsOnScreen(cue2Ref);
-
-  useEffect(() => {
-    if (!cueMounted2 && cueIsOnScreen2) {
-      setCueMounted2(true);
-    }
-  }, [cueIsOnScreen2]);
-
-  const startTimeout = () => {
-    setIFrameLoaded(true);
-  };
 
   return (
     <Overlay isMobile={isMobile} ref={ref}>

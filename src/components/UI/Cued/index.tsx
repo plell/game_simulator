@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import { useIsOnScreen } from "../hooks";
 import { FadeLeft } from "../FadeLeft";
+import { browserIsChrome } from "../../../Stores/constants";
 
 type Props = {
   children: JSX.Element;
@@ -13,7 +14,7 @@ export const Cued = (props: Props) => {
   const cueRef = useRef(null);
 
   const [init, setInit] = useState(false);
-  const [cueMounted, setCueMounted] = useState(false);
+  const [cueMounted, setCueMounted] = useState(!browserIsChrome);
 
   const cueIsOnScreen = useIsOnScreen(cueRef);
 

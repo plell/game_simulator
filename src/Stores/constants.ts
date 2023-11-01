@@ -20,6 +20,20 @@ export const isDevelopment = false
 //   origin === 'http://localhost:5173'
 // )
 
+var isChromium = window.chrome;
+var winNav = window.navigator;
+var vendorName = winNav.vendor;
+var isOpera = typeof window.opr !== "undefined";
+var isIEedge = winNav.userAgent.indexOf("Edg") > -1;
+var isIOSChrome = winNav.userAgent.match("CriOS");
+
+export const browserIsChrome = isIOSChrome || (isChromium !== null &&
+  typeof isChromium !== "undefined" &&
+  vendorName === "Google Inc." &&
+  isOpera === false &&
+  isIEedge === false)
+
+
 export const debounce = (fn: () => void, ms = 300) => {
   let timeoutId: ReturnType<typeof setTimeout>;
   return function (this: any, ...args: []) {
@@ -157,17 +171,17 @@ export const experienceProperties: ExperienceProps[] = [
     game: RaceGame,
     uiComponent:Interface
   },
-  {
-    cameraPosition: new Vector3(0,11,16),
-    cameraTarget: new Vector3(0, 3, 0),
-    cameraNear: 1,
-    cameraFar: 500,
-    gamePosition: new Vector3(0, 0, 0),
-    title: '',
-    description: '',
-    instructions: 'Click to play',
-    cameraControls: false,
-    backgroundColor:'#000000',
-    game: WhackASoul,
-  },
+  // {
+  //   cameraPosition: new Vector3(0,11,16),
+  //   cameraTarget: new Vector3(0, 3, 0),
+  //   cameraNear: 1,
+  //   cameraFar: 500,
+  //   gamePosition: new Vector3(0, 0, 0),
+  //   title: '',
+  //   description: '',
+  //   instructions: 'Click to play',
+  //   cameraControls: false,
+  //   backgroundColor:'#000000',
+  //   game: WhackASoul,
+  // },
 ]

@@ -44,12 +44,15 @@ function useScreenWidth() {
 export { useIsMobile, useScreenWidth, getScreenWidth, getIsMobile, screenWidthOffset }
 
 
+
 export const useIsOnScreen = (ref: RefObject<HTMLElement>) => {
 
   const [isIntersecting, setIntersecting] = useState(false)
 
   const observer = useMemo(() => new IntersectionObserver(
-    ([entry]) => setIntersecting(entry.isIntersecting)
+    ([entry]) => {
+      setIntersecting(entry.isIntersecting)
+    }
   ), [ref])
 
 
@@ -59,7 +62,7 @@ export const useIsOnScreen = (ref: RefObject<HTMLElement>) => {
     }
     
     return () => observer.disconnect()
-  }, [])
+  }, [ref.current])
 
   return isIntersecting
 }
