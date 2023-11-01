@@ -1,5 +1,5 @@
 import { useFrame } from "@react-three/fiber";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Group, MathUtils, Mesh, MeshStandardMaterial, Vector3 } from "three";
 import useGame from "../../../../../Stores/useGame";
 

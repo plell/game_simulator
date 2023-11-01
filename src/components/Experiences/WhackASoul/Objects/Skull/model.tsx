@@ -5,10 +5,10 @@ type Props = {
   id: number | string;
 };
 
-useGLTF.preload("./models/ghost.gltf");
+useGLTF.preload("./models/ghost_less.glb");
 
 export const Model = ({ id }: Props) => {
-  const model = useGLTF("./models/ghost.gltf");
+  const model = useGLTF("./models/ghost_less.glb");
 
   const cloneModel = useMemo(() => {
     model.scene.children.forEach((mesh) => {
