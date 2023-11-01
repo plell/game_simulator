@@ -71,7 +71,7 @@ const Pumpkin = () => {
   return (
     <group>
       <pointLight ref={lightRef} intensity={60} position-y={1.3} />
-      <primitive object={pumpkin.scene.clone()} scale={20} />
+      {/* <primitive object={pumpkin.scene.clone()} scale={20} /> */}
     </group>
   );
 };

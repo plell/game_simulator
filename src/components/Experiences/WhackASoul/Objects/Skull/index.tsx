@@ -3,9 +3,9 @@ import { useEffect, useRef, useState } from "react";
 import { Group, MathUtils, Mesh, MeshStandardMaterial, Vector3 } from "three";
 import useGame from "../../../../../Stores/useGame";
 
-import { Model } from "./model";
 import { useObjectsIntersect } from "../../../hooks/useObjectsIntersect";
 import gsap, { Power4, TweenLite } from "gsap";
+import { Model } from "./model";
 
 type Props = {
   position: Vector3;
@@ -24,6 +24,18 @@ export const movementRange = {
 
 const origin = new Vector3(1, 1, 1);
 const baseSpeed = 4;
+
+const eyesMaterial = new MeshStandardMaterial({
+  emissive: "yellow",
+  emissiveIntensity: 30,
+  opacity: 1,
+});
+
+const invisibleMaterial = new MeshStandardMaterial({
+  emissive: "yellow",
+  emissiveIntensity: 30,
+  opacity: 1,
+});
 
 export const Skull = ({ position, id }: Props) => {
   const skullGroupRef = useRef<Group | null>(null);
@@ -217,22 +229,20 @@ export const Skull = ({ position, id }: Props) => {
             rotation-y={Math.PI * -0.5}
             position={[-0.3, 1.54, 0]}
           >
-            <mesh scale={attacked ? 0.1 : 0.06} position={[0.2, 0, 0]}>
+            <mesh
+              scale={attacked ? 0.1 : 0.06}
+              position={[0.2, 0, 0]}
+              material={eyesMaterial}
+            >
               <circleGeometry />
-              <meshStandardMaterial
-                emissive={attacked ? "white" : "yellow"}
-                emissiveIntensity={30}
-                opacity={1}
-              />
             </mesh>
 
-            <mesh scale={attacked ? 0.1 : 0.06} position={[-0.2, 0, 0]}>
+            <mesh
+              scale={attacked ? 0.1 : 0.06}
+              position={[-0.2, 0, 0]}
+              material={eyesMaterial}
+            >
               <circleGeometry />
-              <meshStandardMaterial
-                emissive={attacked ? "white" : "yellow"}
-                emissiveIntensity={30}
-                opacity={1}
-              />
             </mesh>
           </group>
           <Model id={id} />
@@ -244,7 +254,6 @@ export const Skull = ({ position, id }: Props) => {
         position={[position.x, movementRange.max - 1, position.z]}
       >
         <boxGeometry />
-        <meshStandardMaterial transparent opacity={0} />
       </mesh>
     </group>
   );
