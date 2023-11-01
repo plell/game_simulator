@@ -15,12 +15,12 @@ import { Instance, Instances, useGLTF } from "@react-three/drei";
 const sprinkleMaterial = new MeshBasicMaterial();
 const sprinkleGeometry = new CylinderGeometry(0.2, 0.2, 1.3);
 
-useGLTF.preload("./models/donut.glb");
+useGLTF.preload("./models/donut_less.glb");
 
 export const Donut = () => {
   const [focused, setFocused] = useState(false);
 
-  const donut = useGLTF("./models/donut.glb");
+  const donut = useGLTF("./models/donut_less.glb");
 
   useEffect(() => {
     donut.scene.children.forEach((mesh) => {
@@ -50,14 +50,8 @@ export const Donut = () => {
   return (
     <>
       <directionalLight intensity={3} />
-
       <directionalLight intensity={2} position={[0, -300, 0]} />
       <ambientLight intensity={0.4} />
-
-      {/* <pointLight color={"#ffffff"} position={[0, 0, 0]} intensity={8} /> */}
-
-      <pointLight color={"#ffffff"} position={[0, 20, 0]} intensity={90} />
-
       <hemisphereLight args={["#ffffff", "yellow"]} intensity={2} />
 
       <Instances

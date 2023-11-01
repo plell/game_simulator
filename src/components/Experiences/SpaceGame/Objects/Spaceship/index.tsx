@@ -1,4 +1,4 @@
-import { MutableRefObject, useRef } from "react";
+import { MutableRefObject } from "react";
 import { Group, Vector3 } from "three";
 import { useGLTF } from "@react-three/drei";
 
@@ -13,10 +13,10 @@ type Props = {
 const tiltStrength = 0.1;
 const reuseableVec3 = new Vector3();
 
-useGLTF.preload("./models/spaceship.gltf");
+useGLTF.preload("./models/spaceship.glb");
 
 export const Spaceship = ({ position, playerRef, mouseRef }: Props) => {
-  const model = useGLTF("./models/spaceship.gltf");
+  const model = useGLTF("./models/spaceship.glb");
 
   useFrame(() => {
     if (mouseRef.current && playerRef?.current) {

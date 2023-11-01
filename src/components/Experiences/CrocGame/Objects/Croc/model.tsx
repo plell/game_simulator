@@ -5,10 +5,10 @@ type Props = {
   id: number | string;
 };
 
-useGLTF.preload("./models/croc_less.gltf");
+useGLTF.preload("./models/croc_lesser.glb");
 
 export const CrocModel = ({ id }: Props) => {
-  const crocModel = useGLTF("./models/croc_less.gltf");
+  const crocModel = useGLTF("./models/croc_lesser.glb");
 
   useEffect(() => {
     crocModel.scene.children.forEach((mesh) => {

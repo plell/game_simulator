@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Group, Vector3 } from "three";
 import { Cloud } from "@react-three/drei";
 import useGame from "../../../Stores/useGame";
@@ -16,8 +16,7 @@ const mouseVec3 = new Vector3();
 
 export const SpaceGame = () => {
   const ref = useRef<Group | null>(null);
-  const cloudRef = useRef<Group | null>(null);
-  const cloudRef2 = useRef<Group | null>(null);
+
   const playerRef = useRef<Group | null>(null);
   const mouseRef = useRef<Vector3>(mouseVec3);
   const [score, setScore] = useState(0);
@@ -25,26 +24,6 @@ export const SpaceGame = () => {
   const projectilesRef = useRef<Refs>({});
 
   const game = useGame((s) => s.game);
-
-  useFrame((_, delta) => {
-    const movement = 7 * delta;
-
-    if (cloudRef.current) {
-      cloudRef.current.position.y -= movement;
-
-      if (cloudRef.current.position.y < -25) {
-        cloudRef.current.position.y = 25;
-      }
-    }
-
-    if (cloudRef2.current) {
-      cloudRef2.current.position.y -= movement;
-
-      if (cloudRef2.current.position.y < -25) {
-        cloudRef2.current.position.y = 25;
-      }
-    }
-  });
 
   const enemies = useMemo(() => {
     const b: any = [];
@@ -63,40 +42,17 @@ export const SpaceGame = () => {
     <group ref={ref} position={experienceProperties[game]?.gamePosition}>
       <directionalLight position={[5, 5, 100]} intensity={3.4} />
 
+      <CloudSpace />
+
       <GameProgress
         position={new Vector3(0, 3, 10)}
         type='points'
         max={4}
         score={score}
-        setLevel={(l) => {
-          console.log("setLevel");
-        }}
         level={0}
         levelSuffix=''
         scale={0.1}
       />
-
-      <group>
-        <group ref={cloudRef} position-z={-10}>
-          <Cloud
-            opacity={0.5}
-            speed={0.4} // Rotation speed
-            width={20} // Width of the full cloud
-            depth={1.5} // Z-dir depth
-            segments={20} // Number of particles
-          />
-        </group>
-
-        <group ref={cloudRef2} position-y={25} position-z={10}>
-          <Cloud
-            opacity={0.7}
-            speed={0.7} // Rotation speed
-            width={30} // Width of the full cloud
-            depth={1} // Z-dir depth
-            segments={20} // Number of particles
-          />
-        </group>
-      </group>
 
       <group position-y={-6}>
         <Spaceship
@@ -132,6 +88,54 @@ export const SpaceGame = () => {
         <planeGeometry args={[145, 80]} />
         <meshStandardMaterial color={"skyblue"} />
       </mesh>
+    </group>
+  );
+};
+
+const CloudSpace = () => {
+  const cloudRef = useRef<Group | null>(null);
+  const cloudRef2 = useRef<Group | null>(null);
+
+  useFrame((_, delta) => {
+    const movement = 7 * delta;
+
+    if (cloudRef.current) {
+      cloudRef.current.position.y -= movement;
+
+      if (cloudRef.current.position.y < -25) {
+        cloudRef.current.position.y = 25;
+      }
+    }
+
+    if (cloudRef2.current) {
+      cloudRef2.current.position.y -= movement;
+
+      if (cloudRef2.current.position.y < -25) {
+        cloudRef2.current.position.y = 25;
+      }
+    }
+  });
+  return (
+    <group>
+      <group ref={cloudRef} position-z={-10}>
+        <Cloud
+          opacity={0.5}
+          speed={0.4} // Rotation speed
+          width={20} // Width of the full cloud
+          depth={1.5} // Z-dir depth
+          segments={20} // Number of particles
+        />
+      </group>
+
+      <group ref={cloudRef2} position-y={25} position-z={10}>
+        <Cloud
+          opacity={0.7}
+          speed={0.7} // Rotation speed
+          width={30} // Width of the full cloud
+          depth={1} // Z-dir depth
+          segments={20} // Number of particles
+        />
+      </group>
     </group>
   );
 };

@@ -2,9 +2,9 @@ import { MdArrowCircleLeft, MdArrowCircleRight } from "react-icons/md";
 import styled from "styled-components";
 import useGame from "../../../Stores/useGame";
 import { experienceProperties } from "../../../Stores/constants";
-import { MutableRefObject, useEffect, useMemo, useRef } from "react";
+import { MutableRefObject, useMemo, useRef } from "react";
 import gsap, { Power4 } from "gsap";
-import { Bounce } from "gsap";
+
 import { AudioPlayer } from "../AudioPlayer";
 import { AboutMe } from "../AboutMe";
 import { useIsMobile } from "../hooks";
@@ -12,35 +12,11 @@ import { useIsMobile } from "../hooks";
 export const Browser = () => {
   const game = useGame((s) => s.game);
   const setGame = useGame((s) => s.setGame);
-  const setLockClicked = useGame((s) => s.setLockClicked);
-  const lockClicked = useGame((s) => s.lockClicked);
-  const locked = useGame((s) => s.locked);
 
   const forwardButton = useRef(null);
   const backButton = useRef(null);
 
   const isMobile = useIsMobile();
-
-  const nopeAnimation = () => {
-    if (forwardButton.current) {
-      setLockClicked(!lockClicked);
-      gsap.from(forwardButton.current, {
-        duration: 0.5,
-        keyframes: {
-          ease: Bounce.easeOut,
-          "0%": { transform: "translateX(0px)" },
-          "50%": { transform: "translateX(10px)" },
-          "100%": { transform: "translateX(0px)" },
-        },
-      });
-    }
-  };
-
-  useEffect(() => {
-    if (!locked && forwardButton.current) {
-      spin(forwardButton);
-    }
-  }, [locked]);
 
   const spin = (ref: MutableRefObject<HTMLElement | null>) => {
     if (ref.current) {
@@ -131,7 +107,7 @@ export const Browser = () => {
             spin(forwardButton);
           }}
         >
-          {locked ? null : <MdArrowCircleRight />}
+          <MdArrowCircleRight />
         </Button>
       </Overlay>
     </>
