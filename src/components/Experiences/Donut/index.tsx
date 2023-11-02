@@ -7,7 +7,6 @@ import {
   MeshBasicMaterial,
 } from "three";
 
-import { useCursorHover } from "../hooks/useCursorHover";
 import { useFrame } from "@react-three/fiber";
 import { normalScale, data, rainbowColors } from "./constants";
 import { Instance, Instances, useGLTF } from "@react-three/drei";
@@ -18,22 +17,11 @@ const sprinkleGeometry = new CylinderGeometry(0.2, 0.2, 1.3);
 useGLTF.preload("./models/donut_less.glb");
 
 export const Donut = () => {
-  const [focused, setFocused] = useState(false);
-
   const donut = useGLTF("./models/donut_less.glb");
-
-  useEffect(() => {
-    donut.scene.children.forEach((mesh) => {
-      mesh.castShadow = true;
-      mesh.receiveShadow = true;
-    });
-  }, []);
 
   const ref = useRef<Group | null>(null);
   const sprinkleRef = useRef<Group | null>(null);
   const donutRef = useRef<Group | null>(null);
-
-  useCursorHover(focused);
 
   useFrame((_, delta) => {
     if (ref?.current) {
@@ -53,8 +41,7 @@ export const Donut = () => {
       <hemisphereLight args={["#ffffff", "yellow"]} intensity={2} />
 
       <Instances
-        range={2080}
-        castShadow
+        range={500}
         material={sprinkleMaterial}
         geometry={sprinkleGeometry}
       >
@@ -77,14 +64,10 @@ export const Donut = () => {
   );
 };
 
+const white = new Color("#ffffff");
+
 function Sprinkle({ random, color = new Color(), ...props }) {
   const ref = useRef<typeof Instance | null>(null);
-  const [hovered, setHover] = useState(false);
-
-  const myColor = useMemo(
-    () => rainbowColors[Math.floor(Math.random() * rainbowColors.length)],
-    []
-  );
 
   useFrame((state) => {
     const t = state.clock.getElapsedTime() + random * 10000;
@@ -95,23 +78,11 @@ function Sprinkle({ random, color = new Color(), ...props }) {
         Math.cos(t / 1.5) / 2
       );
       ref.current.position.y = Math.sin(t / 1.5) / 2;
-      ref.current.scale.x =
-        ref.current.scale.y =
-        ref.current.scale.z =
-          MathUtils.lerp(ref.current.scale.z, hovered ? 1.4 : 1, 0.1);
-      ref.current.color.lerp(
-        color.set(hovered ? myColor : "white"),
-        hovered ? 1 : 0.1
-      );
     }
   });
   return (
     <group {...props}>
-      <Instance
-        ref={ref}
-        onPointerOver={(e) => (e.stopPropagation(), setHover(true))}
-        onPointerOut={(e) => setHover(false)}
-      />
+      <Instance ref={ref} color={white} />
     </group>
   );
 }

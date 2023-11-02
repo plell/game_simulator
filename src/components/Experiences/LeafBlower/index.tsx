@@ -34,7 +34,6 @@ import { useControls } from "leva";
 import { useObjectIntersectsMany } from "../hooks/useObjectsIntersect";
 import { GameProgress } from "../common/GameProgress";
 import { LevelProps, environmentParamsByLevel } from "./constants";
-import { Campfire } from "./Campfire";
 
 const mouseVec3 = new Vector3();
 const pointLightVec3 = new Vector3();
@@ -115,7 +114,7 @@ export const LeafBlower = () => {
     color: "#ffad69",
   });
 
-  const leafCount = useMemo(() => 40, []);
+  const leafCount = useMemo(() => 20, []);
 
   const leafInstances = useMemo(() => {
     const instances = [];
@@ -254,7 +253,15 @@ export const LeafBlower = () => {
           levelSuffix=':00 PM'
         />
 
-        {level >= 11 && <Campfire />}
+        <group position={[0, 30, 90]}>
+          <pointLight
+            visible={level >= 11}
+            position={[0, 0, 0]}
+            castShadow
+            intensity={5000}
+            color={"orange"}
+          />
+        </group>
 
         <InstancedRigidBodies
           gravityScale={3}
