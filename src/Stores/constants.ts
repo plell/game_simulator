@@ -73,6 +73,7 @@ type ExperienceProps = {
 }
 
 export const experienceProperties: ExperienceProps[] = [
+  
   {
     cameraPosition: new Vector3(0, 0, 29),
     cameraTarget: new Vector3(0, 0, 0),
@@ -84,7 +85,6 @@ export const experienceProperties: ExperienceProps[] = [
     cameraControls: true,
     game: Earth,
     showAboutMe: true,
-
   },
    {
     cameraPosition: new Vector3(0,0,40),
@@ -167,19 +167,6 @@ export const experienceProperties: ExperienceProps[] = [
     game: RaceGame,
     uiComponent:Interface
   },
-  // {
-  //   cameraPosition: new Vector3(0,11,16),
-  //   cameraTarget: new Vector3(0, 3, 0),
-  //   cameraNear: 1,
-  //   cameraFar: 500,
-  //   gamePosition: new Vector3(0, 0, 0),
-  //   title: '',
-  //   description: '',
-  //   instructions: 'Click to play',
-  //   cameraControls: false,
-  //   backgroundColor:'#000000',
-  //   game: WhackASoul,
-  // },
   {
     cameraPosition: new Vector3(0, 0, 100),
     cameraTarget: new Vector3(0, 0, 0),
@@ -190,9 +177,11 @@ export const experienceProperties: ExperienceProps[] = [
     description: '',
     // instructions: 'Click to play',
     cameraControls: false,
-      backgroundColor:'#000000',
-    game: Psychedelic
+    backgroundColor:'#000000',
+    game: Psychedelic,
+    // showAboutMe: true,
   },
+  
 
  
 ]

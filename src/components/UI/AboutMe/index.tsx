@@ -1,9 +1,11 @@
 import styled from "styled-components";
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 import { MdArrowForward } from "react-icons/md";
-import { useIsMobile, useIsOnScreen } from "../hooks";
+import { useIsMobile } from "../hooks";
 import useGame from "../../../Stores/useGame";
 import { Cued } from "../Cued";
+
+const speed = 1;
 
 export const AboutMe = () => {
   const ref = useRef(null);
@@ -34,45 +36,41 @@ export const AboutMe = () => {
       <Spacer />
 
       <FlexRow>
-        <FlexRowItem>
-          <Title>Clean and Flexible UI</Title>
-        </FlexRowItem>
-        <FlexRowItem>
-          <Description isMobile={isMobile}>
-            <span>
-              <Link href='https://community.sphinx.chat/p' target='_blank'>
-                Sphinx Community
-              </Link>
-            </span>
-            &nbsp;is a Web3 sidekick social media platform that I built from the
-            ground up using React, Golang and PostgreSQL. Here you can meet
-            Sphinx Chat users, join Sphinx tribes, earn badges, and claim coding
-            bounties.
-          </Description>
-        </FlexRowItem>
+        <Cued>
+          <FlexRowItem>
+            <Title>Clean and Flexible UI</Title>
+          </FlexRowItem>
+        </Cued>
+        <Cued speed={speed}>
+          <FlexRowItem>
+            <Description isMobile={isMobile}>
+              <span>
+                <Link href='https://community.sphinx.chat/p' target='_blank'>
+                  Sphinx Community
+                </Link>
+              </span>
+              &nbsp;is a Web3 sidekick social media platform that I built from
+              the ground up using React, Golang and PostgreSQL. Here you can
+              meet Sphinx Chat users, join Sphinx tribes, earn badges, and claim
+              coding bounties.
+            </Description>
+          </FlexRowItem>
+        </Cued>
 
-        <MediaItem>
-          <Image src='/images/sphinxCommunity.jpg' />
-          {/* <iframe
-            onLoad={() => {
-              startTimeout();
-            }}
-            style={{
-              border: "none",
-              // display: iFrameLoaded ? "block" : "none",
-            }}
-            src={"https://community.sphinx.chat/p"}
-            height={700}
-            width={"100%"}
-          /> */}
-        </MediaItem>
+        <Cued speed={speed}>
+          <MediaItem>
+            <Image src='/images/sphinxCommunity.jpg' />
+          </MediaItem>
+        </Cued>
       </FlexRow>
 
-      <Cued>
-        <FlexRow>
+      <FlexRow>
+        <Cued>
           <FlexRowItem>
             <Title>Creative Designs</Title>
           </FlexRowItem>
+        </Cued>
+        <Cued speed={speed}>
           <FlexRowItem>
             <Description isMobile={isMobile}>
               Second Brain is an application that collects data for an open
@@ -82,17 +80,21 @@ export const AboutMe = () => {
               graph to life.
             </Description>
           </FlexRowItem>
+        </Cued>
+        <Cued speed={speed}>
           <MediaItem>
             <Image src='/images/secondbrain2.jpg' />
           </MediaItem>
-        </FlexRow>
-      </Cued>
+        </Cued>
+      </FlexRow>
 
-      <Cued>
-        <FlexRow style={{ marginBottom: 200 }}>
+      <FlexRow style={{ marginBottom: 200 }}>
+        <Cued>
           <FlexRowItem>
             <Title>Immersive Experiences</Title>
           </FlexRowItem>
+        </Cued>
+        <Cued speed={speed}>
           <FlexRowItem>
             <Description isMobile={isMobile}>
               <span>
@@ -102,8 +104,8 @@ export const AboutMe = () => {
               ThreeJS.
             </Description>
           </FlexRowItem>
-        </FlexRow>
-      </Cued>
+        </Cued>
+      </FlexRow>
     </Overlay>
   );
 };
@@ -169,7 +171,6 @@ const Description = styled.div<DescriptionProps>`
   width: 100%;
   color: #f1f1f1;
   padding: 20px;
-  background: #00000022;
 `;
 
 type OverlayProps = {

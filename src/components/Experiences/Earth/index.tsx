@@ -22,8 +22,6 @@ export const Earth = () => {
 
   return (
     <group position={experienceProperties[game]?.gamePosition}>
-      {/* <directionalLight ref={lightRef} intensity={3} position={[0, 0, 90]} /> */}
-
       {init && <Planet />}
     </group>
   );
@@ -35,28 +33,6 @@ const Planet = () => {
   // This reference will give us direct access to the mesh
   const ref = useRef<Mesh | null>(null);
   const [hover, setHover] = useState(false);
-
-  // useEffect(() => {
-  //   window.addEventListener("mousemove", handleMoveMove);
-
-  //   return () => {
-  //     window.removeEventListener("mousemove", handleMoveMove);
-  //   };
-  // });
-
-  // const cursor = useRef({ x: 0, y: 0 });
-
-  // const handleMoveMove = (e) => {
-  //   const { target, pageX, pageY } = e;
-  //   const { offsetHeight, offsetWidth } = target;
-
-  //   const x = pageX / offsetWidth;
-  //   const y = pageY / offsetHeight;
-
-  //   cursor.current = { x, y };
-
-  //   console.log("e", x, y);
-  // };
 
   const uniforms = useMemo(
     () => ({
@@ -94,7 +70,7 @@ const Planet = () => {
 
       ref.current.rotation.y += delta * 0.4;
 
-      const newScale = MathUtils.lerp(ref.current.scale.x, scale, 0.006);
+      const newScale = MathUtils.lerp(ref.current.scale.x, scale, 0.002);
 
       ref.current.scale.set(newScale, newScale, newScale);
     }

@@ -1,11 +1,10 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import styled from "styled-components";
 
 const sleep = (ms: any) =>
   new Promise((resolve: any) => setTimeout(resolve, ms));
 
 const Fader = styled.div`
-  transition: all 1s;
   display: inherit;
   width: 100%;
 `;
@@ -37,6 +36,7 @@ export const FadeLeft = (props: FadeLeftProps) => {
     noFadeOnInit,
     direction,
     withOverlay,
+    speed,
     overlayClick,
     noFade,
   } = props;
@@ -84,22 +84,23 @@ export const FadeLeft = (props: FadeLeftProps) => {
     })();
   }, [dismountCallback, doAnimation, isMounted, props.speed]);
 
-  if (!alwaysRender && !shouldRender) {
-    return null;
-  }
-
   const transformValue =
     direction === "up"
       ? `translateY(${translation}px)`
       : `translateX(${translation}px)`;
+
+  const isInvisible = useMemo(() => {
+    return !alwaysRender && !shouldRender;
+  }, [alwaysRender, shouldRender]);
 
   return (
     <Fader
       style={{
         height: "inherit",
         ...style,
+        transition: `all ${speed || 1}s`,
         transform: transformValue,
-        opacity: !noFade ? opacity : 1,
+        opacity: isInvisible ? 0 : !noFade ? opacity : 1,
       }}
     >
       {children}

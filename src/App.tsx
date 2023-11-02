@@ -22,7 +22,15 @@ import { Perf } from "r3f-perf";
 
 import styled from "styled-components";
 
-import { ACESFilmicToneMapping, Color, PCFSoftShadowMap } from "three";
+import {
+  ACESFilmicToneMapping,
+  AmbientLight,
+  Color,
+  DirectionalLight,
+  HemisphereLight,
+  PCFSoftShadowMap,
+  PointLight,
+} from "three";
 
 const color = new Color("#000000");
 

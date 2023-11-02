@@ -6,14 +6,13 @@ import { browserIsChrome } from "../../../Stores/constants";
 
 type Props = {
   children: JSX.Element;
+  speed?: number;
 };
 
-export const Cued = (props: Props) => {
-  const { children } = props;
-
+export const Cued = ({ children, speed }: Props) => {
   const cueRef = useRef(null);
 
-  const [init, setInit] = useState(false);
+  const [init, setInit] = useState(true);
   const [cueMounted, setCueMounted] = useState(!browserIsChrome);
 
   const cueIsOnScreen = useIsOnScreen(cueRef);
@@ -36,7 +35,9 @@ export const Cued = (props: Props) => {
   return (
     <>
       <Cue ref={cueRef} isMounted={!cueMounted} />
-      <FadeLeft isMounted={cueMounted}>{children}</FadeLeft>
+      <FadeLeft speed={speed} isMounted={cueMounted}>
+        {children}
+      </FadeLeft>
     </>
   );
 };
@@ -45,8 +46,4 @@ type CueProps = {
   isMounted: boolean;
 };
 
-const Cue = styled.div<CueProps>`
-  display: ${(p) => (p.isMounted ? "block" : "none")};
-  margin-top: 100px;
-  min-height: 1000px;
-`;
+const Cue = styled.div<CueProps>``;
