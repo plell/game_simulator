@@ -6,6 +6,7 @@ import { experienceProperties } from "../../../Stores/constants";
 
 import { vertexShader } from "./shaders/vertexShader";
 import { fragmentShader } from "./shaders/fragmentShader";
+import { Select } from "@react-three/postprocessing";
 
 export const Psychedelic = () => {
   const game = useGame((s) => s.game);
@@ -19,7 +20,7 @@ export const Psychedelic = () => {
 
 const size = 100.0;
 
-const triangleSize = 13.8;
+const triangleSize = 12.8;
 const triangleYAdjust = 1.7;
 const Content = () => {
   const ref = useRef<Mesh | null>(null);
@@ -88,34 +89,35 @@ const Content = () => {
           );
         })}
 
-        <mesh
-          visible={!!hovered}
-          position-x={hovered?.x}
-          position-y={hovered?.y}
-        >
-          <circleGeometry args={[triangleSize, 0, hovered?.rotation]} />
-          <meshStandardMaterial
-            emissive={"mediumpurple"}
-            emissiveIntensity={4.48}
-          />
-        </mesh>
+        <Select enabled={!!hovered}>
+          <mesh
+            visible={!!hovered}
+            position-x={hovered?.x}
+            position-y={hovered?.y}
+          >
+            <circleGeometry args={[triangleSize, 0, hovered?.rotation]} />
+            <meshBasicMaterial transparent opacity={0} />
+          </mesh>
+        </Select>
       </group>
 
       <group position-z={10}></group>
 
-      <mesh
-        rotation-x={Math.PI * 0.5}
-        ref={ref}
-        onPointerOut={() => setHovered(null)}
-      >
-        <coneGeometry args={[30, 30, 6, undefined, true]} />
-        <shaderMaterial
-          fragmentShader={fragmentShader}
-          vertexShader={vertexShader}
-          uniforms={uniforms}
-          wireframe={false}
-        />
-      </mesh>
+      <Select enabled={!hovered}>
+        <mesh
+          rotation-x={Math.PI * 0.5}
+          ref={ref}
+          onPointerOut={() => setHovered(null)}
+        >
+          <coneGeometry args={[30, 30, 6, undefined, true]} />
+          <shaderMaterial
+            fragmentShader={fragmentShader}
+            vertexShader={vertexShader}
+            uniforms={uniforms}
+            wireframe={false}
+          />
+        </mesh>
+      </Select>
 
       <mesh rotation-z={Math.PI * -0.5} position-z={-30}>
         <planeGeometry args={[200, 300]} />

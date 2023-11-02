@@ -181,7 +181,7 @@ export const experienceProperties: ExperienceProps[] = [
   //   game: WhackASoul,
   // },
   {
-    cameraPosition: new Vector3(0, 0, 170),
+    cameraPosition: new Vector3(0, 0, 100),
     cameraTarget: new Vector3(0, 0, 0),
     cameraNear: 10,
     cameraFar: 2500,
