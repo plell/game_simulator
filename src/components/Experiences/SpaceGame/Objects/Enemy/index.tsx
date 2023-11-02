@@ -8,7 +8,15 @@ import {
   useState,
 } from "react";
 
-import { Color, Group, MeshStandardMaterial, Vector3 } from "three";
+import {
+  BoxGeometry,
+  Color,
+  Group,
+  MathUtils,
+  MeshBasicMaterial,
+  MeshStandardMaterial,
+  Vector3,
+} from "three";
 import { useFrame } from "@react-three/fiber";
 import { Refs } from "../..";
 import {
@@ -32,10 +40,14 @@ type Props = {
   playerRef: MutableRefObject<Group | null>;
 };
 
+const baseColor = new Color("#aaaaaa");
+const boxGeo = new BoxGeometry(2, 1, 1);
+
 export const Enemy = ({ projectilesRef, playerRef }: Props) => {
   const ref = useRef<Group | null>(null);
-  const materialRef = useRef<MeshStandardMaterial | null>(null);
-  const [color, setColor] = useState(new Color("red"));
+  const materialRef = useRef<MeshBasicMaterial | null>(null);
+  const [color, setColor] = useState(baseColor.clone());
+  const [scale, setScale] = useState(1);
   const [animating, setAnimating] = useState(false);
 
   const [spawnPosition, setSpawnPosition] = useState({
@@ -48,11 +60,13 @@ export const Enemy = ({ projectilesRef, playerRef }: Props) => {
     if (ref?.current) {
       ref.current.position.y = 30;
       ref.current.rotation.z = 0;
+
       if (materialRef.current) {
         materialRef.current.opacity = 1;
       }
       setSpawnPosition({ x: getRandomX(), y: getRandomY() });
-      setColor(color.set("red"));
+      setColor(color.set(baseColor));
+      setScale(1);
     }
   };
 
@@ -60,15 +74,19 @@ export const Enemy = ({ projectilesRef, playerRef }: Props) => {
 
   useEffect(() => {
     if (objectsIntersect) {
-      setColor(color.set("black"));
+      setColor(color.set("red"));
+      setScale(0);
     }
   }, [objectsIntersect]);
 
   const intersect = useObjectIntersectsManyB(ref, projectilesRef);
 
-  useFrame(({ clock }, delta) => {
+  useFrame((_, delta) => {
     if (ref?.current) {
       ref.current.position.y -= delta * 4;
+
+      const scl = MathUtils.lerp(ref.current.scale.x, scale, 0.2);
+      ref.current.scale.set(scl, scl, scl);
 
       if (intersect.current.length > 0) {
         const id = intersect.current[0];
@@ -126,9 +144,8 @@ export const Enemy = ({ projectilesRef, playerRef }: Props) => {
 
   return (
     <group ref={ref} position={[spawnPosition.x, spawnPosition.y, 0]}>
-      <mesh>
-        <boxGeometry args={[2, 1, 1]} />
-        <meshStandardMaterial ref={materialRef} transparent />
+      <mesh geometry={boxGeo}>
+        <meshBasicMaterial ref={materialRef} transparent />
       </mesh>
     </group>
   );

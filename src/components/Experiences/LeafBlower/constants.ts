@@ -49,7 +49,7 @@ export const environmentParamsByLevel = {
             position:[0.7, 0.1504999999999995, -8.760353553682876e-17],
         },
         ambientLight: {
-            intensity: 0.39
+            intensity: 0.99
         },
         directionalLight: {
             intensity: 0.39,

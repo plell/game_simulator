@@ -44,43 +44,6 @@ const fireGeometry = () => {
 };
 
 export const Campfire = () => {
-  const ref = useRef<Mesh | null>(null);
-
-  const [hover, setHover] = useState(false);
-
-  const uniforms = useMemo(
-    () => ({
-      uTime: {
-        value: 0.0,
-      },
-      uColor1: {
-        value: [255, 0, 0],
-      },
-      uColor2: {
-        value: [100, 100, 100],
-      },
-    }),
-    []
-  );
-
-  useFrame(({ clock }, delta) => {
-    if (ref?.current) {
-      ref.current.material.uniforms.uTime.value = 0.2 * clock.getElapsedTime();
-
-      //   ref.current.material.uniforms.u_intensity.value = MathUtils.lerp(
-      //     ref.current.material.uniforms.u_intensity.value,
-      //     hover ? 0.95 : 0.25,
-      //     0.3
-      //   );
-
-      //   ref.current.material.uniforms.u_color.value = MathUtils.lerp(
-      //     ref.current.material.uniforms.u_color.value,
-      //     hover ? 1.5 : 1,
-      //     0.3
-      //   );
-    }
-  });
-
   return (
     <group position={[0, 30, 90]}>
       <pointLight
@@ -89,20 +52,6 @@ export const Campfire = () => {
         intensity={5000}
         color={"orange"}
       />
-      <mesh
-        ref={ref}
-        // geometry={fireGeometry()}
-        scale={4}
-        onPointerOver={() => setHover(true)}
-        onPointerOut={() => setHover(false)}
-      >
-        <shaderMaterial
-          fragmentShader={fireFragmentShader}
-          vertexShader={fireVertexShader}
-          uniforms={uniforms}
-          wireframe={false}
-        />
-      </mesh>
     </group>
   );
 };

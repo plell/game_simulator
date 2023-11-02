@@ -12,14 +12,12 @@ import { experienceProperties } from "../../../Stores/constants";
 const Lights = () => {
   return (
     <group position={[0, 5, 0]}>
-      <ambientLight intensity={0.04} />
       <pointLight
-        color={"yellow"}
-        intensity={200}
+        color={"pink"}
+        intensity={280}
         position={[-9, 4, 4]}
         castShadow
         shadow-bias={-0.001}
-        shadow-mapSize={[512, 512]}
         shadow-camera-near={1}
         shadow-camera-far={100}
         shadow-camera-top={100}
@@ -27,7 +25,6 @@ const Lights = () => {
         shadow-camera-bottom={-100}
         shadow-camera-left={-100}
       />
-      <hemisphereLight args={["red", "pink"]} intensity={0.4} />
     </group>
   );
 };

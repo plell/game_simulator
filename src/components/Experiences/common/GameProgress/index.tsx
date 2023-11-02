@@ -1,5 +1,12 @@
 import { MutableRefObject, useEffect, useMemo, useRef, useState } from "react";
-import { Group, Mesh, Vector3 } from "three";
+import {
+  CircleGeometry,
+  Group,
+  Mesh,
+  MeshStandardMaterial,
+  TorusGeometry,
+  Vector3,
+} from "three";
 import useGame from "../../../../Stores/useGame";
 import { useFrame, useThree } from "@react-three/fiber";
 import gsap, { Bounce, Power4 } from "gsap";
@@ -22,6 +29,27 @@ type Props = {
   scale?: number;
   intensity?: number;
 };
+
+const circleGeo = new CircleGeometry(2, 40);
+const circleMaterial = new MeshStandardMaterial({
+  color: "white",
+  roughness: 0,
+  emissive: "white",
+  emissiveIntensity: 2,
+});
+
+const torusGeo = new TorusGeometry(5, 0.2);
+const torusMaterial = new MeshStandardMaterial({
+  color: "white",
+  roughness: 0,
+  emissive: "white",
+  emissiveIntensity: 2,
+});
+const torusBasicMaterial = new MeshStandardMaterial({
+  color: "white",
+  transparent: true,
+  opacity: 0.4,
+});
 
 export const GameProgress = ({
   type,
@@ -153,34 +181,13 @@ export const GameProgress = ({
 
             return (
               <group key={i} position-x={pointPositions[i] * 10}>
-                <mesh>
-                  <torusGeometry args={[5, 0.2]} />
-                  {scoreComplete ? (
-                    <meshStandardMaterial
-                      color={"#ffffff"}
-                      roughness={0}
-                      emissive={"white"}
-                      emissiveIntensity={2}
-                    />
-                  ) : (
-                    <meshBasicMaterial
-                      color={"#ffffff"}
-                      transparent
-                      opacity={0.4}
-                    />
-                  )}
-                </mesh>
+                <mesh
+                  geometry={torusGeo}
+                  material={scoreComplete ? torusMaterial : torusBasicMaterial}
+                />
 
                 {fill && (
-                  <mesh>
-                    <circleGeometry args={[2, 40]} />
-                    <meshStandardMaterial
-                      color={"white"}
-                      roughness={0}
-                      emissive={"gold"}
-                      emissiveIntensity={3}
-                    />
-                  </mesh>
+                  <mesh geometry={circleGeo} material={circleMaterial} />
                 )}
               </group>
             );

@@ -50,8 +50,6 @@ export const Donut = () => {
   return (
     <>
       <directionalLight intensity={3} />
-      <directionalLight intensity={2} position={[0, -300, 0]} />
-      <ambientLight intensity={0.4} />
       <hemisphereLight args={["#ffffff", "yellow"]} intensity={2} />
 
       <Instances

@@ -1,8 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Group, MeshBasicMaterial, Vector3 } from "three";
 import { Cloud, Clouds } from "@react-three/drei";
-import useGame from "../../../Stores/useGame";
-import { experienceProperties } from "../../../Stores/constants";
 
 import { Spaceship } from "./Objects/Spaceship";
 import { Enemy } from "./Objects/Enemy";
@@ -23,8 +21,6 @@ export const SpaceGame = () => {
 
   const projectilesRef = useRef<Refs>({});
 
-  // const game = useGame((s) => s.game);
-
   const enemies = useMemo(() => {
     const b: any = [];
 
@@ -40,7 +36,7 @@ export const SpaceGame = () => {
 
   return (
     <group ref={ref} position={[0, 0, 0]}>
-      <directionalLight position={[5, 5, 100]} intensity={3.4} />
+      <directionalLight position={[5, 5, 100]} intensity={1} />
 
       <CloudSpace />
 
@@ -86,7 +82,7 @@ export const SpaceGame = () => {
 
       <mesh receiveShadow position-z={-30}>
         <planeGeometry args={[145, 80]} />
-        <meshStandardMaterial color={"skyblue"} />
+        <meshStandardMaterial color={"#555555"} />
       </mesh>
     </group>
   );
@@ -129,6 +125,7 @@ const CloudSpace = () => {
           speed={0.4} // Rotation speed
           bounds={[30, 30, 2]}
           seed={22}
+          color={"#aaaaaa"}
         />
 
         <Cloud
@@ -139,6 +136,7 @@ const CloudSpace = () => {
           opacity={0.7}
           speed={0.7} // Rotation speed
           seed={1}
+          color={"#888888"}
         />
       </Clouds>
     </group>

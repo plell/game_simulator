@@ -101,9 +101,6 @@ export const LeafBlower = () => {
           pointLightVec3.set(mouseRef.current.x, 30, mouseRef.current.z),
           0.1
         );
-        if (level > 11) {
-          pointLightRef.current.intensity = 10;
-        }
       }
     }
   });
@@ -221,9 +218,18 @@ export const LeafBlower = () => {
       )}
       <group ref={ref} position={experienceProperties[game]?.gamePosition}>
         <directionalLight
+          castShadow
           intensity={atmosphere?.directionalLight?.intensity || 0.8}
         />
         <ambientLight intensity={atmosphere?.ambientLight?.intensity || 0.4} />
+
+        <pointLight
+          ref={pointLightRef}
+          castShadow
+          intensity={2000}
+          color={mouseDown ? "white" : "gold"}
+          {...atmosphere?.pointLight}
+        />
 
         <Sky
           distance={450000}
@@ -248,15 +254,7 @@ export const LeafBlower = () => {
           levelSuffix=':00 PM'
         />
 
-        {level === 11 && <Campfire />}
-
-        <pointLight
-          ref={pointLightRef}
-          castShadow
-          intensity={2000}
-          color={mouseDown ? "white" : "gold"}
-          {...atmosphere?.pointLight}
-        />
+        {level >= 11 && <Campfire />}
 
         <InstancedRigidBodies
           gravityScale={3}
@@ -281,22 +279,22 @@ export const LeafBlower = () => {
 
         <group ref={cursorRef}>
           <mesh rotation-x={Math.PI * -0.5}>
-            <torusGeometry args={[radius, 0.5]} />
+            <torusGeometry args={[radius, 0.4]} />
             <meshBasicMaterial
               color={mouseDown ? "white" : "gold"}
               transparent
-              opacity={level > 11 ? 0.1 : 0.3}
+              opacity={0.8}
             />
           </mesh>
-          <mesh>
+          {/* <mesh>
             <sphereGeometry args={[radius, 20]} />
-            <meshStandardMaterial
+            <meshBasicMaterial
               wireframe
               color={mouseDown ? "white" : "gold"}
               transparent
-              opacity={0.2}
+              opacity={0.8}
             />
-          </mesh>
+          </mesh> */}
         </group>
 
         <mesh

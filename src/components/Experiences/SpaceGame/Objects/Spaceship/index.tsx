@@ -13,10 +13,10 @@ type Props = {
 const tiltStrength = 0.1;
 const reuseableVec3 = new Vector3();
 
-useGLTF.preload("./models/spaceship.glb");
+useGLTF.preload("./models/spaceship_bw.glb");
 
 export const Spaceship = ({ position, playerRef, mouseRef }: Props) => {
-  const model = useGLTF("./models/spaceship.glb");
+  const model = useGLTF("./models/spaceship_bw.glb");
 
   useFrame(() => {
     if (mouseRef.current && playerRef?.current) {

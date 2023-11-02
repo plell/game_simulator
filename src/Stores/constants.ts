@@ -181,7 +181,4 @@ export const experienceProperties: ExperienceProps[] = [
     game: Psychedelic,
     // showAboutMe: true,
   },
-  
-
- 
 ]
