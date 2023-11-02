@@ -1,4 +1,4 @@
-import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import { Canvas, useThree } from "@react-three/fiber";
 
 import { Physics } from "@react-three/rapier";
 
@@ -22,7 +22,7 @@ import { Perf } from "r3f-perf";
 
 import styled from "styled-components";
 
-import { ACESFilmicToneMapping, Color, PCFSoftShadowMap, Vector3 } from "three";
+import { ACESFilmicToneMapping, Color, PCFSoftShadowMap } from "three";
 
 const color = new Color("#000000");
 

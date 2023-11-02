@@ -1,5 +1,5 @@
 import * as THREE from 'three'
-import { RigidBody, CuboidCollider, RapierRigidBody } from '@react-three/rapier'
+import { RigidBody, CuboidCollider } from '@react-three/rapier'
 import { useState, useRef, useMemo } from 'react'
 import { useFrame } from '@react-three/fiber'
 import { useGLTF } from '@react-three/drei'
@@ -58,11 +58,6 @@ function BlockEnd({ position = [0, 0, 0] }) {
 
     const hamburger = useGLTF('./models/hamburger.glb')
 
-    hamburger.scene.children.forEach(mesh => {
-        mesh.castShadow = true
-    })
-
-
     return <group position={position} >
         {/* floor */}
         <mesh
@@ -82,8 +77,10 @@ function BlockSpinner({ position = [0, 0, 0] }) {
     useFrame((state) => {
         const time = state.clock.getElapsedTime()
         const rotation = new THREE.Quaternion()
-        rotation.setFromEuler(new THREE.Euler(0, time*speed, 0))
-        obstacle.current.setNextKinematicRotation(rotation)
+        rotation.setFromEuler(new THREE.Euler(0, time * speed, 0))
+        if (obstacle?.current) {
+            obstacle.current.setNextKinematicRotation(rotation)    
+        }
     })
 
     return <group position={position}>
@@ -151,7 +148,9 @@ function BlockAxe({ position = [0, 0, 0] }) {
     useFrame((state) => {
         const time = state.clock.getElapsedTime()
         const x = Math.sin(time + timeOffset) * 1.25
-        obstacle.current.setNextKinematicTranslation({ x: position[0]+x, y:position[1]+0.7, z: position[2] })
+        if (obstacle?.current) {
+            obstacle.current.setNextKinematicTranslation({ x: position[0]+x, y:position[1]+0.7, z: position[2] })   
+        }
     })
 
     return <group position={position}>
@@ -201,14 +200,6 @@ function Bounds({length = 1}) {
             receiveShadow
             />
             
-            {/* <mesh
-            scale={[4, 1.5, .3]}
-            position={[0, 0.75, - (length * 4) + 2]}
-            geometry={boxGeometry}
-            material={wallMaterial}
-            receiveShadow
-            /> */}
-            
             <CuboidCollider
                 args={[2, 0.1, 2 * length]}
                 position={[0, -0.1, -(length * 2) + 2]}
@@ -220,25 +211,28 @@ function Bounds({length = 1}) {
 }
 
 function Level({ count = 4, types = [BlockSpinner, BlockAxe, BlockLimbo] }) {
-    const blockSeed = useGame(s=>s.blockSeed)
+    const blockSeed = useGame(s => s.blockSeed)
+
     const blocks = useMemo(() => {
-        
         const blocks = []
         for (let i = 0; i < count; i++) {
             const randomIndex = Math.floor(Math.random() * types.length)
             blocks.push(types[randomIndex])
         }
         return blocks
-    },[count, types, blockSeed])
+    }, [count, types, blockSeed])
+    
+    const obstacles = useMemo(() => {
+        return blocks.map((Block, i) => {
+            return <Block position={[0,0,(i+1)*-4]}  key={"block"+i} />
+        })
+    },[blocks])
 
     return (
         <>
             <BlockStart position={[0, 0, 0]} />
-            {blocks.map((Block, i) => {
-                return <Block position={[0,0,(i+1)*-4]}  key={"block"+i} />
-            })}
+            {obstacles}
             <BlockEnd position={[0, 0, -(count + 1) * 4]} />
-            
             <Bounds length={count+2} />
         </>
     )

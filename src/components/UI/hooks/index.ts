@@ -66,3 +66,31 @@ export const useIsOnScreen = (ref: RefObject<HTMLElement>) => {
 
   return isIntersecting
 }
+
+export const useMouseDown = () => {
+
+  const [mouseDown, setMouseDown] = useState(false)
+
+  useEffect(() => {
+    window.addEventListener("mousedown", handleMouseDown);
+    window.addEventListener("mouseup", handleMouseUp);
+    window.addEventListener("touchstart", handleMouseDown);
+    window.addEventListener("touchend", handleMouseDown);
+    return () => {
+      window.removeEventListener("mousedown", handleMouseDown);
+      window.removeEventListener("mouseup", handleMouseUp);
+      window.removeEventListener("touchstart", handleMouseDown);
+      window.removeEventListener("touchend", handleMouseUp);
+    };
+  });
+
+  const handleMouseDown = () => {
+    setMouseDown(true);
+  };
+
+  const handleMouseUp = () => {
+    setMouseDown(false);
+  };
+
+  return mouseDown
+}

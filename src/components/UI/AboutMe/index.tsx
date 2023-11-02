@@ -89,7 +89,7 @@ export const AboutMe = () => {
       </Cued>
 
       <Cued>
-        <FlexRow style={{ marginBottom: 300 }}>
+        <FlexRow style={{ marginBottom: 200 }}>
           <FlexRowItem>
             <Title>Immersive Experiences</Title>
           </FlexRowItem>

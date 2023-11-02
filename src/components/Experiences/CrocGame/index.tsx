@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useMemo, useRef } from "react";
+import { Fragment, Suspense, useEffect, useMemo, useRef } from "react";
 import { Group, Vector3 } from "three";
 import { Croc } from "./Objects/Croc";
 import { Select } from "@react-three/drei";
@@ -84,39 +84,41 @@ export const CrocGame = () => {
   }, []);
 
   return (
-    <group ref={ref} position={experienceProperties[game]?.gamePosition}>
-      <Lights />
+    <Suspense fallback={null}>
+      <group ref={ref} position={experienceProperties[game]?.gamePosition}>
+        <Lights />
 
-      <Hammer />
+        <Hammer />
 
-      {crocs}
+        {crocs}
 
-      {walls}
+        {walls}
 
-      <mesh castShadow receiveShadow position={[0, 4.5, -11.5]}>
-        <boxGeometry args={[26, 4, 10]} />
-        <meshStandardMaterial color={"#0090c8"} />
-      </mesh>
+        <mesh castShadow receiveShadow position={[0, 4.5, -11.5]}>
+          <boxGeometry args={[26, 4, 10]} />
+          <meshStandardMaterial color={"#0090c8"} />
+        </mesh>
 
-      <mesh
-        castShadow
-        receiveShadow
-        position={[0, 3.6, -5]}
-        rotation-x={Math.PI * -0.5}
-      >
-        <planeGeometry args={[26, 3, 10]} />
-        <meshStandardMaterial color={"#00923e"} />
-      </mesh>
+        <mesh
+          castShadow
+          receiveShadow
+          position={[0, 3.6, -5]}
+          rotation-x={Math.PI * -0.5}
+        >
+          <planeGeometry args={[26, 3, 10]} />
+          <meshStandardMaterial color={"#00923e"} />
+        </mesh>
 
-      {/* score and hits */}
-      <Counter title={"HITS"} value={score} position={[-6, 4.4, -6.5]} />
-      <Counter title={"BITES"} value={damage} position={[6, 4.4, -6.5]} />
-      {/* <Counter title={"HI SCORE"} value={9} position={[-1, 4.4, -6.5]} /> */}
+        {/* score and hits */}
+        <Counter title={"HITS"} value={score} position={[-6, 4.4, -6.5]} />
+        <Counter title={"BITES"} value={damage} position={[6, 4.4, -6.5]} />
+        {/* <Counter title={"HI SCORE"} value={9} position={[-1, 4.4, -6.5]} /> */}
 
-      <mesh receiveShadow position-z={-10} rotation-x={Math.PI * -0.5}>
-        <planeGeometry args={[26.8, 26]} />
-        <meshStandardMaterial color={"#569f3e"} />
-      </mesh>
-    </group>
+        <mesh receiveShadow position-z={-10} rotation-x={Math.PI * -0.5}>
+          <planeGeometry args={[26.8, 26]} />
+          <meshStandardMaterial color={"#569f3e"} />
+        </mesh>
+      </group>
+    </Suspense>
   );
 };

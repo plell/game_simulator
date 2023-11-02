@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Group, Vector3 } from "three";
-import { Cloud } from "@react-three/drei";
+import { Group, MeshBasicMaterial, Vector3 } from "three";
+import { Cloud, Clouds } from "@react-three/drei";
 import useGame from "../../../Stores/useGame";
 import { experienceProperties } from "../../../Stores/constants";
 
@@ -23,7 +23,7 @@ export const SpaceGame = () => {
 
   const projectilesRef = useRef<Refs>({});
 
-  const game = useGame((s) => s.game);
+  // const game = useGame((s) => s.game);
 
   const enemies = useMemo(() => {
     const b: any = [];
@@ -39,7 +39,7 @@ export const SpaceGame = () => {
   }, [playerRef, projectilesRef]);
 
   return (
-    <group ref={ref} position={experienceProperties[game]?.gamePosition}>
+    <group ref={ref} position={[0, 0, 0]}>
       <directionalLight position={[5, 5, 100]} intensity={3.4} />
 
       <CloudSpace />
@@ -93,8 +93,8 @@ export const SpaceGame = () => {
 };
 
 const CloudSpace = () => {
-  const cloudRef = useRef<Group | null>(null);
-  const cloudRef2 = useRef<Group | null>(null);
+  const cloudRef = useRef<any | null>(null);
+  const cloudRef2 = useRef<any | null>(null);
 
   useFrame((_, delta) => {
     const movement = 7 * delta;
@@ -102,40 +102,45 @@ const CloudSpace = () => {
     if (cloudRef.current) {
       cloudRef.current.position.y -= movement;
 
-      if (cloudRef.current.position.y < -25) {
-        cloudRef.current.position.y = 25;
+      if (cloudRef.current.position.y < -40) {
+        cloudRef.current.position.y = 40;
+
+        console.log("cloudRef.current", cloudRef.current);
+        cloudRef.current.seed = Math.floor(Math.random() * 1000);
       }
     }
 
     if (cloudRef2.current) {
       cloudRef2.current.position.y -= movement;
 
-      if (cloudRef2.current.position.y < -25) {
-        cloudRef2.current.position.y = 25;
+      if (cloudRef2.current.position.y < -40) {
+        cloudRef2.current.position.y = 40;
+        cloudRef2.current.seed = Math.floor(Math.random() * 1000);
       }
     }
   });
   return (
     <group>
-      <group ref={cloudRef} position-z={-10}>
+      <Clouds material={MeshBasicMaterial}>
         <Cloud
+          ref={cloudRef}
+          position-z={3}
           opacity={0.5}
           speed={0.4} // Rotation speed
-          width={20} // Width of the full cloud
-          depth={1.5} // Z-dir depth
-          segments={20} // Number of particles
+          bounds={[30, 30, 2]}
+          seed={22}
         />
-      </group>
 
-      <group ref={cloudRef2} position-y={25} position-z={10}>
         <Cloud
+          ref={cloudRef2}
+          position-y={25}
+          position-z={10}
+          bounds={[30, 20, 2]}
           opacity={0.7}
           speed={0.7} // Rotation speed
-          width={30} // Width of the full cloud
-          depth={1} // Z-dir depth
-          segments={20} // Number of particles
+          seed={1}
         />
-      </group>
+      </Clouds>
     </group>
   );
 };
