@@ -1,13 +1,20 @@
-import { Fragment, Suspense, useEffect, useMemo, useRef } from "react";
+import {
+  Fragment,
+  Suspense,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { Group, Vector3 } from "three";
 import { Croc } from "./Objects/Croc";
-import { Select } from "@react-three/drei";
 import Counter from "../common/Counter";
 import useGame from "../../../Stores/useGame";
 import Hammer from "./Objects/Hammer";
 import Wall from "./Objects/Wall";
 import CrocArch from "./Objects/Arch";
 import { experienceProperties } from "../../../Stores/constants";
+import { GameProgress } from "../common/GameProgress";
 
 const Lights = () => {
   return (
@@ -29,6 +36,8 @@ const Lights = () => {
   );
 };
 
+const max = 20;
+
 export const CrocGame = () => {
   const ref = useRef<Group | null>(null);
   const game = useGame((s) => s.game);
@@ -38,6 +47,8 @@ export const CrocGame = () => {
   const setBite = useGame((s) => s.setBite);
   const setDamage = useGame((s) => s.setDamage);
   const setScore = useGame((s) => s.setScore);
+  const setLevel = useGame((s) => s.setLevel);
+  const level = useGame((s) => s.level);
 
   useEffect(() => {
     return () => {
@@ -80,12 +91,35 @@ export const CrocGame = () => {
     return m;
   }, []);
 
+  useEffect(() => {
+    if (score - damage < -max) {
+      setDamage(0);
+      setScore(0);
+      setLevel(level - 1);
+    }
+  }, [damage]);
+
   return (
     <Suspense fallback={null}>
       <group ref={ref} position={experienceProperties[game]?.gamePosition}>
         <Lights />
 
         <Hammer />
+
+        <GameProgress
+          position={new Vector3(0, 13, 0)}
+          type='bar'
+          max={max}
+          score={score - damage}
+          level={level}
+          levelPrefix='LEVEL '
+          setLevel={() => {
+            setLevel(level + 1);
+            setScore(0);
+            setDamage(0);
+          }}
+          scale={0.1}
+        />
 
         {crocs}
 

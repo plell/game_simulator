@@ -19,6 +19,8 @@ export const SpaceGame = () => {
   const mouseRef = useRef<Vector3>(mouseVec3);
   const [score, setScore] = useState(0);
 
+  const [level, setLevel] = useState(1);
+
   const projectilesRef = useRef<Refs>({});
 
   const enemies = useMemo(() => {
@@ -41,12 +43,16 @@ export const SpaceGame = () => {
       <CloudSpace />
 
       <GameProgress
-        position={new Vector3(0, 3, 10)}
+        position={new Vector3(0, 5, 10)}
         type='points'
         max={4}
         score={score}
-        level={0}
-        levelSuffix=''
+        level={level}
+        levelPrefix='RANK '
+        setLevel={() => {
+          setLevel(level + 1);
+          setScore(0);
+        }}
         scale={0.1}
       />
 
@@ -101,7 +107,6 @@ const CloudSpace = () => {
       if (cloudRef.current.position.y < -40) {
         cloudRef.current.position.y = 40;
 
-        console.log("cloudRef.current", cloudRef.current);
         cloudRef.current.seed = Math.floor(Math.random() * 1000);
       }
     }

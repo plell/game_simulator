@@ -4,6 +4,7 @@ const initialGameState = {
     game:0,
     hit: 0,
     bite: 0,
+    level:1,
     mouseDown: false,
     win:false,
     locked: false,
@@ -20,7 +21,8 @@ type GameState = {
     locked: boolean
     lockClicked: boolean
     bite: number
-    win:boolean
+    win: boolean
+    level: number
     score: number
     mouseDown:boolean
     damage: number
@@ -28,6 +30,7 @@ type GameState = {
     cameraPosition: number
     setGame: (game: number) => void
     setWin: (win: boolean) => void
+    setLevel: (level: number) => void
     setMouseDown: (mouseDown: boolean) => void
     setLocked: (locked: boolean) => void
     setLockClicked: (lockClicked: boolean) => void
@@ -45,8 +48,9 @@ type GameState = {
 export default create<GameState>((set, get) => ({
     ...initialGameState,
     setGame: (game) => {
-        set({ game, win:false })
+        set({ game, win:false, level:1 })
     },
+    setLevel: (level) => set({ level}),
     setLocked: (locked) => set({ locked }),
     setLockClicked: (lockClicked) => set({ lockClicked }),
     setHit: (hit) => set({ hit }),

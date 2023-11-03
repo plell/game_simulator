@@ -1,12 +1,8 @@
-import { useFrame, useThree } from "@react-three/fiber";
-import { Suspense, useEffect, useMemo, useRef, useState } from "react";
-import { Mesh } from "three";
+import { Suspense, useMemo, useState } from "react";
 import useGame from "../../../Stores/useGame";
 import { experienceProperties } from "../../../Stores/constants";
-
-import { vertexShader } from "./shaders/vertexShader";
-import { fragmentShader } from "./shaders/fragmentShader";
 import { Select } from "@react-three/postprocessing";
+import { Shader } from "./Shader";
 
 export const Psychedelic = () => {
   const game = useGame((s) => s.game);
@@ -18,32 +14,10 @@ export const Psychedelic = () => {
   );
 };
 
-const size = 100.0;
-
 const triangleSize = 12.8;
 const triangleYAdjust = 1.7;
 const Content = () => {
-  const ref = useRef<Mesh | null>(null);
   const [hovered, setHovered] = useState(null);
-
-  const uniforms = useMemo(
-    () => ({
-      uTime: {
-        value: 0.0,
-      },
-      uSize: {
-        value: size,
-      },
-    }),
-    []
-  );
-
-  useFrame(({ clock }) => {
-    if (ref?.current) {
-      const elapsed = clock.getElapsedTime();
-      ref.current.material.uniforms.uTime.value = elapsed;
-    }
-  });
 
   const triangles = useMemo(() => {
     return [
@@ -101,31 +75,16 @@ const Content = () => {
         </Select>
       </group>
 
-      <group position-z={10}></group>
-
       <Select enabled={!hovered}>
-        <mesh
-          rotation-x={Math.PI * 0.5}
-          ref={ref}
-          onPointerOut={() => setHovered(null)}
-        >
+        <mesh rotation-x={Math.PI * 0.5} onPointerOut={() => setHovered(null)}>
           <coneGeometry args={[30, 30, 6, undefined, true]} />
-          <shaderMaterial
-            fragmentShader={fragmentShader}
-            vertexShader={vertexShader}
-            uniforms={uniforms}
-            wireframe={false}
-          />
+          <Shader />
         </mesh>
       </Select>
 
       <mesh rotation-z={Math.PI * -0.5} position-z={-30}>
         <planeGeometry args={[200, 300]} />
-        <shaderMaterial
-          fragmentShader={fragmentShader}
-          vertexShader={vertexShader}
-          uniforms={uniforms}
-        />
+        <Shader />
       </mesh>
     </Suspense>
   );

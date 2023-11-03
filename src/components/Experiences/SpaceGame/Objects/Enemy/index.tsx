@@ -107,7 +107,7 @@ export const Enemy = ({ projectilesRef, playerRef }: Props) => {
   const hit = () => {
     if (!animating && ref.current) {
       setAnimating(true);
-      setColor(color.set("white"));
+      setColor(color.set("red"));
       gsap
         .to(ref.current.rotation, {
           duration: 0.3,

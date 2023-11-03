@@ -174,8 +174,17 @@ export const GameProgress = ({
 
   return (
     <group ref={ref} position={position} scale={scale}>
+      {!hideText && (
+        <group position-y={5}>
+          <Text fontSize={7}>
+            {levelPrefix}
+            {level}
+            {levelSuffix}
+          </Text>
+        </group>
+      )}
       {type === "points" ? (
-        <>
+        <group position-y={-9}>
           {pointPositions.map((_, i) => {
             const fill = i + 1 <= score;
 
@@ -192,18 +201,9 @@ export const GameProgress = ({
               </group>
             );
           })}
-        </>
+        </group>
       ) : (
         <group>
-          {!hideText && (
-            <group position-y={5}>
-              <Text fontSize={7}>
-                {levelPrefix}
-                {level}
-                {levelSuffix}
-              </Text>
-            </group>
-          )}
           <group position-y={-2}>
             <mesh>
               <planeGeometry args={[90, 1]} />

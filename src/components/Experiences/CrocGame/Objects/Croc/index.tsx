@@ -21,15 +21,17 @@ const movementRange = {
 
 const origin = new Vector3(1, 1, 1);
 const baseSpeed = 0.5;
+const baseMultiplier = 0.7;
 
 export const Croc = ({ position, id }: Props) => {
   const crocGroupRef = useRef<Group | null>(null);
   const wallRef = useRef<Mesh | null>(null);
   const score = useGame((s) => s.score);
+  const level = useGame((s) => s.level);
   const scoreUp = useGame((s) => s.scoreUp);
   const setHit = useGame((s) => s.setHit);
   const [speed, setSpeed] = useState(baseSpeed);
-  const [multiplier, setMultiplier] = useState(0.8);
+  const [multiplier, setMultiplier] = useState(baseMultiplier);
 
   const [destination, setDestination] = useState(movementRange.min);
 
@@ -39,14 +41,8 @@ export const Croc = ({ position, id }: Props) => {
   const bonked = useMemo(() => hit === id, [hit, id]);
 
   useEffect(() => {
-    if (score > 10 && multiplier !== 1.2) {
-      setMultiplier(1.2);
-    } else if (score > 20 && multiplier !== 1.8) {
-      setMultiplier(1.8);
-    } else if (score > 30 && multiplier !== 2.5) {
-      setMultiplier(2.5);
-    }
-  }, [score]);
+    setMultiplier(level * baseMultiplier);
+  }, [level]);
 
   useEffect(() => {
     if (bonked) {

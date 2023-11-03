@@ -22,15 +22,7 @@ import { Perf } from "r3f-perf";
 
 import styled from "styled-components";
 
-import {
-  ACESFilmicToneMapping,
-  AmbientLight,
-  Color,
-  DirectionalLight,
-  HemisphereLight,
-  PCFSoftShadowMap,
-  PointLight,
-} from "three";
+import { ACESFilmicToneMapping, Color, PCFSoftShadowMap } from "three";
 
 const color = new Color("#000000");
 
@@ -103,11 +95,17 @@ const CameraController = () => {
     [enabled]
   );
 
+  const controlsEnabled = useMemo(
+    () => !experienceProperties[game].killCameraControls,
+    [game]
+  );
+
   return (
     <CameraControls
       ref={cameraControlsRef}
       dollySpeed={0.08}
       {...cameraProps}
+      enabled={controlsEnabled}
     />
   );
 };
@@ -213,7 +211,7 @@ const App = () => {
             <CameraController />
 
             <Selection>
-              <EffectComposer autoClear={false} multisampling={8}>
+              <EffectComposer multisampling={8}>
                 <Bloom
                   luminanceThreshold={1}
                   mipmapBlur
