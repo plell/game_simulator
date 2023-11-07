@@ -4,6 +4,7 @@ import { MdArrowForward } from "react-icons/md";
 import { useIsMobile } from "../hooks";
 import useGame from "../../../Stores/useGame";
 import { Cued } from "../Cued";
+import { TextRevealer } from "../TextRevealer";
 
 const speed = 1;
 
@@ -49,10 +50,12 @@ export const AboutMe = () => {
                   Sphinx Community
                 </Link>
               </span>
-              &nbsp;is a Web3 sidekick social media platform that I built from
-              the ground up using React, Golang and PostgreSQL. Here you can
-              meet Sphinx Chat users, join Sphinx tribes, earn badges, and claim
-              coding bounties.
+              <TextRevealer>
+                &nbsp;is a Web3 sidekick social media platform that I built from
+                the ground up using React, Golang and PostgreSQL. Here you can
+                meet Sphinx Chat users, join Sphinx tribes, earn badges, and
+                claim coding bounties.
+              </TextRevealer>
             </Description>
           </FlexRowItem>
         </Cued>
@@ -73,11 +76,13 @@ export const AboutMe = () => {
         <Cued speed={speed}>
           <FlexRowItem>
             <Description isMobile={isMobile}>
-              Second Brain is an application that collects data for an open
-              source machine learning bank. I designed and built the UI using
-              React Three Fiber. My goal was to encourage community
-              participation by bringing the daily evolution of the knowledge
-              graph to life.
+              <TextRevealer>
+                Second Brain is an application that collects data for an open
+                source machine learning bank. I designed and built the UI using
+                React Three Fiber. My goal was to encourage community
+                participation by bringing the daily evolution of the knowledge
+                graph to life.
+              </TextRevealer>
             </Description>
           </FlexRowItem>
         </Cued>
@@ -100,8 +105,10 @@ export const AboutMe = () => {
               <span>
                 <Link onClick={() => setGame(1)}>Try them out!</Link>
               </span>
-              &nbsp;I build games and other 3D experiences with React and
-              ThreeJS.
+              <TextRevealer>
+                &nbsp;I build games and other 3D experiences with React and
+                ThreeJS.
+              </TextRevealer>
             </Description>
           </FlexRowItem>
         </Cued>

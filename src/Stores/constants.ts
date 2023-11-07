@@ -9,6 +9,7 @@ import Interface from "../components/Experiences/RaceGame/Interface";
 import { Donut } from "../components/Experiences/Donut";
 import { Psychedelic } from "../components/Experiences/Psychedelic";
 import { Climb } from "../components/Experiences/Climb";
+import { AudioShader } from "../components/Experiences/AudioShader";
 // import { WhackASoul } from "../components/Experiences/WhackASoul";
 
 const { origin } = window.location
@@ -184,17 +185,15 @@ export const experienceProperties: ExperienceProps[] = [
     // showAboutMe: true,
   },
   // {
-  //   cameraPosition: new Vector3(0, 0, 10),
+  //   cameraPosition: new Vector3(0, 6, 6),
   //   cameraTarget: new Vector3(0, 0, 0),
   //   cameraNear: 1,
   //   cameraFar: 300,
   //   gamePosition: new Vector3(0, 0, 0),
   //   title: '',
   //   description: '',
-  //   instructions: 'Click to jump',
-  //   cameraControls: false,
-  //   killCameraControls: true,
+  //   cameraControls: true,
   //   backgroundColor:'#000000',
-  //   game: Climb,
+  //   game: AudioShader,
   // },
 ]

@@ -211,7 +211,7 @@ const App = () => {
             <CameraController />
 
             <Selection>
-              <EffectComposer multisampling={8}>
+              <EffectComposer autoClear={false} multisampling={8}>
                 <Bloom
                   luminanceThreshold={1}
                   mipmapBlur

@@ -12,25 +12,15 @@ type Props = {
 export const Cued = ({ children, speed }: Props) => {
   const cueRef = useRef(null);
 
-  const [init, setInit] = useState(true);
   const [cueMounted, setCueMounted] = useState(!browserIsChrome);
 
   const cueIsOnScreen = useIsOnScreen(cueRef);
 
   useEffect(() => {
-    const initTimer = setTimeout(() => {
-      setInit(true);
-    }, 200);
-    return () => {
-      clearTimeout(initTimer);
-    };
-  }, []);
-
-  useEffect(() => {
-    if (init && !cueMounted && cueIsOnScreen) {
+    if (!cueMounted && cueIsOnScreen) {
       setCueMounted(true);
     }
-  }, [cueIsOnScreen, init]);
+  }, [cueIsOnScreen]);
 
   return (
     <>
