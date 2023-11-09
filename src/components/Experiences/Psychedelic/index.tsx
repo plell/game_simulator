@@ -31,15 +31,15 @@ import { Projectile } from "../../../Stores/types";
 import { useObjectIntersectsManyB } from "../hooks/useObjectsIntersect";
 import { useFrame } from "@react-three/fiber";
 import { useAudioAnalysis } from "../hooks/useAudioAnalysis";
-import { useControls } from "leva";
+
 import { GameProgress } from "../common/GameProgress";
 
-const triangleSize = 12.8;
-const triangleYAdjust = 1.7;
+const triangleSize = Math.PI * 6;
+const triangleYAdjust = Math.PI * 0.8;
 
 const buffer = 60;
 
-const bulletSpeed = 0.5;
+const bulletSpeed = 0.4;
 
 type Triangle = {
   x: number;
@@ -265,7 +265,7 @@ const Beats = ({ sensorRef, hovered }: BeatsProps) => {
   return (
     <>
       <GameProgress
-        position={new Vector3(0, 11, 110)}
+        position={new Vector3(0, 11.8, 110)}
         type='points'
         max={5}
         score={score}
@@ -456,18 +456,18 @@ type ConeProps = {
 
 const PsychCone = ({ setHovered }: ConeProps) => {
   return (
-    <group>
+    <group position-z={140}>
       {triangles.map((t, i) => {
         return (
           <mesh
             key={`${i}-sensor`}
             position-x={t.x}
             position-y={t.y}
-            position-z={-24}
+            position-z={4}
             onPointerEnter={() => setHovered(t)}
           >
             <circleGeometry args={[triangleSize, 0, t.rotation]} />
-            <meshBasicMaterial color='white' transparent opacity={0.1} />
+            <meshBasicMaterial color='white' transparent opacity={0} />
           </mesh>
         );
       })}
