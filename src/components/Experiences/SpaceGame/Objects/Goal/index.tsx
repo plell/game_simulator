@@ -63,11 +63,11 @@ export const Goal = ({ player, addToScore }: Props) => {
         ref.current.scale.set(newScale, newScale, 1);
 
         if (materialRef?.current) {
-          materialRef.current.emissive.lerp(white, 0.06);
+          materialRef.current.emissive.lerp(white, 0.2);
           materialRef.current.opacity = MathUtils.lerp(
             materialRef.current.opacity,
             0,
-            0.05
+            0.3
           );
           materialRef.current.emissiveIntensity = MathUtils.lerp(
             materialRef.current.emissiveIntensity,
@@ -76,7 +76,7 @@ export const Goal = ({ player, addToScore }: Props) => {
           );
 
           if (
-            materialRef.current.opacity < 0.01 &&
+            materialRef.current.opacity < 0.0001 &&
             materialRef.current.visible
           ) {
             materialRef.current.visible = false;

@@ -181,7 +181,7 @@ export const experienceProperties: ExperienceProps[] = [
     title: '',
     description: '',
     // instructions: 'Click to play',
-    cameraControls: true,
+    cameraControls: false,
     backgroundColor:'#000000',
     game: Psychedelic,
     // showAboutMe: true,
