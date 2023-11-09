@@ -6,7 +6,11 @@ import { ShaderMaterial } from "three";
 
 const size = 100.0;
 
-export const Shader = () => {
+type Props = {
+  opacity?: number;
+};
+
+export const Shader = ({ opacity }: Props) => {
   const ref = useRef<ShaderMaterial | null>(null);
 
   const uniforms = useMemo(
@@ -31,6 +35,8 @@ export const Shader = () => {
   return (
     <shaderMaterial
       ref={ref}
+      transparent
+      opacity={opacity}
       fragmentShader={fragmentShader}
       vertexShader={vertexShader}
       uniforms={uniforms}

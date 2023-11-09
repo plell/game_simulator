@@ -1,14 +1,26 @@
 import { useFrame } from "@react-three/fiber";
 
-import { MutableRefObject, useEffect, useMemo, useRef, useState } from "react";
-import { Color, Group, MeshStandardMaterial } from "three";
+import { MutableRefObject, useEffect, useState } from "react";
+import {
+  BoxGeometry,
+  CircleGeometry,
+  Color,
+  Group,
+  MeshBasicMaterial,
+  MeshStandardMaterial,
+  SphereGeometry,
+  Vector3,
+} from "three";
 import { Projectile } from "../../../../../../Stores/types";
 import { Refs } from "../../../../SpaceGame";
+import { DEAD_ZONE_Y } from "../../../../../../Stores/constants";
 
 type Props = {
   self: Projectile;
   removeMe: (id: string) => void;
   refs: MutableRefObject<Refs>;
+  material?: MeshBasicMaterial | MeshStandardMaterial;
+  geometry?: SphereGeometry | CircleGeometry | BoxGeometry;
 };
 
 const highlightMaterial = new MeshStandardMaterial({
@@ -19,7 +31,9 @@ const highlightMaterial = new MeshStandardMaterial({
   transparent: true,
 });
 
-export const Bullet = ({ refs, self, removeMe }: Props) => {
+const sphereGeometry = new SphereGeometry(0.3, 10, 10);
+
+export const Bullet = ({ refs, self, removeMe, material, geometry }: Props) => {
   const [dead, setDead] = useState(false);
 
   useEffect(() => {
@@ -28,12 +42,15 @@ export const Bullet = ({ refs, self, removeMe }: Props) => {
     }
   }, [dead]);
 
-  useFrame(() => {
+  useFrame((_, delta) => {
     const ref = refs.current[self.id];
     if (ref) {
-      ref.position.y += 0.3;
+      ref.position.y += self.direction.y;
+      ref.position.x += self.direction.x;
+      ref.position.z += self.direction.z;
+      ref.rotation.z += 16 * delta;
 
-      if (ref.position.y > 50) {
+      if (ref.position.y > DEAD_ZONE_Y - 1) {
         setDead(true);
       }
     }
@@ -45,9 +62,10 @@ export const Bullet = ({ refs, self, removeMe }: Props) => {
       position={self?.position}
       userData={{ id: self.id }}
     >
-      <mesh material={highlightMaterial}>
-        <sphereGeometry args={[0.3, 10, 10]} />
-      </mesh>
+      <mesh
+        material={material || highlightMaterial}
+        geometry={geometry || sphereGeometry}
+      />
     </group>
   );
 };

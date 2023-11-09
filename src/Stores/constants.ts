@@ -75,6 +75,8 @@ type ExperienceProps = {
   killCameraControls?:boolean
 }
 
+export const DEAD_ZONE_Y = 5000
+
 export const experienceProperties: ExperienceProps[] = [
   
   {
@@ -144,34 +146,34 @@ export const experienceProperties: ExperienceProps[] = [
   //   game:TempoGame
   // },
   
+  // {
+  //   cameraPosition: new Vector3(0, 22, 20),
+  //   cameraTarget: new Vector3(0, 0, -5),
+  //   cameraNear: 10,
+  //   cameraFar: 2500,
+  //   gamePosition: new Vector3(0, 0, 0),
+  //   title: '',
+  //   description: '',
+  //   instructions: 'Click to play',
+  //   cameraControls: false,
+  //   game:CrocGame
+  // },
+  // {
+  //   cameraPosition: new Vector3(0,0,0),
+  //   cameraTarget: new Vector3(0, 0, 0),
+  //   cameraNear: 0.1,
+  //   cameraFar: 500,
+  //   gamePosition: new Vector3(0, 0, 0),
+  //   title: '',
+  //   description: '',
+  //   instructions: '',
+  //   cameraControls: false,
+  //   backgroundColor:'#000000',
+  //   game: RaceGame,
+  //   uiComponent:Interface
+  // },
   {
-    cameraPosition: new Vector3(0, 22, 20),
-    cameraTarget: new Vector3(0, 0, -5),
-    cameraNear: 10,
-    cameraFar: 2500,
-    gamePosition: new Vector3(0, 0, 0),
-    title: '',
-    description: '',
-    instructions: 'Click to play',
-    cameraControls: false,
-    game:CrocGame
-  },
-  {
-    cameraPosition: new Vector3(0,0,0),
-    cameraTarget: new Vector3(0, 0, 0),
-    cameraNear: 0.1,
-    cameraFar: 500,
-    gamePosition: new Vector3(0, 0, 0),
-    title: '',
-    description: '',
-    instructions: '',
-    cameraControls: false,
-    backgroundColor:'#000000',
-    game: RaceGame,
-    uiComponent:Interface
-  },
-  {
-    cameraPosition: new Vector3(0, 0, 100),
+    cameraPosition: new Vector3(0, 0, 170),
     cameraTarget: new Vector3(0, 0, 0),
     cameraNear: 10,
     cameraFar: 2500,

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { Suspense, useMemo, useRef, useState } from "react";
 import { Group, MeshBasicMaterial, Vector3 } from "three";
 import { Cloud, Clouds } from "@react-three/drei";
 
@@ -58,10 +58,12 @@ export const SpaceGame = () => {
 
       <group position-y={-6}>
         <Spaceship
+          score={score}
           position={[0, 0, 0]}
           mouseRef={mouseRef}
           playerRef={playerRef}
         />
+
         <mesh
           onPointerMove={(e) => {
             const { x, y, z } = e.point;
@@ -69,7 +71,7 @@ export const SpaceGame = () => {
           }}
         >
           <planeGeometry args={[145, 80]} />
-          <meshStandardMaterial transparent opacity={0} />
+          <meshStandardMaterial transparent opacity={0} wireframe />
         </mesh>
       </group>
 
@@ -122,28 +124,30 @@ const CloudSpace = () => {
   });
   return (
     <group>
-      <Clouds material={MeshBasicMaterial}>
-        <Cloud
-          ref={cloudRef}
-          position-z={3}
-          opacity={0.5}
-          speed={0.4} // Rotation speed
-          bounds={[30, 30, 2]}
-          seed={22}
-          color={"#aaaaaa"}
-        />
+      <Suspense fallback={null}>
+        <Clouds material={MeshBasicMaterial}>
+          <Cloud
+            ref={cloudRef}
+            position-z={3}
+            opacity={0.5}
+            speed={0.4} // Rotation speed
+            bounds={[30, 30, 2]}
+            seed={22}
+            color={"#aaaaaa"}
+          />
 
-        <Cloud
-          ref={cloudRef2}
-          position-y={25}
-          position-z={10}
-          bounds={[30, 20, 2]}
-          opacity={0.7}
-          speed={0.7} // Rotation speed
-          seed={1}
-          color={"#888888"}
-        />
-      </Clouds>
+          <Cloud
+            ref={cloudRef2}
+            position-y={25}
+            position-z={10}
+            bounds={[30, 20, 2]}
+            opacity={0.7}
+            speed={0.7} // Rotation speed
+            seed={1}
+            color={"#888888"}
+          />
+        </Clouds>
+      </Suspense>
     </group>
   );
 };

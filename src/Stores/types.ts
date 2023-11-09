@@ -20,6 +20,7 @@ export type Projectile = {
     position: Vector3
     type: string
     dead: boolean
+    direction: Vector3
 }
 
 export type Zone = {

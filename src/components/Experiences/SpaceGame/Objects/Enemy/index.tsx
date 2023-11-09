@@ -24,6 +24,7 @@ import {
   useObjectsIntersect,
 } from "../../../hooks/useObjectsIntersect";
 import gsap from "gsap";
+import { DEAD_ZONE_Y } from "../../../../../Stores/constants";
 
 const width = 30;
 
@@ -90,7 +91,7 @@ export const Enemy = ({ projectilesRef, playerRef }: Props) => {
 
       if (intersect.current.length > 0) {
         const id = intersect.current[0];
-        projectilesRef.current[id].position.set(0, 400, 0);
+        projectilesRef.current[id].position.set(0, DEAD_ZONE_Y + 100, 0);
         hit();
       }
 

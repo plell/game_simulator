@@ -3,6 +3,7 @@ import { Group, Vector3 } from "three";
 import { Bullet } from "./components/Bullet";
 import { v4 as uuidv4 } from "uuid";
 import { Refs } from "../../SpaceGame";
+import { Projectile } from "../../../../Stores/types";
 
 type Props = {
   player: React.MutableRefObject<Group | null>;
@@ -11,7 +12,9 @@ type Props = {
 };
 
 export const Projectiles = ({ refs, player, launchPosition }: Props) => {
-  const [projectiles, setProjectiles] = useState<any>({});
+  const [projectiles, setProjectiles] = useState<Record<string, Projectile>>(
+    {}
+  );
 
   useEffect(() => {
     window.addEventListener("mousedown", newProjectile);
@@ -39,6 +42,7 @@ export const Projectiles = ({ refs, player, launchPosition }: Props) => {
       position: position,
       type: "projectile",
       dead: false,
+      direction: new Vector3(0, 0.3, 0),
     };
 
     setProjectiles(pCopy);
