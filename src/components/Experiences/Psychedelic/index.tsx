@@ -39,7 +39,7 @@ const triangleYAdjust = Math.PI * 0.8;
 
 const buffer = 60;
 
-const bulletSpeed = 0.4;
+const bulletSpeed = 0.3;
 
 type Triangle = {
   x: number;
@@ -125,38 +125,59 @@ export const Psychedelic = () => {
 const Content = () => {
   const [hovered, setHovered] = useState<Triangle | null>(null);
   const sensorRef = useRef<Mesh | null>(null);
-  const beatMeshRef = useRef<Mesh | null>(null);
+  const gameGroupRef = useRef<Group | null>(null);
+  const [level, setLevel] = useState(1);
+  const [score, setScore] = useState(0);
+
+  useFrame((_, delta) => {
+    if (gameGroupRef.current && level > 1) {
+      // gameGroupRef.current.rotation.z += 0.3 * delta;
+    }
+  });
 
   return (
     <Suspense fallback={null}>
-      <group position-z={15}>
-        <Beats sensorRef={sensorRef} hovered={hovered} />
-        <PsychCone setHovered={setHovered} />
+      <GameProgress
+        position={new Vector3(0, 11.8, 125)}
+        type='points'
+        max={5}
+        score={score}
+        level={level}
+        levelPrefix='LEVEL '
+        setLevel={() => {
+          setLevel(level + 1);
+          setScore(0);
+        }}
+        scale={0.1}
+      />
 
-        <mesh
-          ref={beatMeshRef}
-          visible={false} //!!hovered}
-          position-x={hovered?.x}
-          position-y={hovered?.y}
-          rotation-z={hovered?.rotation}
-          position-z={20}
-        >
-          <circleGeometry args={[triangleSize, 0]} />
-          <meshBasicMaterial />
+      <group ref={gameGroupRef}>
+        <group position-z={15}>
+          <Beats
+            sensorRef={sensorRef}
+            hovered={hovered}
+            score={score}
+            setScore={setScore}
+            level={level}
+          />
+          <PsychCone setHovered={setHovered} />
+        </group>
+
+        <mesh ref={sensorRef} rotation-x={Math.PI * 0.5}>
+          <cylinderGeometry args={[26, 26, 30, 6]} />
+          <meshBasicMaterial wireframe opacity={0} transparent />
         </mesh>
+
+        <Select enabled={true}>
+          <mesh
+            rotation-x={Math.PI * 0.5}
+            onPointerOut={() => setHovered(null)}
+          >
+            <coneGeometry args={[30, 30, 6, undefined, true]} />
+            <Shader />
+          </mesh>
+        </Select>
       </group>
-
-      <mesh ref={sensorRef} rotation-x={Math.PI * 0.5}>
-        <cylinderGeometry args={[26, 26, 30, 6]} />
-        <meshBasicMaterial wireframe opacity={0} transparent />
-      </mesh>
-
-      <Select enabled={true}>
-        <mesh rotation-x={Math.PI * 0.5} onPointerOut={() => setHovered(null)}>
-          <coneGeometry args={[30, 30, 6, undefined, true]} />
-          <Shader />
-        </mesh>
-      </Select>
 
       <mesh rotation-z={Math.PI * -0.5} position-z={-30}>
         <planeGeometry args={[200, 300]} />
@@ -170,20 +191,19 @@ const Content = () => {
 type BeatsProps = {
   sensorRef: MutableRefObject<Mesh | null>;
   hovered: any;
+  score: number;
+  setScore: (n: number) => void;
+  level: number;
 };
 
-const lime = new Color("white");
-const white = new Color("hotpink");
-
-const Beats = ({ sensorRef, hovered }: BeatsProps) => {
+const Beats = ({ sensorRef, hovered, score, setScore, level }: BeatsProps) => {
   const projectilesRef = useRef<Refs>({});
   const barrierGroupRef = useRef<Group | null>(null);
   const barrierRef = useRef<Mesh | null>(null);
   const barrierMaterialRef = useRef<MeshStandardMaterial | null>(null);
-  const [score, setScore] = useState(0);
-  const [barrierColor, setBarrierColor] = useState(white);
+
   const [barrierIntensity, setBarrierIntensity] = useState(1.1);
-  const [level, setLevel] = useState(1);
+
   const [barrierRotation, setBarrierRotation] = useState({
     rotation: 0,
     order: 0,
@@ -191,9 +211,8 @@ const Beats = ({ sensorRef, hovered }: BeatsProps) => {
 
   useEffect(() => {
     setBarrierIntensity(2);
-    setBarrierColor(lime);
+
     const timeout = setTimeout(() => {
-      setBarrierColor(white);
       setBarrierIntensity(1.1);
     }, 100);
     return () => {
@@ -228,7 +247,7 @@ const Beats = ({ sensorRef, hovered }: BeatsProps) => {
 
   const intersect = useObjectIntersectsManyB(barrierRef, projectilesRef);
 
-  useFrame(() => {
+  useFrame((_, delta) => {
     if (barrierGroupRef.current) {
       barrierGroupRef.current.rotation.z = MathUtils.lerp(
         barrierGroupRef.current.rotation.z,
@@ -264,20 +283,6 @@ const Beats = ({ sensorRef, hovered }: BeatsProps) => {
 
   return (
     <>
-      <GameProgress
-        position={new Vector3(0, 11.8, 110)}
-        type='points'
-        max={5}
-        score={score}
-        level={level}
-        levelPrefix='LEVEL '
-        setLevel={() => {
-          setLevel(level + 1);
-          setScore(0);
-        }}
-        scale={0.1}
-      />
-
       <group ref={barrierGroupRef}>
         <mesh ref={barrierRef} position={[26, 0, 0]}>
           <boxGeometry args={[0.3, 25, 30, 10, 10]} />
@@ -288,7 +293,7 @@ const Beats = ({ sensorRef, hovered }: BeatsProps) => {
           />
         </mesh>
       </group>
-      <Projectiles sensorRef={sensorRef} refs={projectilesRef} />
+      <Projectiles level={level} sensorRef={sensorRef} refs={projectilesRef} />
     </>
   );
 };
@@ -296,6 +301,7 @@ const Beats = ({ sensorRef, hovered }: BeatsProps) => {
 type Props = {
   refs: MutableRefObject<Refs>;
   sensorRef: MutableRefObject<Mesh | null>;
+  level: number;
 };
 
 type BulletProps = {
@@ -306,7 +312,7 @@ type BulletProps = {
 const bulletMaterial = new MeshBasicMaterial({ color: "white" });
 const bulletGeometry = new CircleGeometry(2, 2);
 
-export const Projectiles = ({ refs, sensorRef }: Props) => {
+export const Projectiles = ({ refs, sensorRef, level }: Props) => {
   const [projectiles, setProjectiles] = useState<Record<string, Projectile>>(
     {}
   );
@@ -338,10 +344,6 @@ export const Projectiles = ({ refs, sensorRef }: Props) => {
         },
         1000
       );
-    }
-
-    if (orbGroupRef.current) {
-      // orbGroupRef.current.rotation.z += 1 * delta;
     }
   });
 
@@ -378,24 +380,28 @@ export const Projectiles = ({ refs, sensorRef }: Props) => {
     setProjectiles(pCopy);
   };
 
+  const bullets = useMemo(() => {
+    return Object.keys(projectiles).map((p) => {
+      const self = projectiles[p];
+      if (self) {
+        return (
+          <Bullet
+            geometry={bulletGeometry}
+            material={bulletMaterial}
+            self={self}
+            refs={refs}
+            removeMe={removeProjectile}
+            key={self.id}
+          />
+        );
+      }
+      return null;
+    });
+  }, [projectiles]);
+
   return (
     <group ref={orbGroupRef}>
-      {Object.keys(projectiles).map((p) => {
-        const self = projectiles[p];
-        if (self) {
-          return (
-            <Bullet
-              geometry={bulletGeometry}
-              material={bulletMaterial}
-              self={self}
-              refs={refs}
-              removeMe={removeProjectile}
-              key={self.id}
-            />
-          );
-        }
-        return null;
-      })}
+      {bullets}
 
       {triangles.map((s, i) => {
         return (
@@ -456,7 +462,7 @@ type ConeProps = {
 
 const PsychCone = ({ setHovered }: ConeProps) => {
   return (
-    <group position-z={140}>
+    <group position-z={120}>
       {triangles.map((t, i) => {
         return (
           <mesh
