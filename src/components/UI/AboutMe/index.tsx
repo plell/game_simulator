@@ -93,6 +93,62 @@ export const AboutMe = () => {
         </Cued>
       </FlexRow>
 
+      <FlexRow>
+        <Cued>
+          <FlexRowItem>
+            <Title>3D Models</Title>
+          </FlexRowItem>
+        </Cued>
+        <Cued speed={speed}>
+          <FlexRowItem>
+            <Description isMobile={isMobile}>
+              <TextRevealer>
+                I started using Blender to create 3D models in January of 2023.
+                An elegant 3D model with some interactions can sometimes really
+                level up the website scrolling experience. I love it!
+              </TextRevealer>
+            </Description>
+          </FlexRowItem>
+        </Cued>
+        <Cued speed={speed}>
+          <MediaItem>
+            <Image src='/images/donut.png' />
+          </MediaItem>
+        </Cued>
+      </FlexRow>
+
+      <FlexRow>
+        <Cued>
+          <FlexRowItem>
+            <Title>Creative Audio</Title>
+          </FlexRowItem>
+        </Cued>
+        <Cued speed={speed}>
+          <FlexRowItem>
+            <Description isMobile={isMobile}>
+              <span>
+                <Link href='https://davidplell.bandcamp.com/' target='_blank'>
+                  Here
+                </Link>
+              </span>
+              <TextRevealer>
+                &nbsp;is my music portfolio. I started writing music and forming
+                bands in 2007. Since becoming an engineer, I really enjoy
+                putting my knowledge of audio production (eq, compression, etc.)
+                to work using audio libraries like the Web Audio API. Using
+                audio analysis to drive WebGL visuals is where it all comes
+                together for me.
+              </TextRevealer>
+            </Description>
+          </FlexRowItem>
+        </Cued>
+        <Cued speed={speed}>
+          <MediaItem>
+            <Image src='/images/ableton.png' />
+          </MediaItem>
+        </Cued>
+      </FlexRow>
+
       <FlexRow style={{ marginBottom: 200 }}>
         <Cued>
           <FlexRowItem>
@@ -229,10 +285,10 @@ const FlexRowItem = styled.div`
 const MediaItem = styled.div`
   display: flex;
   opacity: 0.9;
+  width: 100%;
+  justify-content: center;
 
   overflow: hidden;
-
-  box-shadow: 0px 0px 4px 0px #ffffff77;
 `;
 
 type ImageProps = {
@@ -246,5 +302,8 @@ const Image = styled.img<ImageProps>`
   background-size: contain;
   background-repeat: no-repeat;
   width: 100%;
+  max-width: 1000px;
   height: auto;
+  border-radius: 5px;
+  border: 5px solid #ffffff33;
 `;

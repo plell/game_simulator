@@ -91,6 +91,20 @@ export const experienceProperties: ExperienceProps[] = [
     game: Earth,
     showAboutMe: true,
   },
+  {
+    cameraPosition: new Vector3(0, 0, 170),
+    cameraTarget: new Vector3(0, 0, 0),
+    cameraNear: 10,
+    cameraFar: 2500,
+    gamePosition: new Vector3(0, 0, 0),
+    title: '',
+    description: '',
+    // instructions: 'Click to play',
+    cameraControls: false,
+    backgroundColor:'#000000',
+    game: Psychedelic,
+    // showAboutMe: true,
+  },
    {
     cameraPosition: new Vector3(0,0,40),
     cameraTarget: new Vector3(0, 0, 0),
@@ -172,20 +186,7 @@ export const experienceProperties: ExperienceProps[] = [
   //   game: RaceGame,
   //   uiComponent:Interface
   // },
-  {
-    cameraPosition: new Vector3(0, 0, 170),
-    cameraTarget: new Vector3(0, 0, 0),
-    cameraNear: 10,
-    cameraFar: 2500,
-    gamePosition: new Vector3(0, 0, 0),
-    title: '',
-    description: '',
-    // instructions: 'Click to play',
-    cameraControls: false,
-    backgroundColor:'#000000',
-    game: Psychedelic,
-    // showAboutMe: true,
-  },
+ 
   // {
   //   cameraPosition: new Vector3(0, 6, 6),
   //   cameraTarget: new Vector3(0, 0, 0),
