@@ -1,4 +1,4 @@
-import { Suspense, useMemo, useRef, useState } from "react";
+import { Suspense, useCallback, useMemo, useRef, useState } from "react";
 import { Group, MeshBasicMaterial, Vector3 } from "three";
 import { Cloud, Clouds } from "@react-three/drei";
 
@@ -18,10 +18,19 @@ export const SpaceGame = () => {
   const playerRef = useRef<Group | null>(null);
   const mouseRef = useRef<Vector3>(mouseVec3);
   const [score, setScore] = useState(0);
+  const [subScore, setSubScore] = useState(0);
 
   const [level, setLevel] = useState(1);
 
   const projectilesRef = useRef<Refs>({});
+
+  const addToSubScore = useCallback(() => {
+    setSubScore(subScore + 1);
+  }, [setSubScore, subScore]);
+
+  const resetSubScore = useCallback(() => {
+    setSubScore(0);
+  }, [setSubScore, subScore]);
 
   const enemies = useMemo(() => {
     const b: any = [];
@@ -29,18 +38,39 @@ export const SpaceGame = () => {
     for (let i = 0; i < 10; i++) {
       const id = i + "-bird";
       b.push(
-        <Enemy key={id} playerRef={playerRef} projectilesRef={projectilesRef} />
+        <Enemy
+          key={id}
+          playerRef={playerRef}
+          projectilesRef={projectilesRef}
+          onDeath={addToSubScore}
+          onCrash={resetSubScore}
+        />
       );
     }
 
     return b;
-  }, [playerRef, projectilesRef]);
+  }, [playerRef, projectilesRef, subScore, setSubScore]);
 
   return (
     <group ref={ref} position={[0, 0, 0]}>
       <directionalLight position={[5, 5, 100]} intensity={1} />
 
       <CloudSpace />
+
+      <GameProgress
+        position={new Vector3(0, 3, 10)}
+        type='bar'
+        max={10}
+        score={subScore}
+        level={1}
+        color='#cccccc'
+        hideText
+        setLevel={() => {
+          setSubScore(0);
+          setScore(score + 1);
+        }}
+        scale={0.03}
+      />
 
       <GameProgress
         position={new Vector3(0, 5, 10)}
@@ -84,7 +114,7 @@ export const SpaceGame = () => {
         level={level}
         refs={projectilesRef}
         player={playerRef}
-        launchPosition={[0, -4, 0]}
+        launchPosition={[0, -4.7, 0]}
       />
 
       {enemies}

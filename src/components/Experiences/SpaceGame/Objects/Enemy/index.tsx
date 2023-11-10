@@ -1,12 +1,4 @@
-import { RapierRigidBody, RigidBody } from "@react-three/rapier";
-import {
-  MutableRefObject,
-  useEffect,
-  useLayoutEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { MutableRefObject, useEffect, useRef, useState } from "react";
 
 import {
   BoxGeometry,
@@ -14,7 +6,6 @@ import {
   Group,
   MathUtils,
   MeshBasicMaterial,
-  MeshStandardMaterial,
   Vector3,
 } from "three";
 import { useFrame } from "@react-three/fiber";
@@ -24,7 +15,7 @@ import {
   useObjectsIntersect,
 } from "../../../hooks/useObjectsIntersect";
 import gsap from "gsap";
-import { DEAD_ZONE_Y } from "../../../../../Stores/constants";
+import { DEAD_ZONE_Y, postDebounce } from "../../../../../Stores/constants";
 
 const width = 30;
 
@@ -39,12 +30,19 @@ const getRandomY = () => {
 type Props = {
   projectilesRef: MutableRefObject<Refs>;
   playerRef: MutableRefObject<Group | null>;
+  onDeath: () => void;
+  onCrash: () => void;
 };
 
 const baseColor = new Color("#aaaaaa");
 const boxGeo = new BoxGeometry(2, 1, 1);
 
-export const Enemy = ({ projectilesRef, playerRef }: Props) => {
+export const Enemy = ({
+  projectilesRef,
+  playerRef,
+  onDeath,
+  onCrash,
+}: Props) => {
   const ref = useRef<Group | null>(null);
   const materialRef = useRef<MeshBasicMaterial | null>(null);
   const [color, setColor] = useState(baseColor.clone());
@@ -77,6 +75,7 @@ export const Enemy = ({ projectilesRef, playerRef }: Props) => {
     if (objectsIntersect) {
       setColor(color.set("red"));
       setScale(0);
+      postDebounce("crash", () => onCrash(), 100);
     }
   }, [objectsIntersect]);
 
@@ -107,6 +106,7 @@ export const Enemy = ({ projectilesRef, playerRef }: Props) => {
 
   const hit = () => {
     if (!animating && ref.current) {
+      onDeath();
       setAnimating(true);
       setColor(color.set("red"));
       gsap

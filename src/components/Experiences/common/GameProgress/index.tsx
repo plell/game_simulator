@@ -28,6 +28,7 @@ type Props = {
   hideText?: boolean;
   scale?: number;
   intensity?: number;
+  color?: string;
 };
 
 const circleGeo = new CircleGeometry(2, 40);
@@ -55,6 +56,7 @@ export const GameProgress = ({
   type,
   max,
   score,
+  color,
   intensity,
   scoreRef,
   position,
@@ -156,16 +158,20 @@ export const GameProgress = ({
 
   useFrame(() => {
     const s = score || scoreRef?.current;
-    if (type === "bar" && (s || s === 0) && progressRef?.current) {
-      const xScale = s ? (scoreInverted ? (max - s) / max : s / max) : 1;
 
-      const yScale = scoreComplete || refScoreComplete ? 2 : 1;
-      progressRef.current.scale.set(xScale, yScale, 1);
+    if (type === "bar" && (s || s === 0) && progressRef?.current) {
+      let xScale = s ? (scoreInverted ? (max - s) / max : s / max) : 1;
+
+      if (xScale > 1) {
+        xScale = 1;
+      }
+
+      progressRef.current.scale.set(xScale, 1, 1);
 
       if (initialized && !(scoreComplete || refScoreComplete)) {
         const s_ = scoreInverted ? max - s : s;
 
-        if (s_ > max - 1) {
+        if (!animating && s_ > max - 1) {
           setRefScoreComplete(true);
         }
       }
@@ -220,10 +226,10 @@ export const GameProgress = ({
                       ? "white"
                       : score < 0
                       ? "red"
-                      : "purple"
+                      : color || "purple"
                   }
                   emissiveIntensity={
-                    refScoreComplete || scoreComplete ? 1 : intensity || 40
+                    refScoreComplete || scoreComplete ? 6 : intensity || 1
                   }
                 />
               </mesh>
