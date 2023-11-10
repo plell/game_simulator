@@ -75,3 +75,58 @@ void main()
 
 }
 `;
+
+
+export const cloudFragmentShader = `
+#ifdef GL_ES
+precision mediump float;
+#endif
+
+varying float vTime;
+varying vec2 vResolution;
+
+float hash(vec2 p) {
+    float h = dot(p, vec2(127.1, 311.7));
+    return fract(sin(h) * 43758.5453123);
+}
+
+float noise(vec2 p) {
+    vec2 i = floor(p);
+    vec2 f = fract(p);
+
+    float a = hash(i);
+    float b = hash(i + vec2(1.0, 0.0));
+    float c = hash(i + vec2(0.0, 1.0));
+    float d = hash(i + vec2(1.0, 1.0));
+
+    vec2 u = f * f * (3.0 - 2.0 * f);
+
+    return mix(a, b, u.x) + (c - a) * u.y * (1.0 - u.x) + (d - b) * u.x * u.y;
+}
+
+void main() {
+    vec2 uv = gl_FragCoord.xy / vResolution.xy;
+    uv = uv * 2.0 - 1.0;
+
+    vec2 p = uv * 10.0 + vec2(vTime * 0.1, vTime * 0.2);
+
+    float cloud = noise(p * 0.5) * 0.5 + 0.5;
+    float turbulence = 0.1 * noise(p * 2.0);
+    cloud += turbulence;
+
+    // Simulate movement through the clouds using time
+    float speed = 0.2;
+    p.y -= vTime * speed;
+
+    cloud = noise(p * 0.5) * 0.5 + 0.5;
+    turbulence = 0.1 * noise(p * 2.0);
+    cloud += turbulence;
+
+    vec3 skyColor = vec3(0.5, 0.7, 1.0);
+    vec3 cloudColor = vec3(1.0, 1.0, 1.0);
+    vec3 finalColor = mix(skyColor, cloudColor, cloud);
+
+    gl_FragColor = vec4(finalColor, 1.0);
+}
+
+`

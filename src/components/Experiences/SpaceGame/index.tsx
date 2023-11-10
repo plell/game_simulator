@@ -81,6 +81,7 @@ export const SpaceGame = () => {
       />
 
       <Projectiles
+        level={level}
         refs={projectilesRef}
         player={playerRef}
         launchPosition={[0, -4, 0]}

@@ -9,9 +9,10 @@ type Props = {
   player: React.MutableRefObject<Group | null>;
   launchPosition?: [x: number, y: number, z: number];
   refs: MutableRefObject<Refs>;
+  level: number;
 };
 
-export const Projectiles = ({ refs, player, launchPosition }: Props) => {
+export const Projectiles = ({ refs, player, launchPosition, level }: Props) => {
   const [projectiles, setProjectiles] = useState<Record<string, Projectile>>(
     {}
   );
@@ -25,7 +26,6 @@ export const Projectiles = ({ refs, player, launchPosition }: Props) => {
 
   const newProjectile = () => {
     const pCopy = { ...projectiles };
-    const id = uuidv4();
 
     const playerPosition = player?.current?.position.clone() || new Vector3();
     const offset: [x: number, y: number, z: number] = launchPosition
@@ -37,6 +37,7 @@ export const Projectiles = ({ refs, player, launchPosition }: Props) => {
       playerPosition.z + offset[2]
     );
 
+    const id = uuidv4();
     pCopy[id] = {
       id,
       position: position,
@@ -44,6 +45,31 @@ export const Projectiles = ({ refs, player, launchPosition }: Props) => {
       dead: false,
       direction: new Vector3(0, 0.3, 0),
     };
+
+    const id2 = uuidv4();
+    pCopy[id2] = {
+      id: id2,
+      position: position,
+      type: "projectile",
+      dead: false,
+      direction: new Vector3(0.1, 0.2, 0),
+    };
+
+    const id3 = uuidv4();
+    pCopy[id3] = {
+      id: id3,
+      position: position,
+      type: "projectile",
+      dead: false,
+      direction: new Vector3(-0.1, 0.2, 0),
+    };
+
+    if (level < 2) {
+      delete pCopy[id2];
+      delete pCopy[id3];
+    } else if (level < 3) {
+      delete pCopy[id];
+    }
 
     setProjectiles(pCopy);
   };

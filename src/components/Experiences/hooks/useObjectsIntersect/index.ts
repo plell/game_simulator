@@ -82,8 +82,8 @@ export const useObjectIntersectsManyB = (objectA: IntersectObject, objects: Inte
 
       Object.values(objects.current).forEach((o) => {
         if (!o) return
-        const { x, y, z } = o.position
-        boundingBoxB.setFromCenterAndSize(reuseableVec.set(x, y, z), reuseableVec2.set(0.02, 0.02, 0.02));
+        o.getWorldPosition(reuseableVec)
+        boundingBoxB.setFromCenterAndSize(reuseableVec, reuseableVec2.set(0.02, 0.02, 0.02));
         
         if (boundingBoxA.intersectsBox(boundingBoxB)) {
           intersectingObjectsCount.push(o.userData.id)

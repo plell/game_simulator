@@ -48,7 +48,7 @@ export const Bullet = ({ refs, self, removeMe, material, geometry }: Props) => {
       ref.position.y += self.direction.y;
       ref.position.x += self.direction.x;
       ref.position.z += self.direction.z;
-      ref.rotation.z += 16 * delta;
+      ref.rotation.z += 6 * delta;
 
       if (ref.position.y > DEAD_ZONE_Y - 1) {
         setDead(true);

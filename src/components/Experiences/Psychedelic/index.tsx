@@ -22,6 +22,8 @@ import {
   Mesh,
   MeshBasicMaterial,
   MeshStandardMaterial,
+  Shape,
+  ShapeGeometry,
   Vector3,
 } from "three";
 import { v4 as uuidv4 } from "uuid";
@@ -39,7 +41,7 @@ const triangleYAdjust = Math.PI * 0.8;
 
 const buffer = 60;
 
-const bulletSpeed = 0.3;
+const bulletSpeed = 0.15;
 
 type Triangle = {
   x: number;
@@ -125,15 +127,9 @@ export const Psychedelic = () => {
 const Content = () => {
   const [hovered, setHovered] = useState<Triangle | null>(null);
   const sensorRef = useRef<Mesh | null>(null);
-  const gameGroupRef = useRef<Group | null>(null);
+
   const [level, setLevel] = useState(1);
   const [score, setScore] = useState(0);
-
-  useFrame((_, delta) => {
-    if (gameGroupRef.current && level > 1) {
-      // gameGroupRef.current.rotation.z += 0.3 * delta;
-    }
-  });
 
   return (
     <Suspense fallback={null}>
@@ -151,37 +147,32 @@ const Content = () => {
         scale={0.1}
       />
 
-      <group ref={gameGroupRef}>
-        <group position-z={15}>
-          <Beats
-            sensorRef={sensorRef}
-            hovered={hovered}
-            score={score}
-            setScore={setScore}
-            level={level}
-          />
-          <PsychCone setHovered={setHovered} />
-        </group>
+      <group position-z={15}>
+        <Beats
+          sensorRef={sensorRef}
+          hovered={hovered}
+          score={score}
+          setScore={setScore}
+          level={level}
+        />
 
-        <mesh ref={sensorRef} rotation-x={Math.PI * 0.5}>
-          <cylinderGeometry args={[26, 26, 30, 6]} />
-          <meshBasicMaterial wireframe opacity={0} transparent />
-        </mesh>
-
-        <Select enabled={true}>
-          <mesh
-            rotation-x={Math.PI * 0.5}
-            onPointerOut={() => setHovered(null)}
-          >
-            <coneGeometry args={[30, 30, 6, undefined, true]} />
-            <Shader />
-          </mesh>
-        </Select>
+        <PsychCone setHovered={setHovered} />
       </group>
+
+      <mesh ref={sensorRef} rotation-x={Math.PI * 0.5}>
+        <cylinderGeometry args={[26, 26, 30, 6]} />
+        <meshBasicMaterial wireframe opacity={0} transparent />
+      </mesh>
+
+      <Select enabled={true}>
+        <mesh rotation-x={Math.PI * 0.5} onPointerOut={() => setHovered(null)}>
+          <coneGeometry args={[30, 30, 6, undefined, true]} />
+          <Shader />
+        </mesh>
+      </Select>
 
       <mesh rotation-z={Math.PI * -0.5} position-z={-30}>
         <planeGeometry args={[200, 300]} />
-
         <meshBasicMaterial color={"black"} />
       </mesh>
     </Suspense>
@@ -201,7 +192,7 @@ const Beats = ({ sensorRef, hovered, score, setScore, level }: BeatsProps) => {
   const barrierGroupRef = useRef<Group | null>(null);
   const barrierRef = useRef<Mesh | null>(null);
   const barrierMaterialRef = useRef<MeshStandardMaterial | null>(null);
-
+  const gameGroupRef = useRef<Group | null>(null);
   const [barrierIntensity, setBarrierIntensity] = useState(1.1);
 
   const [barrierRotation, setBarrierRotation] = useState({
@@ -264,6 +255,12 @@ const Beats = ({ sensorRef, hovered, score, setScore, level }: BeatsProps) => {
       );
     }
 
+    if (gameGroupRef.current && level > 1) {
+      const mult = level > 5 ? 1.5 : 1;
+      const speed = level * 0.2 * mult;
+      gameGroupRef.current.rotation.z += speed * delta;
+    }
+
     if (intersect.current.length > 0) {
       projectilesRef.current[intersect.current[0]].position.set(
         0,
@@ -293,7 +290,13 @@ const Beats = ({ sensorRef, hovered, score, setScore, level }: BeatsProps) => {
           />
         </mesh>
       </group>
-      <Projectiles level={level} sensorRef={sensorRef} refs={projectilesRef} />
+      <group ref={gameGroupRef}>
+        <Projectiles
+          level={level}
+          sensorRef={sensorRef}
+          refs={projectilesRef}
+        />
+      </group>
     </>
   );
 };
@@ -309,7 +312,11 @@ type BulletProps = {
   direction: Vector3;
 };
 
-const bulletMaterial = new MeshBasicMaterial({ color: "white" });
+const bulletMaterial = new MeshStandardMaterial({
+  emissive: "white",
+  emissiveIntensity: 2,
+});
+
 const bulletGeometry = new CircleGeometry(2, 2);
 
 export const Projectiles = ({ refs, sensorRef, level }: Props) => {

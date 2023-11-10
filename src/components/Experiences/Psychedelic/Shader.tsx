@@ -2,7 +2,7 @@ import { vertexShader } from "./shaders/vertexShader";
 import { fragmentShader } from "./shaders/fragmentShader";
 import { useMemo, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
-import { ShaderMaterial } from "three";
+import { ShaderMaterial, Vector2 } from "three";
 
 const size = 100.0;
 
@@ -21,6 +21,9 @@ export const Shader = ({ opacity }: Props) => {
       uSize: {
         value: size,
       },
+      uResolution: {
+        value: new Vector2(100, 100),
+      },
     }),
     []
   );
@@ -35,8 +38,6 @@ export const Shader = ({ opacity }: Props) => {
   return (
     <shaderMaterial
       ref={ref}
-      transparent
-      opacity={opacity}
       fragmentShader={fragmentShader}
       vertexShader={vertexShader}
       uniforms={uniforms}
