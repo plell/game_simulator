@@ -91,20 +91,7 @@ export const experienceProperties: ExperienceProps[] = [
     game: Earth,
     showAboutMe: true,
   },
-  {
-    cameraPosition: new Vector3(0, 0, 170),
-    cameraTarget: new Vector3(0, 0, 0),
-    cameraNear: 10,
-    cameraFar: 2500,
-    gamePosition: new Vector3(0, 0, 0),
-    title: '',
-    description: '',
-    // instructions: 'Click to play',
-    cameraControls: false,
-    backgroundColor:'#000000',
-    game: Psychedelic,
-    // showAboutMe: true,
-  },
+  
    {
     cameraPosition: new Vector3(0,0,40),
     cameraTarget: new Vector3(0, 0, 0),
@@ -146,57 +133,19 @@ export const experienceProperties: ExperienceProps[] = [
     cameraControls: false,
     game: SpaceGame
   },
-  
+  {
+    cameraPosition: new Vector3(0, 0, 170),
+    cameraTarget: new Vector3(0, 0, 0),
+    cameraNear: 10,
+    cameraFar: 2500,
+    gamePosition: new Vector3(0, 0, 0),
+    title: '',
+    description: '',
+    // instructions: 'Click to play',
+    cameraControls: false,
+    backgroundColor:'#000000',
+    game: Psychedelic,
+    // showAboutMe: true,
+  },
  
-  
-  // {
-  //   cameraPosition: new Vector3(0, 0, 60),
-  //   cameraTarget: new Vector3(0, 0, 0),
-  //   gamePosition: new Vector3(0, 0, 0),
-  //   title: 'Tempo Sneakers',
-  //   description: 'A music adventure game.',
-  //   instructions: 'The player moves toward the cursor. Click to drop a note, bait enemies toward notes to gain points.',
-  //   cameraControls: false,
-  //   game:TempoGame
-  // },
-  
-  // {
-  //   cameraPosition: new Vector3(0, 22, 20),
-  //   cameraTarget: new Vector3(0, 0, -5),
-  //   cameraNear: 10,
-  //   cameraFar: 2500,
-  //   gamePosition: new Vector3(0, 0, 0),
-  //   title: '',
-  //   description: '',
-  //   instructions: 'Click to play',
-  //   cameraControls: false,
-  //   game:CrocGame
-  // },
-  // {
-  //   cameraPosition: new Vector3(0,0,0),
-  //   cameraTarget: new Vector3(0, 0, 0),
-  //   cameraNear: 0.1,
-  //   cameraFar: 500,
-  //   gamePosition: new Vector3(0, 0, 0),
-  //   title: '',
-  //   description: '',
-  //   instructions: '',
-  //   cameraControls: false,
-  //   backgroundColor:'#000000',
-  //   game: RaceGame,
-  //   uiComponent:Interface
-  // },
- 
-  // {
-  //   cameraPosition: new Vector3(0, 6, 6),
-  //   cameraTarget: new Vector3(0, 0, 0),
-  //   cameraNear: 1,
-  //   cameraFar: 300,
-  //   gamePosition: new Vector3(0, 0, 0),
-  //   title: '',
-  //   description: '',
-  //   cameraControls: true,
-  //   backgroundColor:'#000000',
-  //   game: AudioShader,
-  // },
 ]
