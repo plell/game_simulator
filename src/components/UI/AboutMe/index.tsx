@@ -52,9 +52,9 @@ export const AboutMe = () => {
               </span>
               <TextRevealer>
                 &nbsp;is a Web3 sidekick social media platform that I built from
-                the ground up using React, Golang and PostgreSQL. Here you can
-                meet Sphinx Chat users, join Sphinx tribes, earn badges, and
-                claim coding bounties.
+                the ground up using React, Typescript, Golang and PostgreSQL.
+                Here you can meet Sphinx Chat users, join Sphinx tribes, earn
+                badges, and claim coding bounties.
               </TextRevealer>
             </Description>
           </FlexRowItem>
@@ -77,11 +77,13 @@ export const AboutMe = () => {
           <FlexRowItem>
             <Description isMobile={isMobile}>
               <TextRevealer>
-                Second Brain is an application that collects data for an open
-                source machine learning bank. I designed and built the UI using
-                React Three Fiber. My goal was to encourage community
-                participation by bringing the daily evolution of the knowledge
-                graph to life.
+                Second Brain is an application that collects and displays data
+                for an open source machine learning model. I designed and built
+                the UI with React, Typescript, and R3F. My main goal was to
+                present data in a way that invites more community contributions.
+                I brought the story of each data node to the UI: details on who
+                contributed the data, and how much they contribute to the
+                platform.
               </TextRevealer>
             </Description>
           </FlexRowItem>
@@ -102,7 +104,7 @@ export const AboutMe = () => {
         <Cued speed={speed}>
           <FlexRowItem>
             <Description isMobile={isMobile}>
-              I have a&nbsp;
+              Here's my&nbsp;
               <span>
                 <Link href='https://davidplell.bandcamp.com/' target='_blank'>
                   music portfolio.
