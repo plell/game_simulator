@@ -9,11 +9,6 @@ type Props = {
   children: string;
 };
 
-const chars =
-  `abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()`.split(
-    ""
-  );
-
 export const TextRevealer = ({ children }: Props) => {
   const cueRef = useRef(null);
 
@@ -45,21 +40,14 @@ export const TextRevealer = ({ children }: Props) => {
         const transformedString = [];
         for (let i = 0; i < children.length; i += 1) {
           if (i <= count) {
-            // const myChar = children[i];
-            // const charIndex = chars.findIndex((f) => f === myChar);
             let letter = children[i];
-            // if (count < children.length && count < i + 6) {
-            //   const randomIndex = Math.floor(Math.random() * chars.length);
-            //   console.log("randomIndex", randomIndex);
-            //   letter = chars[randomIndex];
-            // }
-
             transformedString.push(letter);
           }
         }
 
         let stringified = "";
         transformedString.forEach((s) => (stringified += s));
+
         setTextToRender(stringified);
       }
     }, 10);
@@ -76,15 +64,20 @@ export const TextRevealer = ({ children }: Props) => {
     [textToRender, children]
   );
 
+  const hiddenText = useMemo(() => {
+    let s = children.slice(textToRender.length, children.length);
+
+    return s;
+  }, [children, textToRender]);
+
   return (
     <Inline>
       <Cue ref={cueRef} isMounted={!cueMounted} />
       <>
-        {textToRender} {!hideBlock && <span style={{ opacity: 0.9 }}>▌</span>}
+        {textToRender}
+        {!hideBlock && <Block>▐</Block>}
       </>
-      <HiddenText>
-        {children.slice(textToRender.length, children.length)}
-      </HiddenText>
+      <HiddenText>{hiddenText}</HiddenText>
     </Inline>
   );
 };
@@ -97,8 +90,13 @@ const Inline = styled.div`
   position: relative;
 `;
 
+const Block = styled.span`
+  opacity: 0.9;
+  overflow: hidden;
+`;
+
 const Cue = styled.span<CueProps>``;
-const HiddenText = styled.div`
+const HiddenText = styled.span`
   display: inline;
   opacity: 0;
   user-select: none;

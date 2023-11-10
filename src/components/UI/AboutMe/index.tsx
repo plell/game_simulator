@@ -96,48 +96,24 @@ export const AboutMe = () => {
       <FlexRow>
         <Cued>
           <FlexRowItem>
-            <Title>3D Models</Title>
+            <Title>Professional Audio</Title>
           </FlexRowItem>
         </Cued>
         <Cued speed={speed}>
           <FlexRowItem>
             <Description isMobile={isMobile}>
-              <TextRevealer>
-                I started using Blender to create 3D models in January of 2023.
-                An elegant 3D model with some interactions can sometimes really
-                level up the website scrolling experience. I love it!
-              </TextRevealer>
-            </Description>
-          </FlexRowItem>
-        </Cued>
-        <Cued speed={speed}>
-          <MediaItem>
-            <Image src='/images/donut.png' />
-          </MediaItem>
-        </Cued>
-      </FlexRow>
-
-      <FlexRow>
-        <Cued>
-          <FlexRowItem>
-            <Title>Creative Audio</Title>
-          </FlexRowItem>
-        </Cued>
-        <Cued speed={speed}>
-          <FlexRowItem>
-            <Description isMobile={isMobile}>
+              I have a&nbsp;
               <span>
                 <Link href='https://davidplell.bandcamp.com/' target='_blank'>
-                  Here
+                  music portfolio.
                 </Link>
               </span>
               <TextRevealer>
-                &nbsp;is my music portfolio. I started writing music and forming
-                bands in 2007. Since becoming an engineer, I really enjoy
-                putting my knowledge of audio production (eq, compression, etc.)
-                to work using audio libraries like the Web Audio API. Using
-                audio analysis to drive WebGL visuals is where it all comes
-                together for me.
+                &nbsp;I started writing music and forming bands in 2007. Since
+                becoming an engineer, I really enjoy putting my knowledge of
+                audio production (eq, compression, etc.) to work when I use
+                audio libraries like the Web Audio API. Using audio analysis to
+                drive WebGL visuals is where it all comes together for me.
               </TextRevealer>
             </Description>
           </FlexRowItem>
@@ -145,6 +121,30 @@ export const AboutMe = () => {
         <Cued speed={speed}>
           <MediaItem>
             <Image src='/images/ableton.png' />
+          </MediaItem>
+        </Cued>
+      </FlexRow>
+
+      <FlexRow>
+        <Cued>
+          <FlexRowItem>
+            <Title>3D Modeling</Title>
+          </FlexRowItem>
+        </Cued>
+        <Cued speed={speed}>
+          <FlexRowItem>
+            <Description isMobile={isMobile}>
+              <TextRevealer>
+                I started using Blender to create 3D models in January of 2023.
+                An elegant 3D model with some interactions can really level up
+                the scrolling experience. I love it!
+              </TextRevealer>
+            </Description>
+          </FlexRowItem>
+        </Cued>
+        <Cued speed={speed}>
+          <MediaItem>
+            <Image src='/images/donut.png' />
           </MediaItem>
         </Cued>
       </FlexRow>
