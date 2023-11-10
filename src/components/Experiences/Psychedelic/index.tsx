@@ -194,11 +194,16 @@ const Beats = ({ sensorRef, hovered, score, setScore, level }: BeatsProps) => {
   const barrierMaterialRef = useRef<MeshStandardMaterial | null>(null);
   const gameGroupRef = useRef<Group | null>(null);
   const [barrierIntensity, setBarrierIntensity] = useState(1.1);
+  const [mult, setMult] = useState(1);
 
   const [barrierRotation, setBarrierRotation] = useState({
     rotation: 0,
     order: 0,
   });
+
+  useEffect(() => {
+    setMult((Math.random() - 0.5) * 1.6);
+  }, [level]);
 
   useEffect(() => {
     setBarrierIntensity(2);
@@ -256,7 +261,6 @@ const Beats = ({ sensorRef, hovered, score, setScore, level }: BeatsProps) => {
     }
 
     if (gameGroupRef.current && level > 1) {
-      const mult = level > 5 ? 1.5 : 1;
       const speed = level * 0.2 * mult;
       gameGroupRef.current.rotation.z += speed * delta;
     }

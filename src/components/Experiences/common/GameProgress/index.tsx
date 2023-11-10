@@ -226,7 +226,7 @@ export const GameProgress = ({
                       ? "white"
                       : score < 0
                       ? "red"
-                      : color || "purple"
+                      : color || "white"
                   }
                   emissiveIntensity={
                     refScoreComplete || scoreComplete ? 6 : intensity || 1
