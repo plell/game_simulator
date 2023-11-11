@@ -20,10 +20,7 @@ import {
   Group,
   MathUtils,
   Mesh,
-  MeshBasicMaterial,
   MeshStandardMaterial,
-  Shape,
-  ShapeGeometry,
   Vector3,
 } from "three";
 import { v4 as uuidv4 } from "uuid";
