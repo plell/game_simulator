@@ -67,7 +67,7 @@ void main()
   float slowFlutter = sin(vTime * 0.4) * vSize * 0.2 + 0.2;
   float heartBeat = sin(vTime * 7.0) * 0.5;
   float noiseVary = sin(vTime * 0.1);
-  float strength = step(0.9, sin(cnoise(vUv * 10.0 * noiseVary) * slowFlutter + heartBeat));
+  float strength = step(0.9, sin(cnoise(vUv * 8.0 * noiseVary) * slowFlutter + heartBeat));
   vec3 blackColor = vec3(0.0);
   vec3 uvColor = vec3(vUv, 1.0);
   vec3 mixedColor = mix(blackColor,uvColor,strength);

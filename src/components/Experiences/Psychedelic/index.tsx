@@ -166,7 +166,7 @@ const Content = () => {
 
       <Select enabled={true}>
         <mesh rotation-x={Math.PI * 0.5} onPointerOut={() => setHovered(null)}>
-          <coneGeometry args={[30, 30, 6, undefined, true]} />
+          <coneGeometry args={[30, 1, 6, undefined, true]} />
           <Shader />
         </mesh>
       </Select>
