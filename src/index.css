@@ -113,3 +113,31 @@ cursor:pointer;
  {
      background: #ffffff99;
  }
+
+ .clickStartWrap{
+  display : flex;
+  pointer-events : none;
+  justify-content : center;
+  align-items : center;
+  position : absolute;
+  top : 0px;
+  left : 0px;
+  height : 100%;
+  width : 100%;
+  z-index : 9999;
+ }
+
+ .clickStartButton{
+  display: flex;
+  pointer-events : auto;
+  justify-content : center;
+  align-items : center;
+  border-radius : 100%;
+  border : 4px solid #ffffff;
+  color : #f1f1f1;
+  font-size : 26px;
+  font-weight : 300;
+  height : 200px;
+  width : 200px;
+  cursor : pointer;
+ }

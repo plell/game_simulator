@@ -10,35 +10,12 @@ export const useStartButton = () => {
   useEffect(() => {
     const wrapper = document.createElement("div");
 
-    wrapper.style.display = "flex";
-    wrapper.style.pointerEvents = "none";
-    wrapper.style.justifyContent = "center";
-    wrapper.style.alignItems = "center";
-    wrapper.style.position = "absolute";
-    wrapper.style.top = "0px";
-    wrapper.style.left = "0px";
-    wrapper.style.height = "100%";
-    wrapper.style.width = "100%";
-    wrapper.style.zIndex = "9999";
+    wrapper.className = "clickStartWrap";
 
     const button = document.createElement("div");
     button.innerHTML = "Click to start";
-    button.style.display = "flex";
-    button.style.pointerEvents = "auto";
-    button.style.justifyContent = "center";
-    button.style.alignItems = "center";
-    button.style.borderRadius = "100%";
-    button.style.border = "10px solid #ffffff";
+    button.className = "clickStartButton";
 
-    // button.style.background = "#ffffff22";
-    button.style.color = "#f1f1f1";
-    button.style.fontSize = "26px";
-    button.style.fontWeight = "300";
-
-    button.style.height = "200px";
-    button.style.width = "200px";
-
-    button.style.cursor = "pointer";
     button.onpointerdown = () => {
       button.remove();
       wrapper.remove();
