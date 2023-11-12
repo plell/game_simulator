@@ -32,6 +32,8 @@ import { useFrame } from "@react-three/fiber";
 import { useAudioAnalysis } from "../hooks/useAudioAnalysis";
 
 import { GameProgress } from "../common/GameProgress";
+import { useStartButton } from "../hooks/useStartButton";
+import { Loading } from "../common/Loading";
 
 const triangleSize = Math.PI * 6;
 const triangleYAdjust = Math.PI * 0.8;
@@ -113,6 +115,12 @@ const triangles: Triangle[] = [
 
 export const Psychedelic = () => {
   const game = useGame((s) => s.game);
+
+  const { ready } = useStartButton();
+
+  if (!ready) {
+    return <Loading text={"This game plays audio"} />;
+  }
 
   return (
     <group position={experienceProperties[game]?.gamePosition}>

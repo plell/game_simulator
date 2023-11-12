@@ -22,17 +22,19 @@ export const useStartButton = () => {
     wrapper.style.zIndex = "9999";
 
     const button = document.createElement("div");
-    button.innerHTML = "Click to Start";
+    button.innerHTML = "Click to start";
     button.style.display = "flex";
     button.style.pointerEvents = "auto";
     button.style.justifyContent = "center";
     button.style.alignItems = "center";
     button.style.borderRadius = "100%";
-    button.style.border = "1px solid #ffffff99";
+    button.style.border = "10px solid #ffffff";
 
     // button.style.background = "#ffffff22";
     button.style.color = "#f1f1f1";
-    button.style.fontSize = "24px";
+    button.style.fontSize = "26px";
+    button.style.fontWeight = "300";
+
     button.style.height = "200px";
     button.style.width = "200px";
 
