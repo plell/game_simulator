@@ -1,6 +1,6 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
-import { Color, Mesh, MeshBasicMaterial, Vector3 } from "three";
+import { BoxGeometry, Color, Mesh, MeshBasicMaterial, Vector3 } from "three";
 import { hihat, kick, playSound, snare } from "../Tone";
 import {
   getMovement,
@@ -93,12 +93,15 @@ export const Loop = () => {
     }
   }, [worldTile]);
 
-  useFrame(({ mouse }, delta) => {
-    if (worldTile.shrine || players.p1?.dead) {
+  useFrame(({ mouse, clock }, delta) => {
+    if (!ref.current) {
       return;
     }
 
-    if (!ref.current) {
+    ref.current.material.emissiveIntensity =
+      1 + Math.abs(Math.sin(clock.getElapsedTime())) * 0.3;
+
+    if (worldTile.shrine || players.p1?.dead) {
       return;
     }
 
@@ -212,8 +215,8 @@ export const Loop = () => {
   return (
     <>
       <mesh ref={ref}>
-        <boxGeometry args={[3, grid.height, 1]} />
-        <meshStandardMaterial />
+        <boxGeometry args={[0.1, grid.height, 0.1]} />
+        <meshStandardMaterial emissive={"white"} emissiveIntensity={1.1} />
       </mesh>
 
       {/* patterns */}
@@ -235,6 +238,9 @@ type NoteComponentProps = {
   played: boolean;
 };
 
+const boxGeo = new BoxGeometry(1, 1, 1);
+const white = new Color("white");
+
 const NoteComponent = ({ note, color, played }: NoteComponentProps) => {
   const body = useRef<RapierRigidBody | null>(null);
   const material = useRef<MeshBasicMaterial | null>(null);
@@ -245,6 +251,7 @@ const NoteComponent = ({ note, color, played }: NoteComponentProps) => {
   const setPatterns = useGame((s) => s.setPatterns);
   const setEnemies = useGame((s) => s.setEnemies);
   const [emitterActive, setEmitterActive] = useState(false);
+  const myColor = useMemo(() => new Color(color), []);
 
   const position = useMemo(() => {
     if (body.current) {
@@ -299,7 +306,7 @@ const NoteComponent = ({ note, color, played }: NoteComponentProps) => {
 
       const distance = myPosition.distanceTo(targetPosition);
 
-      if (distance < 6) {
+      if (distance < 2) {
         hit = true;
         enemiesClone[e.id].health -= 20;
         if (enemiesClone[e.id]?.body?.current) {
@@ -314,14 +321,22 @@ const NoteComponent = ({ note, color, played }: NoteComponentProps) => {
     }
 
     // flash
-    material.current?.color.set(new Color("red"));
     setEmitterActive(true);
 
     setTimeout(() => {
-      material.current?.color.set(new Color(color));
       setEmitterActive(false);
     }, 200);
   };
+
+  useFrame(() => {
+    if (material.current) {
+      if (emitterActive) {
+        material.current?.color.lerp(white, 0.2);
+      } else {
+        material.current.color.lerp(myColor, 0.1);
+      }
+    }
+  });
 
   return (
     <>
@@ -335,8 +350,7 @@ const NoteComponent = ({ note, color, played }: NoteComponentProps) => {
         lockRotations
         friction={1}
       >
-        <mesh>
-          <boxGeometry args={[1, 1, 1]} />
+        <mesh geometry={boxGeo}>
           <meshBasicMaterial ref={material} color={color} />
         </mesh>
       </RigidBody>

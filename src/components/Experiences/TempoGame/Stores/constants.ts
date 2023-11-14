@@ -36,8 +36,8 @@ export const controls = [
 const gridX = 0
 const gridY = 0
 const gridZ = -1
-const gridWidth = 60
-const gridHeight = 40
+const gridWidth = 30
+const gridHeight = 20
 
 export const grid = {
     x: gridX,
@@ -308,7 +308,7 @@ export const debounce = (fn: () => void, ms = 300) => {
   };
 };
 
-export const defaultTempo = 40
+export const defaultTempo = 10
 
 const bufferTimeouts: Record<string, ReturnType<typeof setTimeout>> = {}
 

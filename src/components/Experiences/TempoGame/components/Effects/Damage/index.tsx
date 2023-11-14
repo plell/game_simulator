@@ -1,12 +1,15 @@
 import { useFrame } from "@react-three/fiber";
 import { RapierRigidBody } from "@react-three/rapier";
 import { useEffect, useRef } from "react";
-import { Mesh } from "three";
+import { Mesh, MeshBasicMaterial, RingGeometry } from "three";
 
 type Props = {
   active: boolean;
   body?: React.MutableRefObject<RapierRigidBody | null>;
 };
+
+const ringGeo = new RingGeometry(2, 8, 20);
+const meshMat = new MeshBasicMaterial({ color: "black" });
 
 export const Damage = ({ body, active }: Props) => {
   const ref = useRef<Mesh | null>(null);
@@ -29,10 +32,5 @@ export const Damage = ({ body, active }: Props) => {
     }
   });
 
-  return (
-    <mesh ref={ref}>
-      <ringGeometry args={[2, 8, 20]} />
-      <meshStandardMaterial color={"black"} />
-    </mesh>
-  );
+  return <mesh ref={ref} geometry={ringGeo} material={meshMat} />;
 };

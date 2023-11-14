@@ -1,7 +1,6 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { Group, Vector3 } from "three";
 
-import { useTexture } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { RapierRigidBody, RigidBody } from "@react-three/rapier";
 import {
@@ -9,14 +8,14 @@ import {
   defaultTempo,
   getMovement,
   grid,
-} from "../../Stores/constants";
-import { Player, Players, Timeout } from "../../Stores/types";
-import useGame from "../../Stores/useGame";
-import { Damage } from "../Effects/Damage";
-import { dieSound } from "../Sounds/Tone";
-import { HealthBar } from "../UI/HealthBar";
-import { useOuch } from "../hooks/useOuch";
-import { useDisposeGroup } from "../../../hooks/useDisposeGroup";
+} from "../../../Stores/constants";
+import { Player, Players, Timeout } from "../../../Stores/types";
+import useGame from "../../../Stores/useGame";
+import { Damage } from "../../Effects/Damage";
+import { dieSound } from "../../Sounds/Tone";
+import { HealthBar } from "../../UI/HealthBar";
+import { useOuch } from "../../hooks/useOuch";
+import { useDisposeGroup } from "../../../../hooks/useDisposeGroup";
 import { spriteMaterial, sphereGeometry } from "./constants";
 
 const reuseableVector3a = new Vector3();
@@ -208,17 +207,18 @@ export const Enemy = (props: Player) => {
   };
 
   return (
-    <>
+    <group>
       <group ref={group}>
         <HealthBar health={health} />
       </group>
 
-      <Damage active={ouch} body={body} />
+      {/* <Damage active={ouch} body={body} /> */}
 
       <RigidBody
         ref={body}
         gravityScale={0}
         restitution={1}
+        mass={4}
         friction={1}
         position={startPosition}
         canSleep={false}
@@ -232,7 +232,7 @@ export const Enemy = (props: Player) => {
       >
         <mesh geometry={sphereGeometry} material={spriteMaterial} />
       </RigidBody>
-    </>
+    </group>
   );
 };
 

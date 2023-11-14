@@ -1,45 +1,60 @@
 import { MdCake } from "react-icons/md";
 
-import { ReactElement, useEffect, useMemo, useState } from "react";
-import styled from "styled-components";
-import { Vector3 } from "three";
+import { useEffect, useMemo } from "react";
+
+import {
+  MeshBasicMaterial,
+  MeshStandardMaterial,
+  PlaneGeometry,
+  Vector3,
+} from "three";
 import { v4 as uuidv4 } from "uuid";
-import { ALL_NOTES, columnLimit, controls } from "./Stores/constants";
-import { Interval, Patterns } from "./Stores/types";
+import { ALL_NOTES } from "./Stores/constants";
+import { Patterns } from "./Stores/types";
 import useGame from "./Stores/useGame";
-import { Enemy } from "./components/Enemy";
 import { LevelManager } from "./components/LevelManager";
 import { Lights } from "./components/Lights";
 import { Player } from "./components/Player";
 import { Loop } from "./components/Sounds/Loop";
 import { Terrain } from "./components/Terrain";
-import { Cursor } from "./components/UI/Cursor";
 
 import { experienceProperties } from "../../../Stores/constants";
 import { useStartButton } from "../hooks/useStartButton";
 import { Loading } from "../common/Loading";
-
-let enemyGeneratorTimeout: Interval = null;
-
-const generatorSpeed = 2000;
+import { Enemies } from "./components/Enemies";
+import { Select } from "@react-three/postprocessing";
+import { Float, Text } from "@react-three/drei";
 
 export const TempoGame = () => {
-  // const { ready } = useStartButton();
+  const { ready } = useStartButton();
 
-  // if (!ready) {
-  //   return <Loading />;
-  // }
+  if (!ready) {
+    return (
+      <Loading
+        position={new Vector3(0, 21, -64)}
+        text='This game plays synthesizers'
+      />
+    );
+  }
 
   return <TempoGameCore />;
 };
 
+const boxGeo = new PlaneGeometry(0.6, 0.6);
+const shrineMaterial = new MeshStandardMaterial({
+  emissive: "gold",
+  emissiveIntensity: 2,
+});
+
+const mapMaterial = new MeshBasicMaterial({
+  color: "#000000",
+  transparent: true,
+  opacity: 0,
+});
+
 const TempoGameCore = () => {
-  const enemies = useGame((s) => s.enemies);
   const players = useGame((s) => s.players);
 
-  const setEnemies = useGame((s) => s.setEnemies);
-
-  const setNextWorldTile = useGame((s) => s.setNextWorldTile);
   const discoveredWorldTiles = useGame((s) => s.discoveredWorldTiles);
   const worldTile = useGame((s) => s.worldTile);
   const restartGame = useGame((s) => s.restartGame);
@@ -48,22 +63,6 @@ const TempoGameCore = () => {
 
   const world = useGame((s) => s.world);
 
-  const [tick, setTick] = useState(false);
-
-  useEffect(() => {
-    if (enemyGeneratorTimeout) {
-      clearInterval(enemyGeneratorTimeout);
-    }
-
-    enemyGeneratorTimeout = setInterval(() => {
-      setTick((prevTick) => !prevTick);
-    }, generatorSpeed);
-
-    return function cleanup() {
-      setEnemies({});
-    };
-  }, []);
-
   useEffect(() => {
     window.addEventListener("click", placeNoteAtPlayersPosition);
     return () => {
@@ -71,24 +70,7 @@ const TempoGameCore = () => {
     };
   });
 
-  useEffect(() => {
-    addNewEnemy();
-  }, [tick]);
-
-  const addNewEnemy = () => {
-    if (worldTile.shrine) return;
-    const enemiesCopy = { ...enemies };
-    const newEnemyId = uuidv4();
-    enemiesCopy[newEnemyId] = {
-      id: newEnemyId,
-      body: null,
-      health: 100,
-      type: "enemy",
-      dead: false,
-    };
-
-    setEnemies(enemiesCopy);
-  };
+  const playerIsDead = useMemo(() => players["p1"]?.dead, [players]);
 
   const mapTiles = useMemo(
     () =>
@@ -99,29 +81,41 @@ const TempoGameCore = () => {
           worldTile.position.column === column;
         const discovered = discoveredWorldTiles.includes(t.id);
         const hasShrine = !!t.shrine;
+
+        const scale = 0.4;
         return (
-          <group key={`tile-${i}`} position={[column, -row, 5]}>
-            {/* {hasShrine && (
-              <mesh position-z={1} position-x={-0.2}>
-                <boxGeometry args={[0.3, 0.3]} />
-                <meshStandardMaterial color={"#ffffff"} />
-              </mesh>
-            )} */}
-            <mesh
-              onPointerDown={() =>
-                setNextWorldTile({
-                  worldTile: t,
-                  relativeDirection: "top",
-                })
-              }
-            >
-              <boxGeometry args={[0.6, 0.6, 0.1]} />
-              <meshStandardMaterial
-                color={selected ? "#ffffff" : discovered ? t.color : "#444"}
-                transparent
-                opacity={selected ? 1 : 0.8}
+          <group
+            key={`tile-${i}`}
+            position={[column * scale, -row * scale, 5]}
+            scale={0.4}
+          >
+            {hasShrine && (
+              <mesh
+                scale={0.3}
+                position-z={0.01}
+                geometry={boxGeo}
+                material={shrineMaterial}
               />
-            </mesh>
+            )}
+            <Select enabled={selected}>
+              <mesh
+                // onPointerDown={() =>
+                //   setNextWorldTile({
+                //     worldTile: t,
+                //     relativeDirection: "top",
+                //   })
+                // }
+                geometry={boxGeo}
+                material={mapMaterial}
+              >
+                {/* <meshBasicMaterial
+                  transparent
+                  opacity={0.2}
+                  // color={discovered ? t.color : "#000000"}
+                  color={"#000000"}
+                /> */}
+              </mesh>
+            </Select>
           </group>
         );
       }),
@@ -165,84 +159,23 @@ const TempoGameCore = () => {
   return (
     <group position={experienceProperties[3].gamePosition}>
       <color attach='background' args={[worldTile.color || "#fff"]} />
-
+      {playerIsDead && (
+        <Float position={[0, 0, 16]} speed={3}>
+          <group>
+            <Text>You lost conciousness...</Text>
+          </group>
+        </Float>
+      )}
       <Lights />
 
       <LevelManager />
 
-      <Cursor />
-
       <Player />
+      <Enemies />
       <Loop />
       <Terrain />
 
-      {Object.values(enemies).map((e, i) => {
-        if (e.dead) {
-          return null;
-        }
-        return <Enemy key={`enemy-${i}`} {...e} />;
-      })}
-
-      <group position={[20, 20, 0]}>{mapTiles}</group>
+      <group position={[-3, 2.4, 17]}>{mapTiles}</group>
     </group>
   );
 };
-
-const MapWrapWrap = styled.div`
-  position: fixed;
-  top: 30px;
-  right: 30px;
-  padding: 7px;
-  border-radius: 4px;
-  opacity: 0.7;
-`;
-
-type MapWrapProps = {
-  width: number;
-};
-const MapWrap = styled.div<MapWrapProps>`
-  display: flex;
-  flex-grow: 0;
-  flex-wrap: wrap;
-  width: ${(p) => `${p.width}`}px;
-  height: 200px;
-`;
-
-type TileIconProps = {
-  selected: boolean;
-  discovered: boolean;
-  background: string;
-};
-const TileIcon = styled.div<TileIconProps>`
-  flex-grow: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 9px;
-  font-weight: 900;
-  border-radius: 2px;
-  margin: 0 2px 2px 0;
-  width: 10px;
-  height: 10px;
-  border: 1px solid;
-  border-color: ${(p) =>
-    p.selected ? p.background : p.discovered ? `${p.background}44` : "#000"};
-  background: ${(p) =>
-    p.selected ? p.background : p.discovered ? `${p.background}44` : "#fff"};
-`;
-
-const Restart = styled.div`
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  font-size: 40px;
-  font-weight: 900;
-  color: #fff;
-  z-index: 10;
-`;

@@ -1,16 +1,19 @@
 import { useFrame } from "@react-three/fiber";
-import { useRef } from "react";
-import { Group } from "three";
+import { MutableRefObject, useRef } from "react";
+import { Group, Vector3 } from "three";
 
-export const Cursor = () => {
+type Props = {
+  mouseRef: MutableRefObject<Vector3>;
+};
+
+export const Cursor = ({ mouseRef }: Props) => {
   const ref = useRef<Group | null>(null);
 
-  useFrame(({ mouse, viewport, clock }) => {
+  useFrame(({ clock }) => {
     if (ref?.current) {
       const elapsedTime = clock.getElapsedTime();
-      const x = mouse.x * viewport.width * 1.5;
-      const y = mouse.y * viewport.height * 1.5;
-      ref.current.position.set(x, y, 0);
+
+      ref.current.position.lerp(mouseRef.current, 0.1);
 
       const scale = (Math.cos(elapsedTime * 6) + 4) / 6;
 
@@ -22,7 +25,7 @@ export const Cursor = () => {
     <group ref={ref}>
       <mesh castShadow>
         <circleGeometry />
-        <meshBasicMaterial color='#fff' transparent opacity={0.5} />
+        <meshBasicMaterial color='#fff' transparent opacity={0.2} />
       </mesh>
     </group>
   );

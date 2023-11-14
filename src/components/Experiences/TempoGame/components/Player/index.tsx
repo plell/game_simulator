@@ -12,15 +12,18 @@ import { dieSound } from "../Sounds/Tone";
 import { SnapRadius } from "./Effects/SnapToRadius";
 
 import { useOuch } from "../hooks/useOuch";
+import Cursor from "../UI/Cursor";
 
-export const playerSpeed = 0.15;
+export const playerSpeed = 0.08;
 
 const reuseableVector3a = new Vector3();
 const reuseableVector3b = new Vector3();
+const mouseVec3 = new Vector3();
 
 export const Player = () => {
   const players = useGame((s) => s.players);
   const setPlayers = useGame((s) => s.setPlayers);
+  const mouseRef = useRef<Vector3>(mouseVec3);
 
   const nextWorldTile = useGame((s) => s.nextWorldTile);
 
@@ -104,7 +107,7 @@ export const Player = () => {
 
   const dead = useMemo(() => players[playerId]?.dead, [players, playerId]);
 
-  useFrame(({ mouse, viewport }) => {
+  useFrame(() => {
     if (dead) {
       return;
     }
@@ -112,18 +115,19 @@ export const Player = () => {
     if (nextWorldTile) {
       teleport();
     } else if (!pause && body.current) {
-      const x = mouse.x * viewport.width * 1.5;
-      const y = mouse.y * viewport.height * 1.5;
-
       const currentTranslation = body.current.translation();
 
       const currentPosition = reuseableVector3a.set(
         currentTranslation.x,
         currentTranslation.y,
-        currentTranslation.z
+        0
       );
 
-      const mousePosition = reuseableVector3b.set(x, y, currentTranslation.z);
+      const mousePosition = reuseableVector3b.set(
+        mouseRef.current.x,
+        mouseRef.current.y,
+        0
+      );
 
       const impulse = { x: 0, y: 0, z: 0 };
 
@@ -189,13 +193,25 @@ export const Player = () => {
       >
         <mesh>
           <planeGeometry />
-          <meshStandardMaterial
+          <meshBasicMaterial
             transparent
             map={playerTexture}
             opacity={dead ? 0 : 1}
           />
         </mesh>
       </RigidBody>
+
+      <Cursor mouseRef={mouseRef} />
+
+      <mesh
+        onPointerMove={(e) => {
+          const { x, y, z } = e.point;
+          mouseRef.current.set(x, y, z);
+        }}
+      >
+        <planeGeometry args={[145, 80]} />
+        <meshStandardMaterial transparent opacity={0} wireframe />
+      </mesh>
     </>
   );
 };

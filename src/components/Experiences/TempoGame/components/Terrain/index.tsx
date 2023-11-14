@@ -1,10 +1,11 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { grid } from "../../Stores/constants";
 import useGame from "../../Stores/useGame";
 import { Boundaries } from "./Boundaries";
-import { Grid } from "./Grid";
+
 import { Shrine } from "./Shrine";
 import { Structures } from "./Structures";
+import { useTexture } from "@react-three/drei";
 
 export const Terrain = () => {
   const worldTile = useGame((s) => s.worldTile);
@@ -19,6 +20,12 @@ export const Terrain = () => {
     }
   }, [worldTile]);
 
+  const diffMap = useTexture("textures/sand/aerial_beach_01_diff_1k.jpg");
+
+  const planeRotation = useMemo(() => {
+    return worldTile.id % 2 < 1 ? 1 : 2;
+  }, [worldTile]);
+
   return (
     <>
       <Boundaries />
@@ -26,13 +33,16 @@ export const Terrain = () => {
       <mesh
         receiveShadow
         position={[grid.x, grid.y, grid.z]}
-        rotation-z={Math.PI}
+        rotation-z={Math.PI * planeRotation}
       >
         <planeGeometry args={[grid.width, grid.height]} />
-        <meshStandardMaterial color={worldTile.color || "white"} />
+        <meshStandardMaterial
+          map={diffMap}
+          color={worldTile.color || "white"}
+        />
       </mesh>
 
-      <Grid />
+      {/* <Grid /> */}
       <Shrine />
       <Structures />
     </>

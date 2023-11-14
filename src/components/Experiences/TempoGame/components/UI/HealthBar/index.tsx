@@ -1,15 +1,19 @@
 import { Plane } from "@react-three/drei";
 import { useEffect, useRef } from "react";
-import { Mesh } from "three";
+import { Mesh, MeshBasicMaterial, PlaneGeometry } from "three";
 
 interface HealthBarProps {
   health: number;
 }
 
+const barWidth = 1;
+const barHeight = 0.2;
+
+const planeGeo = new PlaneGeometry(barWidth, barHeight);
+const whiteMaterial = new MeshBasicMaterial({ color: "white" });
+const redMaterial = new MeshBasicMaterial({ color: "red" });
+
 export const HealthBar = ({ health }: HealthBarProps) => {
-  const barWidth = 2;
-  const barHeight = 0.4;
-  const barColor = "red";
   const ref = useRef<Mesh | null>(null);
 
   useEffect(() => {
@@ -24,16 +28,17 @@ export const HealthBar = ({ health }: HealthBarProps) => {
   }, [health]);
 
   return (
-    <group position={[0, 0.9, 1.6]}>
+    <group position={[0, 0.9, 1]}>
       {/* Empty health bar */}
-      <Plane args={[barWidth, barHeight]}>
-        <meshStandardMaterial color='white' />
-      </Plane>
+      <mesh geometry={planeGeo} material={whiteMaterial} />
 
       {/* Filled health bar */}
-      <Plane ref={ref} args={[barWidth, barHeight]} position-z={0.02}>
-        <meshStandardMaterial color={barColor} />
-      </Plane>
+      <mesh
+        ref={ref}
+        geometry={planeGeo}
+        material={redMaterial}
+        position-z={0.02}
+      />
     </group>
   );
 };

@@ -119,7 +119,7 @@ export const Psychedelic = () => {
   const { ready } = useStartButton();
 
   if (!ready) {
-    return <Loading text={"This game plays audio"} />;
+    return <Loading text={"This game plays audio samples"} />;
   }
 
   return (
@@ -328,6 +328,8 @@ const bulletMaterial = new MeshStandardMaterial({
 
 const bulletGeometry = new CircleGeometry(2, 2);
 
+const vec3 = new Vector3();
+
 export const Projectiles = ({ refs, sensorRef, level }: Props) => {
   const [projectiles, setProjectiles] = useState<Record<string, Projectile>>(
     {}
@@ -365,13 +367,16 @@ export const Projectiles = ({ refs, sensorRef, level }: Props) => {
 
   const initNewProjectile = () => {
     const index = Math.floor(Math.random() * triangles.length);
+    const randomStrength = 1 + Math.abs(Math.random()) * 0.7;
     const tri = triangles[index];
 
     setSelectedPointId(index + 1);
 
+    const { x, y, z } = tri.projectileDirection;
+
     newProjectile({
       position: tri.projectilePosition,
-      direction: tri.projectileDirection,
+      direction: new Vector3(x * randomStrength, y * randomStrength, z),
     });
   };
 

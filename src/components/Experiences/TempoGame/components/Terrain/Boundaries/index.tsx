@@ -1,6 +1,6 @@
 import { CuboidCollider } from "@react-three/rapier";
 import { ReactElement, useMemo } from "react";
-import { Vector3 } from "three";
+import { CircleGeometry, MeshBasicMaterial, Vector3 } from "three";
 import {
   NeighborTiles,
   getNeighborTiles,
@@ -16,6 +16,24 @@ type Wall = {
   name: "top" | "bottom" | "left" | "right";
 };
 
+const arrowPositions = {
+  top: new Vector3(grid.x, grid.top + 2, grid.z),
+  bottom: new Vector3(grid.x, grid.bottom - 2, grid.z),
+  left: new Vector3(grid.left - 2, grid.y, grid.z),
+  right: new Vector3(grid.right + 2, grid.y, grid.z),
+};
+
+const turn = 0.83;
+
+const arrowRotations = {
+  top: Math.PI * -turn,
+  bottom: Math.PI * turn,
+  left: Math.PI,
+  right: 0,
+};
+
+const arrowGeo = new CircleGeometry(0.5, 3);
+const arrowMat = new MeshBasicMaterial({ transparent: true, opacity: 0.1 });
 const wallWidth = 8;
 const walls: Wall[] = [
   {
@@ -67,21 +85,32 @@ export const Boundaries = () => {
       const isSensor = !!openPaths[w.name];
 
       wallArray.push(
-        <CuboidCollider
-          args={w.args}
-          key={`wall-${i}`}
-          restitution={2}
-          friction={0}
-          position={w.pos}
-          sensor={isSensor}
-          onIntersectionEnter={({ other }) => {
-            const object = other.rigidBodyObject?.userData as RigidBodyData;
+        <group>
+          <CuboidCollider
+            args={w.args}
+            key={`wall-${i}`}
+            restitution={2}
+            friction={0}
+            position={w.pos}
+            sensor={isSensor}
+            onIntersectionEnter={({ other }) => {
+              const object = other.rigidBodyObject?.userData as RigidBodyData;
 
-            if (object?.type === "player" && object?.name === "p1") {
-              postDebounce("wall", () => doLevelTransition(w.name), 500);
-            }
-          }}
-        />
+              if (object?.type === "player" && object?.name === "p1") {
+                postDebounce("wall", () => doLevelTransition(w.name), 500);
+              }
+            }}
+          />
+
+          {isSensor && (
+            <mesh
+              geometry={arrowGeo}
+              material={arrowMat}
+              position={arrowPositions[w.name]}
+              rotation-z={arrowRotations[w.name]}
+            ></mesh>
+          )}
+        </group>
       );
     });
 

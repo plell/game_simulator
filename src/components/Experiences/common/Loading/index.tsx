@@ -3,17 +3,15 @@ import { useFrame, useThree } from "@react-three/fiber";
 import { useEffect, useRef, useState } from "react";
 import { Group, Mesh, Vector3 } from "three";
 import { Particles } from "../Particles";
-import useGame from "../../../../Stores/useGame";
 
 type Props = {
   text?: string;
+  position?: Vector3;
 };
 
-export const Loading = ({ text }: Props) => {
+export const Loading = ({ text, position }: Props) => {
   const ref = useRef<Mesh | null>(null);
   const textRef = useRef<Text | null>(null);
-
-  const game = useGame((s) => s.game);
 
   useFrame(({ clock }) => {
     if (ref.current) {
@@ -26,20 +24,13 @@ export const Loading = ({ text }: Props) => {
 
   return (
     <group>
-      {/* <CameraControls makeDefault maxDistance={2000} /> */}
-
       {text && (
-        <Float position={[0, 20, 74]} floatIntensity={10} speed={6}>
+        <Float position={position || [0, 20, 74]} floatIntensity={10} speed={6}>
           <Text ref={textRef} scale={4}>
             {text}
           </Text>
         </Float>
       )}
-
-      {/* <mesh ref={ref}>
-        <torusKnotGeometry args={[40, 0.5, 280]} />
-        <meshNormalMaterial />
-      </mesh> */}
 
       <Particles />
     </group>

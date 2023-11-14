@@ -10,6 +10,7 @@ import { Donut } from "../components/Experiences/Donut";
 import { Psychedelic } from "../components/Experiences/Psychedelic";
 import { Climb } from "../components/Experiences/Climb";
 import { AudioShader } from "../components/Experiences/AudioShader";
+import { TempoGame } from "../components/Experiences/TempoGame";
 // import { WhackASoul } from "../components/Experiences/WhackASoul";
 
 const { origin } = window.location
@@ -120,6 +121,18 @@ export const experienceProperties: ExperienceProps[] = [
     game: LeafBlower
   },
   {
+    cameraPosition: new Vector3(0, 0, 33),
+    cameraTarget: new Vector3(0, 0, 0),
+    cameraNear: 10,
+    cameraFar: 2500,
+    gamePosition: new Vector3(0, 0, 0),
+    title: '',
+    description: '',
+    
+    cameraControls: false,
+    game: TempoGame
+  },
+  {
     cameraPosition: new Vector3(0, 0, 170),
     cameraTarget: new Vector3(0, 0, 0),
     cameraNear: 10,
@@ -127,11 +140,11 @@ export const experienceProperties: ExperienceProps[] = [
     gamePosition: new Vector3(0, 0, 0),
     title: '',
     description: '',
-    // instructions: 'Click to play',
+
     cameraControls: false,
     backgroundColor:'#000000',
     game: Psychedelic,
-    // showAboutMe: true,
+    
   },
   {
     cameraPosition: new Vector3(0, 0, 33),
@@ -146,6 +159,8 @@ export const experienceProperties: ExperienceProps[] = [
     cameraControls: false,
     game: SpaceGame
   },
+
+  
   
  
 ]
