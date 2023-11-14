@@ -14,7 +14,7 @@ import { SnapRadius } from "./Effects/SnapToRadius";
 import { useOuch } from "../hooks/useOuch";
 import Cursor from "../UI/Cursor";
 
-export const playerSpeed = 0.08;
+export const playerSpeed = 0.14;
 
 const reuseableVector3a = new Vector3();
 const reuseableVector3b = new Vector3();

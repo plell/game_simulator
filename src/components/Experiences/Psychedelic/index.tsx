@@ -367,7 +367,7 @@ export const Projectiles = ({ refs, sensorRef, level }: Props) => {
 
   const initNewProjectile = () => {
     const index = Math.floor(Math.random() * triangles.length);
-    const randomStrength = 1 + Math.abs(Math.random()) * 0.7;
+    const randomStrength = 1 + Math.abs(Math.random()) * 0.9;
     const tri = triangles[index];
 
     setSelectedPointId(index + 1);
