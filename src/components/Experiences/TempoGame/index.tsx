@@ -1,5 +1,3 @@
-import { MdCake } from "react-icons/md";
-
 import { useEffect, useMemo } from "react";
 
 import {
@@ -171,7 +169,7 @@ const TempoGameCore = () => {
       <LevelManager />
 
       <Player />
-      <Enemies />
+
       <Loop />
       <Terrain />
 

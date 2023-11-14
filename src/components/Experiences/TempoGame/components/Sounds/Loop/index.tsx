@@ -1,7 +1,7 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
 import { BoxGeometry, Color, Mesh, MeshBasicMaterial, Vector3 } from "three";
-import { hihat, kick, playSound, snare } from "../Tone";
+import { dismount, mount, hihat, kick, playSound, snare } from "../Tone";
 import {
   getMovement,
   getPushMovement,
@@ -33,6 +33,11 @@ export const Loop = () => {
   const snapTo = useGame((s) => s.snapTo);
 
   const worldTile = useGame((s) => s.worldTile);
+
+  useEffect(() => {
+    mount();
+    return () => dismount();
+  });
 
   const pattern = useMemo(
     () => patterns[worldTile.patternId],

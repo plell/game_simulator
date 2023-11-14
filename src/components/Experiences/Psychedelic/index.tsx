@@ -34,6 +34,7 @@ import { useAudioAnalysis } from "../hooks/useAudioAnalysis";
 import { GameProgress } from "../common/GameProgress";
 import { useStartButton } from "../hooks/useStartButton";
 import { Loading } from "../common/Loading";
+import { useOneShot } from "../hooks/useOneShot";
 
 const triangleSize = Math.PI * 6;
 const triangleYAdjust = Math.PI * 0.8;
@@ -135,6 +136,14 @@ const Content = () => {
 
   const [level, setLevel] = useState(1);
   const [score, setScore] = useState(0);
+
+  const blockSound = useOneShot("audio/beat3.mp3");
+
+  useEffect(() => {
+    if (score > 0) {
+      blockSound.play();
+    }
+  }, [score]);
 
   return (
     <Suspense fallback={null}>
@@ -360,7 +369,7 @@ export const Projectiles = ({ refs, sensorRef, level }: Props) => {
         () => {
           initNewProjectile();
         },
-        1000
+        400
       );
     }
   });
