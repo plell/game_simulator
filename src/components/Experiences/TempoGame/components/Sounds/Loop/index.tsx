@@ -1,21 +1,8 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
-import {
-  BoxGeometry,
-  Color,
-  ConeGeometry,
-  CylinderGeometry,
-  Mesh,
-  MeshBasicMaterial,
-  Vector3,
-} from "three";
+import { BoxGeometry, Color, Mesh, MeshBasicMaterial, Vector3 } from "three";
 import { dismount, mount, hihat, kick, playSound, snare } from "../Tone";
-import {
-  getMovement,
-  getPushMovement,
-  grid,
-  postDebounce,
-} from "../../../Stores/constants";
+import { getMovement, grid, postDebounce } from "../../../Stores/constants";
 import useGame from "../../../Stores/useGame";
 import { Note } from "../../../Stores/types";
 import { RapierRigidBody, RigidBody } from "@react-three/rapier";
@@ -25,7 +12,6 @@ import { playerSpeed } from "../../Player";
 import { getNearestGridPosition } from "./constants";
 import { getGridPointsAndLines } from "../../Terrain/Grid";
 
-const reuseableVector3 = new Vector3();
 const reuseableVector3a = new Vector3();
 const reuseableVector3b = new Vector3();
 const reuseableVector3c = new Vector3();
@@ -33,29 +19,55 @@ const reuseableVector3d = new Vector3();
 const reuseableVector3e = new Vector3();
 
 export const Loop = () => {
+  useEffect(() => {
+    mount();
+    return () => dismount();
+  }, []);
+
   const players = useGame((s) => s.players);
   const tempo = useGame((s) => s.tempo);
   const patterns = useGame((s) => s.patterns);
   const setTempoUp = useGame((s) => s.setTempoUp);
   const setTempoDown = useGame((s) => s.setTempoDown);
   const snapTo = useGame((s) => s.snapTo);
+  const [activeNoteId, setActiveNoteId] = useState<string | null>(null);
+
+  const [playedPattern, setPlayedPattern] = useState<string[]>([]);
+  const [playedRhythm, setPlayedRhythm] = useState<number[]>([]);
 
   const worldTile = useGame((s) => s.worldTile);
-
-  useEffect(() => {
-    mount();
-    return () => dismount();
-  });
 
   const pattern = useMemo(
     () => patterns[worldTile.patternId],
     [worldTile, patterns]
   );
 
-  const ref = useRef<Mesh | null>(null);
-  const [playedPattern, setPlayedPattern] = useState<string[]>([]);
+  useEffect(() => {
+    if (activeNoteId && !playedPattern.includes(activeNoteId)) {
+      updatePlayedPattern(activeNoteId);
+    }
+  }, [activeNoteId]);
 
-  const [playedRhythm, setPlayedRhythm] = useState<number[]>([]);
+  const updatePlayedPattern = (id: string) => {
+    setPlayedPattern([...playedPattern, id]);
+  };
+
+  const ref = useRef<Mesh | null>(null);
+
+  useEffect(() => {
+    const newPlayed: string[] = [];
+
+    const looperX = ref?.current?.position.x || 100;
+
+    Object.values(pattern.notes).forEach((note) => {
+      if (note.position.x < looperX) {
+        newPlayed.push(note.id);
+      }
+    });
+
+    setActiveNoteId(null);
+    setPlayedPattern(newPlayed);
+  }, [pattern, ref]);
 
   const { viewport } = useThree();
 
@@ -75,21 +87,6 @@ export const Loop = () => {
       ref.current.scale.set(scale, scale, scale);
     }
   }, [worldTile]);
-
-  useEffect(() => {
-    const newPlayed: string[] = [];
-
-    Object.values(pattern.notes).forEach((note) => {
-      if (
-        !newPlayed?.includes(note.id) &&
-        note.position.x < (ref?.current?.position.x || 0)
-      ) {
-        newPlayed.push(note.id);
-      }
-    });
-
-    setPlayedPattern(newPlayed);
-  }, [pattern]);
 
   const resetLoop = () => {
     if (ref.current) {
@@ -177,14 +174,9 @@ export const Loop = () => {
         !playedPattern?.includes(note.id) &&
         notePosition.x < (ref?.current?.position.x || 0)
       ) {
-        postDebounce(
-          "pattern",
-          () => {
-            playSound(note.pitch);
-            setPlayedPattern([...playedPattern, note.id]);
-          },
-          10
-        );
+        if (note.id !== activeNoteId) {
+          setActiveNoteId(note.id);
+        }
       }
 
       // do snapTo
@@ -225,6 +217,17 @@ export const Loop = () => {
     });
   });
 
+  const notes = useMemo(() => {
+    return Object.values(pattern.notes).map((note, i) => (
+      <NoteComponent
+        played={activeNoteId === note.id}
+        color={worldTile.color}
+        note={note}
+        key={`note-${note.id}-${i}`}
+      />
+    ));
+  }, [pattern, worldTile, activeNoteId]);
+
   return (
     <>
       <mesh ref={ref}>
@@ -233,14 +236,7 @@ export const Loop = () => {
       </mesh>
 
       {/* patterns */}
-      {Object.values(pattern.notes).map((note, i) => (
-        <NoteComponent
-          played={playedPattern?.includes(note.id)}
-          color={worldTile.color}
-          note={note}
-          key={`note-${note.id}-${i}`}
-        />
-      ))}
+      {notes}
     </>
   );
 };
@@ -258,11 +254,11 @@ const NoteComponent = ({ note, color, played }: NoteComponentProps) => {
   const body = useRef<RapierRigidBody | null>(null);
   const material = useRef<MeshBasicMaterial | null>(null);
   const [loaded, setLoaded] = useState(false);
-  const enemies = useGame((s) => s.enemies);
+
   const worldTile = useGame((s) => s.worldTile);
   const patterns = useGame((s) => s.patterns);
   const setPatterns = useGame((s) => s.setPatterns);
-  const setEnemies = useGame((s) => s.setEnemies);
+
   const [emitterActive, setEmitterActive] = useState(false);
   const myColor = useMemo(() => new Color(color), []);
 
@@ -294,46 +290,8 @@ const NoteComponent = ({ note, color, played }: NoteComponentProps) => {
   }, [played, body.current]);
 
   const emit = () => {
-    //  do enemy damage
-
-    // const enemiesClone = { ...enemies };
-    // let hit = false;
-    // Object.values(enemies).forEach((e) => {
-    //   if (e.dead) {
-    //     return;
-    //   }
-
-    //   const aPosition = e.body?.current?.translation();
-    //   const targetPosition = reuseableVector3.set(
-    //     aPosition?.x || 0,
-    //     aPosition?.y || 0,
-    //     aPosition?.z || 0
-    //   );
-
-    //   const trans = body?.current?.translation();
-    //   const myPosition = reuseableVector3d.set(
-    //     trans?.x || 0,
-    //     trans?.y || 0,
-    //     trans?.z || 0
-    //   );
-
-    //   const distance = myPosition.distanceTo(targetPosition);
-
-    //   if (distance < 2) {
-    //     hit = true;
-    //     enemiesClone[e.id].health -= 20;
-    //     if (enemiesClone[e.id]?.body?.current) {
-    //       const impulse = getPushMovement(position, targetPosition);
-    //       enemiesClone[e.id].body?.current?.applyImpulse(impulse, true);
-    //     }
-    //   }
-    // });
-
-    // if (hit) {
-    //   setEnemies(enemiesClone);
-    // }
-
     // flash
+    playSound(note.pitch);
     setEmitterActive(true);
 
     setTimeout(() => {

@@ -85,10 +85,9 @@ export const Boundaries = () => {
       const isSensor = !!openPaths[w.name];
 
       wallArray.push(
-        <group>
+        <group key={`wall-${i}`}>
           <CuboidCollider
             args={w.args}
-            key={`wall-${i}`}
             restitution={2}
             friction={0}
             position={w.pos}
