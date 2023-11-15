@@ -1,6 +1,14 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
-import { BoxGeometry, Color, Mesh, MeshBasicMaterial, Vector3 } from "three";
+import {
+  BoxGeometry,
+  Color,
+  ConeGeometry,
+  CylinderGeometry,
+  Mesh,
+  MeshBasicMaterial,
+  Vector3,
+} from "three";
 import { dismount, mount, hihat, kick, playSound, snare } from "../Tone";
 import {
   getMovement,
@@ -355,7 +363,7 @@ const NoteComponent = ({ note, color, played }: NoteComponentProps) => {
         lockRotations
         friction={1}
       >
-        <mesh geometry={boxGeo}>
+        <mesh geometry={boxGeo} rotation-x={Math.PI * 0.5}>
           <meshBasicMaterial ref={material} color={color} />
         </mesh>
       </RigidBody>

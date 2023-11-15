@@ -64,7 +64,11 @@ function generateWorld() {
   const shrineCount = 20
 
   const worldTiles: WorldTile[] = []
-  const worldPatterns: Patterns = {}
+  const worldPatterns: Patterns = {
+    'shrine': {
+      stepCount: 0,
+      notes: {}
+  }}
 
   let row = 0
   let column = 0
@@ -102,6 +106,7 @@ function generateWorld() {
       position: new Vector3(grid.top - grid.height/2,grid.right- grid.width/2,0),
       color: randomColor()
     }
+    worldTiles[index].patternId = 'shrine'
   }
 
 
@@ -211,17 +216,23 @@ export const getNeighborTiles = (worldTilePosition: TilePosition) => {
 function generatePattern() {
   const stepCount = 20
 
-  const noteCount = Math.floor(Math.random() * stepCount) + 3
-
   const notes: Notes = {}
 
-  for (let i = 0; i < noteCount; i += 1){
+  const usedX:number[] = []
 
-    const randomStep = Math.floor(Math.random() * (noteCount-1))
+  for (let i = 0; i < stepCount; i += 1){
+
+    const randomStep = Math.floor(Math.random() * stepCount)
     const randomY = Math.floor(Math.random() * grid.height) - (grid.height / 2)
 
     const id = uuidv4()
     const x = getNoteGridPosition(randomStep, stepCount)
+
+    if (usedX.includes(x)) {
+      continue
+    }
+
+    usedX.push(x)
 
     notes[id] = {
         id,

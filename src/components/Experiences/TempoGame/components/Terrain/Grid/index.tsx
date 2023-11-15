@@ -45,17 +45,19 @@ export const Grid = () => {
 
   const pattern = patterns[worldTile.patternId];
 
-  const {intersections } = useMemo(() => getGridPointsAndLines(pattern), [pattern]);
+  const { intersections } = useMemo(
+    () => getGridPointsAndLines(pattern),
+    [pattern]
+  );
 
   return (
     <>
       {intersections.map((n, i) => (
-          <mesh position={n} key={`${i}-intersects-steps`} scale={0.5}>
-            <circleGeometry />
-            <meshBasicMaterial color="black" transparent opacity={0.1} />
-          </mesh>
-        )
-      )}
+        <mesh position={n} key={`${i}-intersects-steps`} scale={0.5}>
+          <circleGeometry />
+          <meshBasicMaterial color='black' transparent opacity={0.1} />
+        </mesh>
+      ))}
     </>
   );
 };
