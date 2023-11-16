@@ -1,6 +1,13 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
-import { BoxGeometry, Color, Mesh, MeshBasicMaterial, Vector3 } from "three";
+import {
+  BoxGeometry,
+  Color,
+  CylinderGeometry,
+  Mesh,
+  MeshBasicMaterial,
+  Vector3,
+} from "three";
 import { dismount, mount, hihat, kick, playSound, snare } from "../Tone";
 import { getMovement, grid, postDebounce } from "../../../Stores/constants";
 import useGame from "../../../Stores/useGame";
@@ -247,7 +254,7 @@ type NoteComponentProps = {
   played: boolean;
 };
 
-const boxGeo = new BoxGeometry(1, 1, 1);
+const noteGeo = new CylinderGeometry(1, 1, 1, 5);
 const white = new Color("white");
 
 const NoteComponent = ({ note, color, played }: NoteComponentProps) => {
@@ -309,10 +316,12 @@ const NoteComponent = ({ note, color, played }: NoteComponentProps) => {
     }
   });
 
+  const randomRotate = useMemo(() => Math.random() * Math.PI * 2, []);
+
   return (
     <>
       <Emitter body={body} position={position} active={emitterActive} />
-      <RigidBody
+      {/* <RigidBody
         ref={body}
         position={note.position}
         type='fixed'
@@ -320,11 +329,17 @@ const NoteComponent = ({ note, color, played }: NoteComponentProps) => {
         restitution={2}
         lockRotations
         friction={1}
+      > */}
+      <mesh
+        scale={0.4}
+        geometry={noteGeo}
+        position={note.position}
+        rotation-x={Math.PI * 0.5}
+        rotation-y={randomRotate}
       >
-        <mesh geometry={boxGeo} rotation-x={Math.PI * 0.5}>
-          <meshBasicMaterial ref={material} color={color} />
-        </mesh>
-      </RigidBody>
+        <meshBasicMaterial ref={material} color={color} />
+      </mesh>
+      {/* </RigidBody> */}
     </>
   );
 };

@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 import { Direction, Notes, Patterns, Players, Structures, TilePosition, WorldTile } from "./types";
 
 export const ALL_NOTES: string[] = [
+  // 'A2', 'B2', 'C2', 'D2', 'E2', 'F2', 'G2',
   'A3', 'B3', 'C3', 'D3', 'E3', 'F3', 'G3',
   'A4', 'B4', 'C4', 'D4', 'E4', 'F4', 'G4',
   'A5', 'B5', 'C5', 'D5', 'E5', 'F5', 'G5',
@@ -118,16 +119,23 @@ export const generatedWorld = generateWorld()
 
 export const MOVEMENT_DAMPING = 5
 
+const origin = new Vector3()
+
 export const getMovement = (from: Vector3, to: Vector3, speed = 1, tempo: number | boolean = 40) => {
   const amp = 30
 
   const ratio = typeof tempo === 'number' ? (tempo / defaultTempo) : 1
 
+  const distance = from.distanceTo(to)
+
+  if (distance < .3) {
+    return origin
+  }
+
   const movement = to.sub(from).normalize()
 
   movement.x *= ratio * speed * amp
   movement.y *= ratio * speed * amp
-
 
   return movement
 }
@@ -223,7 +231,7 @@ function generatePattern() {
   for (let i = 0; i < stepCount; i += 1){
 
     const randomStep = Math.floor(Math.random() * stepCount)
-    const randomY = Math.floor(Math.random() * grid.height) - (grid.height / 2)
+    const randomY = Math.floor(Math.random() * grid.height)
 
     const id = uuidv4()
     const x = getNoteGridPosition(randomStep, stepCount)
@@ -238,8 +246,8 @@ function generatePattern() {
         id,
         body:null,
         step: randomStep,
-        position: new Vector3(x,randomY,0),
-        pitch: ALL_NOTES[Math.floor(Math.random() * Object.values(notes).length)]
+        position: new Vector3(x,randomY-(grid.height / 2),0),
+        pitch: ALL_NOTES[randomY]
     }
   }
 

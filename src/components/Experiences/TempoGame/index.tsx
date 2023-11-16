@@ -7,7 +7,7 @@ import {
   Vector3,
 } from "three";
 import { v4 as uuidv4 } from "uuid";
-import { ALL_NOTES } from "./Stores/constants";
+import { ALL_NOTES, grid } from "./Stores/constants";
 import { Patterns } from "./Stores/types";
 import useGame from "./Stores/useGame";
 import { LevelManager } from "./components/LevelManager";
@@ -62,9 +62,9 @@ const TempoGameCore = () => {
   const world = useGame((s) => s.world);
 
   useEffect(() => {
-    window.addEventListener("click", placeNoteAtPlayersPosition);
+    window.addEventListener("pointerdown", placeNoteAtPlayersPosition);
     return () => {
-      window.removeEventListener("click", placeNoteAtPlayersPosition);
+      window.removeEventListener("pointerdown", placeNoteAtPlayersPosition);
     };
   });
 
@@ -122,7 +122,7 @@ const TempoGameCore = () => {
 
   const placeNoteAtPlayersPosition = () => {
     if (players.p1?.body?.current) {
-      if (players.p1?.dead) {
+      if (worldTile.shrine || players.p1?.dead) {
         return;
       }
       const translation = players.p1?.body?.current.translation();
@@ -135,18 +135,13 @@ const TempoGameCore = () => {
 
       const id = uuidv4();
 
-      const pitch =
-        ALL_NOTES[Math.floor(Math.random() * Object.keys(notes).length)];
+      const pitch = ALL_NOTES[Math.floor(translation.y + grid.height / 2)];
 
       patternsCopy[worldTile.patternId].notes[id] = {
         id,
         body: null,
         step: randomStep,
-        position: new Vector3(
-          translation.x,
-          translation.y - 0.5,
-          translation.z
-        ),
+        position: new Vector3(translation.x, translation.y, translation.z),
         pitch,
       };
 
