@@ -1,14 +1,16 @@
 import { RigidBody } from "@react-three/rapier";
 import useGame from "../../../Stores/useGame";
 import { useEffect, useRef } from "react";
-import { ConeGeometry, Mesh, MeshStandardMaterial } from "three";
+import { Mesh, SphereGeometry } from "three";
 import { useFrame } from "@react-three/fiber";
+import { Shader } from "../../../../Psychedelic/Shader";
+import { Planet } from "../../../../Earth";
 
-const shrineGeo = new ConeGeometry();
-const material = new MeshStandardMaterial({
-  emissiveIntensity: 2,
-  emissive: "#9d3d3a",
-});
+const shrineGeo = new SphereGeometry();
+// const material = new MeshStandardMaterial({
+//   emissiveIntensity: 2,
+//   emissive: "#9d3d3a",
+// });
 
 export const Shrine = () => {
   const worldTile = useGame((s) => s.worldTile);
@@ -24,23 +26,11 @@ export const Shrine = () => {
     }
   });
 
-  useEffect(() => {
-    if (material && shrine) {
-      material.emissive.set(shrine.color);
-    }
-  }, [shrine]);
+  useEffect(() => {}, [shrine]);
 
   if (!shrine) {
     return null;
   }
 
-  return (
-    <mesh
-      position={shrine.position}
-      position-z={8}
-      ref={ref}
-      geometry={shrineGeo}
-      material={material}
-    />
-  );
+  return <Planet />;
 };

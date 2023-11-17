@@ -242,7 +242,7 @@ export const Loop = () => {
 
   return (
     <>
-      <mesh ref={ref}>
+      <mesh ref={ref} position-x={-grid.width / 2}>
         <boxGeometry args={[0.1, grid.height, 0.1]} />
         <meshStandardMaterial emissive={"white"} emissiveIntensity={1.1} />
       </mesh>

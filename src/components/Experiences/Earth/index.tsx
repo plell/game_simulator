@@ -29,7 +29,7 @@ export const Earth = () => {
 
 const scale = 3;
 
-const Planet = () => {
+export const Planet = () => {
   // This reference will give us direct access to the mesh
   const ref = useRef<Mesh | null>(null);
   const [hover, setHover] = useState(false);

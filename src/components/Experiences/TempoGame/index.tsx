@@ -80,7 +80,10 @@ const TempoGameCore = () => {
         const discovered = discoveredWorldTiles.includes(t.id);
         const hasShrine = !!t.shrine;
 
+        const selectedIsShrine = !!worldTile.shrine;
+
         const scale = 0.4;
+
         return (
           <group
             key={`tile-${i}`}
@@ -90,6 +93,7 @@ const TempoGameCore = () => {
             {hasShrine && (
               <mesh
                 scale={0.3}
+                visible={!selectedIsShrine || (selectedIsShrine && selected)}
                 position-z={0.01}
                 geometry={boxGeo}
                 material={shrineMaterial}
