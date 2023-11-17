@@ -13,12 +13,15 @@ import { SnapRadius } from "./Effects/SnapToRadius";
 
 import { useOuch } from "../hooks/useOuch";
 import Cursor from "../UI/Cursor";
+import { Joystick } from "./Joystick";
 
 export const playerSpeed = 0.12;
 
 const reuseableVector3a = new Vector3();
 const reuseableVector3b = new Vector3();
 const mouseVec3 = new Vector3();
+
+const movementMulti = 3;
 
 export const Player = () => {
   const players = useGame((s) => s.players);
@@ -166,6 +169,8 @@ export const Player = () => {
         </group>
       )}
 
+      {/* <Joystick /> */}
+
       <RigidBody
         ref={body}
         gravityScale={0}
@@ -206,7 +211,7 @@ export const Player = () => {
       <mesh
         onPointerMove={(e) => {
           const { x, y, z } = e.point;
-          mouseRef.current.set(x, y, z);
+          mouseRef.current.set(x * movementMulti, y * movementMulti, z);
         }}
       >
         <planeGeometry args={[145, 80]} />

@@ -128,7 +128,7 @@ export const experienceProperties: ExperienceProps[] = [
     gamePosition: new Vector3(0, 0, 0),
     title: '',
     description: '',
-    cameraControls: false,
+    cameraControls: true,
     game: TempoGame
   },
   {
