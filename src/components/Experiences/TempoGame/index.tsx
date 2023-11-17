@@ -96,23 +96,7 @@ const TempoGameCore = () => {
               />
             )}
             <Select enabled={selected}>
-              <mesh
-                // onPointerDown={() =>
-                //   setNextWorldTile({
-                //     worldTile: t,
-                //     relativeDirection: "top",
-                //   })
-                // }
-                geometry={boxGeo}
-                material={mapMaterial}
-              >
-                {/* <meshBasicMaterial
-                  transparent
-                  opacity={0.2}
-                  // color={discovered ? t.color : "#000000"}
-                  color={"#000000"}
-                /> */}
-              </mesh>
+              <mesh geometry={boxGeo} material={mapMaterial} />
             </Select>
           </group>
         );
