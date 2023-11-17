@@ -38,7 +38,7 @@ export type Note = {
     id: string
     step: number
     position: Vector3
-    pitch: string
+    pitch: number
 }
 
 export type Notes = Record<string, Note>

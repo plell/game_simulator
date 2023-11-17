@@ -18,8 +18,8 @@ export const getGridPointsAndLines = (pattern: Pattern) => {
 
   const n: Vector3[][] = [];
 
-  const scaleStepHeight = grid.height / ALL_NOTES.length;
-  for (let i = 0; i < ALL_NOTES.length; i += 1) {
+  const scaleStepHeight = grid.height / ALL_NOTES[pattern.key].length;
+  for (let i = 0; i < ALL_NOTES[pattern.key].length; i += 1) {
     const y = grid.top - i * scaleStepHeight;
     const topPoint = new Vector3(grid.left, y, 0);
     const bottomPoint = new Vector3(grid.right, y, 0);

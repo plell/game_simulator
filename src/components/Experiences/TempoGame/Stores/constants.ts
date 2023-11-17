@@ -2,12 +2,70 @@ import { Vector3 } from "three";
 import { v4 as uuidv4 } from "uuid";
 import { Direction, Notes, Patterns, Players, Structures, TilePosition, WorldTile } from "./types";
 
-export const ALL_NOTES: string[] = [
-  // 'A2', 'B2', 'C2', 'D2', 'E2', 'F2', 'G2',
-  'A3', 'B3', 'C3', 'D3', 'E3', 'F3', 'G3',
-  'A4', 'B4', 'C4', 'D4', 'E4', 'F4', 'G4',
-  'A5', 'B5', 'C5', 'D5', 'E5', 'F5', 'G5',
-]
+// make a record with keys, so that tiles can have different scale keys
+// later associate color with scale keys
+
+const minor7Scales = {
+  'C': ['C', 'D', 'Eb', 'F', 'G', 'Ab', 'Bb'],
+  'C#': ['C#', 'D#', 'E', 'F#', 'G#', 'A', 'B'],
+  'Db': [ 'Cb', 'Db', 'Eb', 'Fb', 'Gb', 'Ab', 'Bbb',],
+  'D': ['C', 'D', 'E', 'F', 'G', 'A', 'Bb', ],
+  'Eb': ['Cb', 'Db','Eb', 'F', 'Gb', 'Ab', 'Bb', ],
+  'E': ['C', 'D', 'E', 'F#', 'G', 'A', 'B', ],
+  'F': ['C', 'Db', 'Eb', 'F', 'G', 'Ab', 'Bb', ],
+  'F#': ['C#', 'D', 'E', 'F#', 'G#', 'A', 'B', ],
+  'G': ['G', 'A', 'Bb', 'C', 'D', 'Eb', 'F'],
+  'Ab': ['Ab', 'Bb', 'Cb', 'Db', 'Eb', 'Fb', 'Gb'],
+  'A': ['A', 'B', 'C', 'D', 'E', 'F', 'G'],
+  'Bb': ['Bb', 'C', 'Db', 'Eb', 'F', 'Gb', 'Ab'],
+  'B': ['B', 'C#', 'D', 'E', 'F#', 'G', 'A'],
+};
+
+const major7Scales = {
+  'C': ['C', 'D', 'E', 'F', 'G', 'A', 'B'],
+  'C#': ['C#', 'D#', 'E#', 'F#', 'G#', 'A#', 'B#'],
+  'Db': ['Db', 'Eb', 'F', 'Gb', 'Ab', 'Bb', 'C'],
+  'D': ['D', 'E', 'F#', 'G', 'A', 'B', 'C#'],
+  'Eb': ['Eb', 'F', 'G', 'Ab', 'Bb', 'C', 'D'],
+  'E': ['E', 'F#', 'G#', 'A', 'B', 'C#', 'D#'],
+  'F': ['F', 'G', 'A', 'Bb', 'C', 'D', 'E'],
+  'F#': ['F#', 'G#', 'A#', 'B', 'C#', 'D#', 'E#'],
+  'Gb': ['Gb', 'Ab', 'Bb', 'Cb', 'Db', 'Eb', 'F'],
+  'G': ['G', 'A', 'B', 'C', 'D', 'E', 'F#'],
+  'Ab': ['Ab', 'Bb', 'C', 'Db', 'Eb', 'F', 'G'],
+  'A': ['A', 'B', 'C#', 'D', 'E', 'F#', 'G#'],
+  'Bb': ['Bb', 'C', 'D', 'Eb', 'F', 'G', 'A'],
+  'B': ['B', 'C#', 'D#', 'E', 'F#', 'G#', 'A#']
+};
+
+const scales = { ...minor7Scales, ...major7Scales }
+
+export const ALL_NOTES: Record<string, string[]> = {
+  "A": [
+    'A2', 'B2', 'C#3', 'D#3', 'E3', 'F#3', 'G#3',
+    'A3', 'B3', 'C#4', 'D4', 'E4', 'F#4', 'G#4',
+    'A4', 'B4', 'C#5', 'D5', 'E5', 'F#5', 'G#5',
+  ],
+  'Ab': [
+    'Ab2', 'Bb2', 'Cb3', 'Db3', 'Eb3', 'Fb3', 'Gb3',
+    'Ab3', 'Bb3', 'Cb4', 'Db4', 'Eb4', 'Fb4', 'Gb4',
+    'Ab4', 'Bb4', 'Cb5', 'Db5', 'Eb5', 'Fb5', 'Gb5',
+  ],
+  "B": [
+    'A#2', 'B2', 'C#3', 'D#3', 'E#3', 'F#3', 'G#3',
+    'A#3', 'B3', 'C#4', 'D#4', 'E#4', 'F#4', 'G#4',
+    'A#4', 'B4', 'C#5', 'D#5', 'E#5', 'F#5', 'G#5',
+  ],
+  "C": [
+    'A2', 'B2', 'C3', 'D3', 'E3', 'F3', 'G3',
+    'A3', 'B3', 'C4', 'D4', 'E4', 'F4', 'G4',
+    'A4', 'B4', 'C5', 'D5', 'E5', 'F5', 'G5',
+  ],
+  
+  
+}
+
+const ALL_KEYS = Object.keys(ALL_NOTES).map((n:string)=>n)
 
 export const columnLimit = 15
 
@@ -68,7 +126,8 @@ function generateWorld() {
   const worldPatterns: Patterns = {
     'shrine': {
       stepCount: 0,
-      notes: {}
+      notes: {},
+      key:'A'
   }}
 
   let row = 0
@@ -221,8 +280,12 @@ export const getNeighborTiles = (worldTilePosition: TilePosition) => {
 
 
 
+
 function generatePattern() {
+  const noPattern = false
   const stepCount = 20
+
+  const randomKey = ALL_KEYS[Math.floor(Math.random() * ALL_KEYS.length)]
 
   const notes: Notes = {}
 
@@ -230,13 +293,19 @@ function generatePattern() {
 
   for (let i = 0; i < stepCount; i += 1){
 
+    const skip = Math.random() > 0.5
+
+    if (skip) {
+      continue
+    }
+
     const randomStep = Math.floor(Math.random() * stepCount)
     const randomY = Math.floor(Math.random() * grid.height)
 
     const id = uuidv4()
     const x = getNoteGridPosition(randomStep, stepCount)
 
-    if (usedX.includes(x)) {
+    if (noPattern||usedX.includes(x)) {
       continue
     }
 
@@ -244,16 +313,17 @@ function generatePattern() {
 
     notes[id] = {
         id,
-        body:null,
+        body: null,
         step: randomStep,
         position: new Vector3(x,randomY-(grid.height / 2),0),
-        pitch: ALL_NOTES[randomY]
+        pitch: randomY
     }
   }
 
   return {
     stepCount,
-    notes
+    notes,
+    key:randomKey
   }
 }
 

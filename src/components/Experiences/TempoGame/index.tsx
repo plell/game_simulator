@@ -135,7 +135,7 @@ const TempoGameCore = () => {
 
       const id = uuidv4();
 
-      const pitch = ALL_NOTES[Math.floor(translation.y + grid.height / 2)];
+      const pitch = Math.floor(translation.y + grid.height / 2);
 
       patternsCopy[worldTile.patternId].notes[id] = {
         id,

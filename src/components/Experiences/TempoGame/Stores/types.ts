@@ -30,7 +30,7 @@ export type Note = {
     id: string
     step: number
     position: Vector3
-    pitch: string
+    pitch: number
 }
 
 export type Notes = Record<string, Note>
@@ -38,6 +38,7 @@ export type Notes = Record<string, Note>
 export type Pattern = {
     stepCount: number
     notes: Notes
+    key: string
 }
 
 export type TilePosition = {

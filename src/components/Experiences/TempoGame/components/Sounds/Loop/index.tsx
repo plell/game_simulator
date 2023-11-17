@@ -9,7 +9,12 @@ import {
   Vector3,
 } from "three";
 import { dismount, mount, hihat, kick, playSound, snare } from "../Tone";
-import { getMovement, grid, postDebounce } from "../../../Stores/constants";
+import {
+  ALL_NOTES,
+  getMovement,
+  grid,
+  postDebounce,
+} from "../../../Stores/constants";
 import useGame from "../../../Stores/useGame";
 import { Note } from "../../../Stores/types";
 import { RapierRigidBody, RigidBody } from "@react-three/rapier";
@@ -255,11 +260,12 @@ type NoteComponentProps = {
 };
 
 const noteGeo = new CylinderGeometry(1, 1, 1, 5);
+
 const white = new Color("white");
 
 const NoteComponent = ({ note, color, played }: NoteComponentProps) => {
   const body = useRef<RapierRigidBody | null>(null);
-  const material = useRef<MeshBasicMaterial | null>(null);
+  const ref = useRef<Mesh | null>(null);
   const [loaded, setLoaded] = useState(false);
 
   const worldTile = useGame((s) => s.worldTile);
@@ -268,6 +274,11 @@ const NoteComponent = ({ note, color, played }: NoteComponentProps) => {
 
   const [emitterActive, setEmitterActive] = useState(false);
   const myColor = useMemo(() => new Color(color), []);
+  const noteMaterial = useMemo(() => new MeshBasicMaterial(), []);
+
+  const pattern = useMemo(() => {
+    return patterns[worldTile.patternId];
+  }, [patterns, worldTile]);
 
   const position = useMemo(() => {
     if (body.current) {
@@ -298,7 +309,8 @@ const NoteComponent = ({ note, color, played }: NoteComponentProps) => {
 
   const emit = () => {
     // flash
-    playSound(note.pitch);
+    const pitch = ALL_NOTES[pattern.key][note.pitch];
+    playSound(pitch);
     setEmitterActive(true);
 
     setTimeout(() => {
@@ -307,11 +319,11 @@ const NoteComponent = ({ note, color, played }: NoteComponentProps) => {
   };
 
   useFrame(() => {
-    if (material.current) {
+    if (ref.current) {
       if (emitterActive) {
-        material.current?.color.lerp(white, 0.2);
+        ref.current.material.color.lerp(white, 0.2);
       } else {
-        material.current.color.lerp(myColor, 0.1);
+        ref.current.material.color.lerp(myColor, 0.1);
       }
     }
   });
@@ -321,25 +333,16 @@ const NoteComponent = ({ note, color, played }: NoteComponentProps) => {
   return (
     <>
       <Emitter body={body} position={position} active={emitterActive} />
-      {/* <RigidBody
-        ref={body}
-        position={note.position}
-        type='fixed'
-        userData={note}
-        restitution={2}
-        lockRotations
-        friction={1}
-      > */}
+
       <mesh
+        ref={ref}
         scale={0.4}
         geometry={noteGeo}
+        material={noteMaterial}
         position={note.position}
         rotation-x={Math.PI * 0.5}
         rotation-y={randomRotate}
-      >
-        <meshBasicMaterial ref={material} color={color} />
-      </mesh>
-      {/* </RigidBody> */}
+      />
     </>
   );
 };

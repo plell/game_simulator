@@ -42,23 +42,6 @@ effectsBus.chain(highPassFilter, Tone.Destination);
 
 const reverb = new Tone.Reverb(0).connect(effectsBus);
 
-const polySynth0 = new Tone.PolySynth().connect(reverb);
-polySynth0.chain(highPassFilter);
-
-const polySynth1 = new Tone.PolySynth().connect(reverb);
-
-const polySynth2 = new Tone.PolySynth().connect(reverb);
-
-const polySynth3 = new Tone.PolySynth().connect(reverb);
-
-const polySynth4 = new Tone.PolySynth().connect(reverb);
-
-const polySynth5 = new Tone.PolySynth().connect(reverb);
-
-polySynth0.volume.value = 1;
-polySynth1.volume.value = 1;
-polySynth2.volume.value = 1;
-
 const monoSynth2 = new Tone.MonoSynth({
   envelope: {
     attack: 0.1,
@@ -71,6 +54,15 @@ const monoSynth2 = new Tone.MonoSynth({
 monoSynth2.oscillator.type = "square";
 monoSynth2.chain(highPassFilter);
 
+const synthCount = 6;
+const synths: Tone.PolySynth[] = [];
+
+for (let i = 0; i < synthCount; i++) {
+  const polysynth = new Tone.PolySynth().connect(reverb);
+  polysynth.volume.value = 1;
+  synths.push(polysynth);
+}
+
 const init = async () => {
   // start if not started
   if (!toneStarted) {
@@ -80,15 +72,6 @@ const init = async () => {
 };
 
 let toneStarted = false;
-
-const synths = [
-  polySynth0,
-  polySynth1,
-  polySynth2,
-  polySynth3,
-  polySynth4,
-  polySynth5,
-];
 
 let mute = false;
 
