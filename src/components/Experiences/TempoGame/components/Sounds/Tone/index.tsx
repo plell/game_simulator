@@ -123,7 +123,7 @@ export const kick = async (note = "A1") => {
   try {
     await init();
     postDebounce("kick", () => {
-      tomSynth0.triggerAttackRelease(note, 0.2);
+      tomSynth0.triggerAttackRelease(note, 0.02);
     });
   } catch (e) {
     console.warn(e);

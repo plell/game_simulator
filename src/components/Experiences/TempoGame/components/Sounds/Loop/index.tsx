@@ -264,7 +264,6 @@ const noteGeo = new CylinderGeometry(1, 1, 1, 5);
 const white = new Color("white");
 
 const NoteComponent = ({ note, color, played }: NoteComponentProps) => {
-  const body = useRef<RapierRigidBody | null>(null);
   const ref = useRef<Mesh | null>(null);
   const [loaded, setLoaded] = useState(false);
 
@@ -281,19 +280,15 @@ const NoteComponent = ({ note, color, played }: NoteComponentProps) => {
   }, [patterns, worldTile]);
 
   const position = useMemo(() => {
-    if (body.current) {
-      const trans = body.current.translation();
-      return reuseableVector3d.set(trans.x, trans.y, trans.z);
-    }
     return note.position;
-  }, [note, body.current]);
+  }, [note]);
 
   // update rigid body
   useLayoutEffect(() => {
     const patternsCopy = { ...patterns };
     patternsCopy[worldTile.patternId].notes[note.id] = {
       ...note,
-      body,
+      body: null,
     };
 
     setPatterns(patternsCopy);
@@ -305,7 +300,7 @@ const NoteComponent = ({ note, color, played }: NoteComponentProps) => {
     } else if (played) {
       emit();
     }
-  }, [played, body.current]);
+  }, [played]);
 
   const emit = () => {
     // flash
@@ -332,7 +327,7 @@ const NoteComponent = ({ note, color, played }: NoteComponentProps) => {
 
   return (
     <>
-      <Emitter body={body} position={position} active={emitterActive} />
+      <Emitter position={position} active={emitterActive} />
 
       <mesh
         ref={ref}

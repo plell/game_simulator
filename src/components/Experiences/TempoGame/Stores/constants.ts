@@ -4,66 +4,22 @@ import { Direction, Notes, Patterns, Players, Structures, TilePosition, WorldTil
 
 // make a record with keys, so that tiles can have different scale keys
 // later associate color with scale keys
-
-const minor7Scales = {
-  'C': ['C', 'D', 'Eb', 'F', 'G', 'Ab', 'Bb'],
-  'C#': ['C#', 'D#', 'E', 'F#', 'G#', 'A', 'B'],
-  'Db': [ 'Cb', 'Db', 'Eb', 'Fb', 'Gb', 'Ab', 'Bbb',],
-  'D': ['C', 'D', 'E', 'F', 'G', 'A', 'Bb', ],
-  'Eb': ['Cb', 'Db','Eb', 'F', 'Gb', 'Ab', 'Bb', ],
-  'E': ['C', 'D', 'E', 'F#', 'G', 'A', 'B', ],
-  'F': ['C', 'Db', 'Eb', 'F', 'G', 'Ab', 'Bb', ],
-  'F#': ['C#', 'D', 'E', 'F#', 'G#', 'A', 'B', ],
-  'G': ['G', 'A', 'Bb', 'C', 'D', 'Eb', 'F'],
-  'Ab': ['Ab', 'Bb', 'Cb', 'Db', 'Eb', 'Fb', 'Gb'],
-  'A': ['A', 'B', 'C', 'D', 'E', 'F', 'G'],
-  'Bb': ['Bb', 'C', 'Db', 'Eb', 'F', 'Gb', 'Ab'],
-  'B': ['B', 'C#', 'D', 'E', 'F#', 'G', 'A'],
+const majorScales = {
+  'A': ['A2', 'B2', 'C#3', 'D3', 'E3', 'F#3', 'G#3', 'A3', 'B3', 'C#4', 'D4', 'E4', 'F#4', 'G#4', 'A4', 'B4', 'C#5', 'D5', 'E5', 'F#5', 'G#5'],
+  'A#': ['A#2', 'C3', 'D3', 'D#3', 'F3', 'G3', 'A3', 'A#3', 'C4', 'D4', 'D#4', 'F4', 'G4', 'A4', 'A#4', 'C5', 'D5', 'D#5', 'F5', 'G5', 'A5'],
+  'B': ['B2', 'C#3', 'D#3', 'E3', 'F#3', 'G#3', 'A#3', 'B3', 'C#4', 'D#4', 'E4', 'F#4', 'G#4', 'A#4', 'B4', 'C#5', 'D#5', 'E5', 'F#5', 'G#5', 'A#5'],
+  'C': ['C3', 'D3', 'E3', 'F3', 'G3', 'A3', 'B3', 'C4', 'D4', 'E4', 'F4', 'G4', 'A4', 'B4', 'C5', 'D5', 'E5', 'F5', 'G5', 'A5', 'B5'],
+  'C#': ['C#3', 'D#3', 'F3', 'F#3', 'G#3', 'A#3', 'C4', 'C#4', 'D#4', 'F4', 'F#4', 'G#4', 'A#4', 'C5', 'C#5', 'D#5', 'F5', 'F#5', 'G#5', 'A#5', 'C6'],
+  'D': ['D3', 'E3', 'F#3', 'G3', 'A3', 'B3', 'C#4', 'D4', 'E4', 'F#4', 'G4', 'A4', 'B4', 'C#5', 'D5', 'E5', 'F#5', 'G5', 'A5', 'B5', 'C#6'],
+  'D#': ['D#3', 'F3', 'G3', 'G#3', 'A#3', 'C4', 'D4', 'D#4', 'F4', 'G4', 'G#4', 'A#4', 'C5', 'D5', 'D#5', 'F5', 'G5', 'G#5', 'A#5', 'C6', 'D6'],
+  'E': ['E3', 'F#3', 'G#3', 'A3', 'B3', 'C#4', 'D#4', 'E4', 'F#4', 'G#4', 'A4', 'B4', 'C#5', 'D#5', 'E5', 'F#5', 'G#5', 'A5', 'B5', 'C#6', 'D#6'],
+  'F': ['F3', 'G3', 'A3', 'A#3', 'C4', 'D4', 'E4', 'F4', 'G4', 'A4', 'A#4', 'C5', 'D5', 'E5', 'F5', 'G5', 'A5', 'A#5', 'C6', 'D6', 'E6'],
+  'F#': ['F#3', 'G#3', 'A#3', 'B3', 'C#4', 'D#4', 'F4', 'F#4', 'G#4', 'A#4', 'B4', 'C#5', 'D#5', 'F5', 'F#5', 'G#5', 'A#5', 'B5', 'C#6', 'D#6'],
+  'G': ['G3', 'A3', 'B3', 'C4', 'D4', 'E4', 'F#4', 'G4', 'A4', 'B4', 'C5', 'D5', 'E5', 'F#5', 'G5', 'A5', 'B5', 'C6', 'D6', 'E6', 'F#6'],
+  'G#': ['G#3', 'A#3', 'C4', 'C#4', 'D#4', 'F4', 'G4', 'G#4', 'A#4', 'C5', 'C#5', 'D#5', 'F5', 'G5', 'G#5', 'A#5', 'C6', 'C#6', 'D#6', 'F6', 'G6'],
 };
 
-const major7Scales = {
-  'C': ['C', 'D', 'E', 'F', 'G', 'A', 'B'],
-  'C#': ['C#', 'D#', 'E#', 'F#', 'G#', 'A#', 'B#'],
-  'Db': ['Db', 'Eb', 'F', 'Gb', 'Ab', 'Bb', 'C'],
-  'D': ['D', 'E', 'F#', 'G', 'A', 'B', 'C#'],
-  'Eb': ['Eb', 'F', 'G', 'Ab', 'Bb', 'C', 'D'],
-  'E': ['E', 'F#', 'G#', 'A', 'B', 'C#', 'D#'],
-  'F': ['F', 'G', 'A', 'Bb', 'C', 'D', 'E'],
-  'F#': ['F#', 'G#', 'A#', 'B', 'C#', 'D#', 'E#'],
-  'Gb': ['Gb', 'Ab', 'Bb', 'Cb', 'Db', 'Eb', 'F'],
-  'G': ['G', 'A', 'B', 'C', 'D', 'E', 'F#'],
-  'Ab': ['Ab', 'Bb', 'C', 'Db', 'Eb', 'F', 'G'],
-  'A': ['A', 'B', 'C#', 'D', 'E', 'F#', 'G#'],
-  'Bb': ['Bb', 'C', 'D', 'Eb', 'F', 'G', 'A'],
-  'B': ['B', 'C#', 'D#', 'E', 'F#', 'G#', 'A#']
-};
-
-const scales = { ...minor7Scales, ...major7Scales }
-
-export const ALL_NOTES: Record<string, string[]> = {
-  "A": [
-    'A2', 'B2', 'C#3', 'D#3', 'E3', 'F#3', 'G#3',
-    'A3', 'B3', 'C#4', 'D4', 'E4', 'F#4', 'G#4',
-    'A4', 'B4', 'C#5', 'D5', 'E5', 'F#5', 'G#5',
-  ],
-  'Ab': [
-    'Ab2', 'Bb2', 'Cb3', 'Db3', 'Eb3', 'Fb3', 'Gb3',
-    'Ab3', 'Bb3', 'Cb4', 'Db4', 'Eb4', 'Fb4', 'Gb4',
-    'Ab4', 'Bb4', 'Cb5', 'Db5', 'Eb5', 'Fb5', 'Gb5',
-  ],
-  "B": [
-    'A#2', 'B2', 'C#3', 'D#3', 'E#3', 'F#3', 'G#3',
-    'A#3', 'B3', 'C#4', 'D#4', 'E#4', 'F#4', 'G#4',
-    'A#4', 'B4', 'C#5', 'D#5', 'E#5', 'F#5', 'G#5',
-  ],
-  "C": [
-    'A2', 'B2', 'C3', 'D3', 'E3', 'F3', 'G3',
-    'A3', 'B3', 'C4', 'D4', 'E4', 'F4', 'G4',
-    'A4', 'B4', 'C5', 'D5', 'E5', 'F5', 'G5',
-  ],
-  
-  
-}
+export const ALL_NOTES: Record<string, string[]> = majorScales
 
 const ALL_KEYS = Object.keys(ALL_NOTES).map((n:string)=>n)
 
@@ -283,7 +239,7 @@ export const getNeighborTiles = (worldTilePosition: TilePosition) => {
 
 function generatePattern() {
   const noPattern = false
-  const stepCount = 20
+  const stepCount = 8
 
   const randomKey = ALL_KEYS[Math.floor(Math.random() * ALL_KEYS.length)]
 
@@ -293,7 +249,7 @@ function generatePattern() {
 
   for (let i = 0; i < stepCount; i += 1){
 
-    const skip = Math.random() > 0.5
+    const skip = Math.random() > 0.9
 
     if (skip) {
       continue
