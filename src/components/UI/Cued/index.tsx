@@ -13,6 +13,12 @@ export const Cued = ({ children, speed }: Props) => {
   const cueRef = useRef(null);
 
   const [cueMounted, setCueMounted] = useState(!browserIsChrome);
+  const [bufferDone, setBufferDone] = useState(false);
+
+  useEffect(() => {
+    const t = setTimeout(() => setBufferDone(true), 200);
+    return () => clearTimeout(t);
+  }, []);
 
   const cueIsOnScreen = useIsOnScreen(cueRef);
 
@@ -24,16 +30,12 @@ export const Cued = ({ children, speed }: Props) => {
 
   return (
     <>
-      <Cue ref={cueRef} isMounted={!cueMounted} />
-      <FadeLeft speed={speed} isMounted={cueMounted}>
+      <Cue ref={cueRef} />
+      <FadeLeft speed={speed} isMounted={cueMounted && bufferDone}>
         {children}
       </FadeLeft>
     </>
   );
 };
 
-type CueProps = {
-  isMounted: boolean;
-};
-
-const Cue = styled.div<CueProps>``;
+const Cue = styled.div``;
