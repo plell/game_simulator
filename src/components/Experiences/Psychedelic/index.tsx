@@ -356,7 +356,7 @@ export const Projectiles = ({ refs, sensorRef, level }: Props) => {
   useFrame(({ camera }, delta) => {
     const lowAvg = getLowAvg();
 
-    camera.fov = MathUtils.lerp(camera.fov, 50 - lowAvg / 105, 0.2);
+    camera.fov = MathUtils.lerp(camera.fov, 50 - lowAvg / 35, 0.2);
 
     camera.updateProjectionMatrix();
     if (intersect.current.length > 0) {
