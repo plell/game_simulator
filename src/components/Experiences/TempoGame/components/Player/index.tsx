@@ -13,7 +13,6 @@ import { SnapRadius } from "./Effects/SnapToRadius";
 
 import { useOuch } from "../hooks/useOuch";
 import Cursor from "../UI/Cursor";
-import { Joystick } from "./Joystick";
 
 export const playerSpeed = 0.12;
 
@@ -21,7 +20,7 @@ const reuseableVector3a = new Vector3();
 const reuseableVector3b = new Vector3();
 const mouseVec3 = new Vector3();
 
-const movementMulti = 3;
+const movementMulti = 1;
 
 export const Player = () => {
   const players = useGame((s) => s.players);
