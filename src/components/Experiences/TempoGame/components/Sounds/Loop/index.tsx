@@ -23,12 +23,18 @@ import { snapToRadius } from "../../Player/Effects/SnapToRadius";
 import { playerSpeed } from "../../Player";
 import { getNearestGridPosition } from "./constants";
 import { getGridPointsAndLines } from "../../Terrain/Grid";
+import { Instance, InstanceProps, Instances } from "@react-three/drei";
 
 const reuseableVector3a = new Vector3();
 const reuseableVector3b = new Vector3();
 const reuseableVector3c = new Vector3();
 const reuseableVector3d = new Vector3();
 const reuseableVector3e = new Vector3();
+
+const noteGeo = new CylinderGeometry(1, 1, 1, 5);
+const noteMaterial = new MeshBasicMaterial();
+
+const white = new Color("white");
 
 export const Loop = () => {
   useEffect(() => {
@@ -231,7 +237,7 @@ export const Loop = () => {
 
   const notes = useMemo(() => {
     return Object.values(pattern.notes).map((note, i) => (
-      <NoteComponent
+      <NoteInstance
         played={activeNoteId === note.id}
         color={worldTile.color}
         note={note}
@@ -248,7 +254,9 @@ export const Loop = () => {
       </mesh>
 
       {/* patterns */}
-      {notes}
+      <Instances geometry={noteGeo} material={noteMaterial}>
+        {notes}
+      </Instances>
     </>
   );
 };
@@ -259,12 +267,8 @@ type NoteComponentProps = {
   played: boolean;
 };
 
-const noteGeo = new CylinderGeometry(1, 1, 1, 5);
-
-const white = new Color("white");
-
-const NoteComponent = ({ note, color, played }: NoteComponentProps) => {
-  const ref = useRef<Mesh | null>(null);
+const NoteInstance = ({ note, color, played }: NoteComponentProps) => {
+  const ref = useRef<InstanceProps | null>(null);
   const [loaded, setLoaded] = useState(false);
 
   const worldTile = useGame((s) => s.worldTile);
@@ -273,7 +277,6 @@ const NoteComponent = ({ note, color, played }: NoteComponentProps) => {
 
   const [emitterActive, setEmitterActive] = useState(false);
   const myColor = useMemo(() => new Color(color), []);
-  const noteMaterial = useMemo(() => new MeshBasicMaterial(), []);
 
   const pattern = useMemo(() => {
     return patterns[worldTile.patternId];
@@ -316,9 +319,9 @@ const NoteComponent = ({ note, color, played }: NoteComponentProps) => {
   useFrame(() => {
     if (ref.current) {
       if (emitterActive) {
-        ref.current.material.color.lerp(white, 0.2);
+        ref.current.color.lerp(white, 0.2);
       } else {
-        ref.current.material.color.lerp(myColor, 0.1);
+        ref.current.color.lerp(myColor, 0.1);
       }
     }
   });
@@ -329,11 +332,10 @@ const NoteComponent = ({ note, color, played }: NoteComponentProps) => {
     <>
       <Emitter position={position} active={emitterActive} />
 
-      <mesh
+      <Instance
         ref={ref}
+        color={myColor}
         scale={0.4}
-        geometry={noteGeo}
-        material={noteMaterial}
         position={note.position}
         rotation-x={Math.PI * 0.5}
         rotation-y={randomRotate}
