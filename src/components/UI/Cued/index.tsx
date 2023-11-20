@@ -16,7 +16,7 @@ export const Cued = ({ children, speed }: Props) => {
   const [bufferDone, setBufferDone] = useState(false);
 
   useEffect(() => {
-    const t = setTimeout(() => setBufferDone(true), 200);
+    const t = setTimeout(() => setBufferDone(true), 500);
     return () => clearTimeout(t);
   }, []);
 
