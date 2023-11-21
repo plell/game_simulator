@@ -117,11 +117,11 @@ const triangles: Triangle[] = [
 export const Psychedelic = () => {
   const game = useGame((s) => s.game);
 
-  const { ready } = useStartButton();
+  // const { ready } = useStartButton();
 
-  if (!ready) {
-    return <Loading text={"This game plays audio samples"} />;
-  }
+  // if (!ready) {
+  //   return <Loading text={"This game plays audio samples"} />;
+  // }
 
   return (
     <group position={experienceProperties[game]?.gamePosition}>

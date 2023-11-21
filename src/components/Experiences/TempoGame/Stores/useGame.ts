@@ -11,6 +11,7 @@ const initialGameState = {
     worldTile: generatedWorld.worldTiles.filter(f => !f.shrine)[Math.floor(Math.random() * generatedWorld.worldTiles.filter(f => !f.shrine).length)],
     discoveredWorldTiles: [],
     nextWorldTile: null,
+    
     tempo: defaultTempo,
     snapTo: false,
 }
@@ -22,11 +23,13 @@ type GameState = {
     zones: Zone[]
     patterns: Patterns
     world: WorldTile[]
+    
     worldTile: WorldTile
     discoveredWorldTiles: number[]
     snapTo: boolean
     nextWorldTile: NextWorldTile | null
     setTempo: (tempo: number) => void
+    
     setPlayers: (players: Players) => void
     setEnemies: (enemies: Players) => void
     setPatterns: (patterns: Patterns) => void
@@ -61,7 +64,7 @@ export default create<GameState>((set, get) => ({
     },
     setTempo: (tempo) => set({ tempo }),
     setSnapTo: (snapTo) => set({ snapTo }),
-
+   
     setPlayers: (players) => set({ players }),
     setEnemies: (enemies) => set({ enemies }),
     setPatterns: (patterns) => set({ patterns }),

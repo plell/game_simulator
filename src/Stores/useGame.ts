@@ -12,7 +12,9 @@ const initialGameState = {
     selectedDonutIds:[],
     score: 0,
     damage: 0,
-    cameraPosition: 0
+    cameraPosition: 0,
+    dialogue: null,
+    dialogueIndex: 0,
 }
 
 type GameState = {
@@ -28,13 +30,16 @@ type GameState = {
     damage: number
     selectedDonutIds: string[]
     cameraPosition: number
+    dialogue: string[] | null
+    dialogueIndex:number
     setGame: (game: number) => void
     setWin: (win: boolean) => void
     setLevel: (level: number) => void
     setMouseDown: (mouseDown: boolean) => void
     setLocked: (locked: boolean) => void
     setLockClicked: (lockClicked: boolean) => void
-    
+    setDialogue: (dialogue: string[] | null) => void
+    setDialogueIndex: (dialogueIndex: number) => void
     setHit: (hit: number) => void
     setBite: (bite: number) => void
     setScore: (score: number) => void
@@ -59,7 +64,8 @@ export default create<GameState>((set, get) => ({
     setScore: (score) => set({ score }),
     scoreUp: () => set({ score: get().score + 1 }),
     setWin: (win) => set({ win }),
-    
+    setDialogue: (dialogue) => set({ dialogue }),
+    setDialogueIndex: (dialogueIndex) => set({ dialogueIndex }),
     setDamage: (damage) => set({ damage }),
     damageUp: () => set({ damage: get().damage + 1 }),
     setCameraPosition: (cameraPosition) => set({ cameraPosition }),

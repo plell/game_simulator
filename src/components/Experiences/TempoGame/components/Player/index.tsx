@@ -5,7 +5,7 @@ import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { Group, Vector3 } from "three";
 import { MOVEMENT_DAMPING, getMovement, grid } from "../../Stores/constants";
 import useGame from "../../Stores/useGame";
-import { HealthBar } from "../UI/HealthBar";
+import useAppGame from "../../../../../Stores/useGame";
 
 import { RigidBodyData } from "../../Stores/types";
 import { dieSound } from "../Sounds/Tone";
@@ -25,6 +25,7 @@ const movementMulti = 1;
 export const Player = () => {
   const players = useGame((s) => s.players);
   const setPlayers = useGame((s) => s.setPlayers);
+  const dialogue = useAppGame((s) => s.dialogue);
   const mouseRef = useRef<Vector3>(mouseVec3);
 
   const nextWorldTile = useGame((s) => s.nextWorldTile);
@@ -110,7 +111,7 @@ export const Player = () => {
   const dead = useMemo(() => players[playerId]?.dead, [players, playerId]);
 
   useFrame(() => {
-    if (dead) {
+    if (dead || dialogue) {
       return;
     }
 

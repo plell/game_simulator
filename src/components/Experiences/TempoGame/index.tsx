@@ -10,6 +10,7 @@ import { v4 as uuidv4 } from "uuid";
 import { ALL_NOTES, grid } from "./Stores/constants";
 import { Patterns } from "./Stores/types";
 import useGame from "./Stores/useGame";
+import useAppGame from "../../../Stores/useGame";
 import { LevelManager } from "./components/LevelManager";
 import { Lights } from "./components/Lights";
 import { Player } from "./components/Player";
@@ -19,21 +20,20 @@ import { Terrain } from "./components/Terrain";
 import { experienceProperties } from "../../../Stores/constants";
 import { useStartButton } from "../hooks/useStartButton";
 import { Loading } from "../common/Loading";
-import { Enemies } from "./components/Enemies";
 import { Select } from "@react-three/postprocessing";
 import { Float, Text } from "@react-three/drei";
 
 export const TempoGame = () => {
-  const { ready } = useStartButton();
+  // const { ready } = useStartButton();
 
-  if (!ready) {
-    return (
-      <Loading
-        position={new Vector3(0, 21, -64)}
-        text='This game plays synthesizers'
-      />
-    );
-  }
+  // if (!ready) {
+  //   return (
+  //     <Loading
+  //       position={new Vector3(0, 21, -64)}
+  //       text='This game plays synthesizers'
+  //     />
+  //   );
+  // }
 
   return <TempoGameCore />;
 };
@@ -55,11 +55,25 @@ const TempoGameCore = () => {
 
   const discoveredWorldTiles = useGame((s) => s.discoveredWorldTiles);
   const worldTile = useGame((s) => s.worldTile);
-  const restartGame = useGame((s) => s.restartGame);
+
   const patterns = useGame((s) => s.patterns);
+
   const setPatterns = useGame((s) => s.setPatterns);
 
   const world = useGame((s) => s.world);
+
+  const setDialogue = useAppGame((s) => s.setDialogue);
+  const dialogue = useAppGame((s) => s.dialogue);
+
+  useEffect(() => {
+    setDialogue([
+      "You wake up suddenly.",
+      "A warm, elastic space stretches infinitely in every direction.",
+      "Wind plays on the hexagonal flowers.",
+      "And a mysterious star map from your dreams hangs above with expectation.",
+      "What is this place?",
+    ]);
+  }, []);
 
   useEffect(() => {
     window.addEventListener("pointerdown", placeNoteAtPlayersPosition);
@@ -110,7 +124,7 @@ const TempoGameCore = () => {
 
   const placeNoteAtPlayersPosition = () => {
     if (players.p1?.body?.current) {
-      if (worldTile.shrine || players.p1?.dead) {
+      if (worldTile.shrine || players.p1?.dead || dialogue) {
         return;
       }
       const translation = players.p1?.body?.current.translation();

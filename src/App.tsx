@@ -23,6 +23,7 @@ import { Perf } from "r3f-perf";
 import styled from "styled-components";
 
 import { ACESFilmicToneMapping, Color, PCFSoftShadowMap } from "three";
+import { TextRevealer } from "./components/UI/TextRevealer";
 
 const color = new Color("#000000");
 
@@ -112,6 +113,8 @@ const CameraController = () => {
 
 const App = () => {
   const game = useGame((s) => s.game);
+  const dialogue = useGame((s) => s.dialogue);
+  const dialogueIndex = useGame((s) => s.dialogueIndex);
   const setMouseDown = useGame((s) => s.setMouseDown);
 
   const GameComponent = useMemo(() => experienceProperties[game]?.game, [game]);
@@ -151,9 +154,33 @@ const App = () => {
     setMouseDown(false);
   };
 
+  const setDialogueIndex = useGame((s) => s.setDialogueIndex);
+  const setDialogue = useGame((s) => s.setDialogue);
+
   return (
     <>
       <Anchor id='anchor' />
+
+      {dialogue?.length && (
+        <DialogueAnchor
+          onClick={() => {
+            const nextIndex = dialogueIndex + 1;
+            if (dialogue[nextIndex]) {
+              setDialogueIndex(nextIndex);
+            } else {
+              setDialogue(null);
+              setDialogueIndex(0);
+            }
+          }}
+        >
+          <DialogueBox>
+            <TextRevealer key={dialogueIndex}>
+              {dialogue[dialogueIndex]}
+            </TextRevealer>
+            <Blinker />
+          </DialogueBox>
+        </DialogueAnchor>
+      )}
 
       {experienceProperties[game]?.instructions && !firstClick && (
         <ClickMe>{experienceProperties[game]?.instructions}</ClickMe>
@@ -245,6 +272,48 @@ const Anchor = styled.div`
   height: 100%;
   width: 100%;
 `;
+
+const DialogueAnchor = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  user-select: none;
+  height: calc(100% - 100px);
+  width: calc(100% - 100px);
+  padding: 50px;
+  z-index: 5;
+`;
+
+const DialogueBox = styled.div`
+  padding: 70px;
+  font-family: monospace;
+  user-select: none;
+  font-size: 30px;
+  max-width: 40%;
+  height: 200px;
+  width: calc(100% - 140px);
+  background: #00000044;
+  color: #ffffff;
+  position: relative;
+  line-height: 60px;
+`;
+
+const DialogueCursor = styled.div`
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  height: 30px;
+  width: 30px;
+  background: #ffffff;
+`;
+
+const Blinker = () => {
+  const [visible, setVisible] = useState(false);
+
+  return <DialogueCursor style={{ opacity: visible ? 1 : 0 }} />;
+};
 
 const ClickMe = styled.div`
   position: absolute;
