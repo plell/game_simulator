@@ -8,7 +8,7 @@ const initialGameState = {
     zones: initialZones,
     world: generatedWorld.worldTiles,
     patterns: generatedWorld.worldPatterns,
-    worldTile: generatedWorld.worldTiles.filter(f => !f.shrine)[Math.floor(Math.random() * generatedWorld.worldTiles.filter(f => !f.shrine).length)],
+    worldTile: generatedWorld.firstTile,
     discoveredWorldTiles: [],
     nextWorldTile: null,
     

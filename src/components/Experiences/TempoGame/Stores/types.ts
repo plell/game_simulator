@@ -67,6 +67,7 @@ export type Structures = Record<string, Structure>
 export type WorldTile = {
     position: TilePosition
     shrine: Shrine | null
+    dialogue: string[] | null
     color: string
     id: number
     patternId: string

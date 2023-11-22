@@ -18,23 +18,11 @@ import { Loop } from "./components/Sounds/Loop";
 import { Terrain } from "./components/Terrain";
 
 import { experienceProperties } from "../../../Stores/constants";
-import { useStartButton } from "../hooks/useStartButton";
-import { Loading } from "../common/Loading";
+
 import { Select } from "@react-three/postprocessing";
 import { Float, Text } from "@react-three/drei";
 
 export const TempoGame = () => {
-  // const { ready } = useStartButton();
-
-  // if (!ready) {
-  //   return (
-  //     <Loading
-  //       position={new Vector3(0, 21, -64)}
-  //       text='This game plays synthesizers'
-  //     />
-  //   );
-  // }
-
   return <TempoGameCore />;
 };
 
@@ -66,14 +54,9 @@ const TempoGameCore = () => {
   const dialogue = useAppGame((s) => s.dialogue);
 
   useEffect(() => {
-    setDialogue([
-      "You wake up suddenly.",
-      "A warm, elastic space stretches infinitely in every direction.",
-      "Wind plays on the hexagonal flowers.",
-      "And a mysterious star map from your dreams hangs above with expectation.",
-      "What is this place?",
-    ]);
-  }, []);
+    setDialogue(worldTile.dialogue);
+    return () => setDialogue(null);
+  }, [worldTile]);
 
   useEffect(() => {
     window.addEventListener("pointerdown", placeNoteAtPlayersPosition);

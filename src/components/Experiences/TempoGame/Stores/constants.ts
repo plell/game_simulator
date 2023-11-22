@@ -99,6 +99,7 @@ function generateWorld() {
       },
       color: randomColor(),
       id: i,
+      dialogue:null,
       patternId,
       structures: generateStructures(),
       shrine: null
@@ -120,14 +121,23 @@ function generateWorld() {
 
     worldTiles[index].shrine = {
       position: new Vector3(grid.top - grid.height/2,grid.right- grid.width/2,0),
-      color: randomColor()
+      color: randomColor(),
     }
+    worldTiles[index].dialogue = ['Hello.','I am an entity of power in these lands.','Are you the musician?','If so, I bid you, seek out the Tempo Sneakers.','And lift us from silent days once again.']
     worldTiles[index].patternId = 'shrine'
   }
 
+  const firstTile = { ...worldTiles.filter(f => !f.shrine)[Math.floor(Math.random() * worldTiles.filter(f => !f.shrine).length)] }
 
+  firstTile.dialogue = [
+    "You wake up suddenly.",
+    "A warm, elastic space stretches out and disappears in every direction.",
+    "Wind plays on the hexagonal flowers.",
+    "A mysterious map hangs in the sky above with expectation.",
+    "What is this place?",
+  ]
 
-  return { worldTiles, worldPatterns }
+  return { worldTiles, worldPatterns, firstTile }
 }
 
 export const generatedWorld = generateWorld()
