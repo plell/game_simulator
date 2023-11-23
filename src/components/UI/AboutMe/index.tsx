@@ -37,28 +37,23 @@ export const AboutMe = () => {
       <Spacer />
 
       <FlexRow>
-        <Cued>
-          <FlexRowItem>
-            <Title>Clean and Flexible UI</Title>
-          </FlexRowItem>
-        </Cued>
-        <Cued speed={speed}>
-          <FlexRowItem>
-            <Description isMobile={isMobile}>
-              <span>
-                <Link href='https://community.sphinx.chat/p' target='_blank'>
-                  Sphinx Community
-                </Link>
-              </span>
-              <TextRevealer>
-                &nbsp;is a Web3 sidekick social media platform that I built from
-                the ground up using React, Typescript, Golang and PostgreSQL.
-                Here you can meet Sphinx Chat users, join Sphinx tribes, earn
-                badges, and claim coding bounties.
-              </TextRevealer>
-            </Description>
-          </FlexRowItem>
-        </Cued>
+        <FlexRowItem>
+          <Title>Clean and Flexible UI</Title>
+        </FlexRowItem>
+
+        <FlexRowItem>
+          <Description isMobile={isMobile}>
+            <span>
+              <Link href='https://community.sphinx.chat/p' target='_blank'>
+                Sphinx Community
+              </Link>
+            </span>
+            &nbsp;is a Web3 sidekick social media platform that I built from the
+            ground up using React, Typescript, Golang and PostgreSQL. Here you
+            can meet Sphinx Chat users, join Sphinx tribes, earn badges, and
+            claim coding bounties.
+          </Description>
+        </FlexRowItem>
 
         <Cued speed={speed}>
           <MediaItem>
