@@ -5,11 +5,14 @@ import { useIsOnScreen } from "../hooks";
 import { browserIsChrome } from "../../../Stores/constants";
 import { Interval } from "../../../Stores/types";
 
+import { clickClack } from "../../Experiences/TempoGame/components/Sounds/Tone";
+
 type Props = {
   children: string;
+  sound?: boolean;
 };
 
-export const TextRevealer = ({ children }: Props) => {
+export const TextRevealer = ({ children, sound }: Props) => {
   const cueRef = useRef(null);
 
   const [cueMounted, setCueMounted] = useState(!browserIsChrome);
@@ -58,6 +61,16 @@ export const TextRevealer = ({ children }: Props) => {
       }
     };
   }, [cueMounted]);
+
+  useEffect(() => {
+    if (sound) {
+      playTypingSound();
+    }
+  }, [textToRender]);
+
+  const playTypingSound = () => {
+    clickClack();
+  };
 
   const hideBlock = useMemo(
     () => textToRender.length === children.length,

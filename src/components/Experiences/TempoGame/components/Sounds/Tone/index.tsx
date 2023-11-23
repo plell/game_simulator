@@ -160,6 +160,42 @@ export const hihat = async (note = "D2") => {
   }
 };
 
+const clackSynth = new Tone.MembraneSynth({
+  envelope: {
+    attack: 0,
+    decay: 0.1,
+    sustain: 0,
+    release: 0,
+  },
+}).toDestination();
+
+clackSynth.volume.value = -18;
+
+const clackNotes = ["D2", "C1", "D3", "E2", "G2"];
+
+export const clickClack = async () => {
+  if (mute) {
+    return;
+  }
+
+  try {
+    await init();
+
+    const rand = Math.floor(Math.random() * clackNotes.length);
+    const note = clackNotes[rand];
+
+    postDebounce(
+      "clack",
+      () => {
+        clackSynth.triggerAttackRelease(note, 0.1);
+      },
+      80
+    );
+  } catch (e) {
+    console.warn(e);
+  }
+};
+
 export const mount = () => {
   mute = false;
   tomSynth0.toDestination();

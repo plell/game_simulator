@@ -174,7 +174,7 @@ const App = () => {
           }}
         >
           <DialogueBox>
-            <TextRevealer key={dialogueIndex}>
+            <TextRevealer sound key={dialogueIndex}>
               {dialogue[dialogueIndex]}
             </TextRevealer>
             <Blinker />
