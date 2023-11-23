@@ -8,6 +8,7 @@ import { useFrame } from "@react-three/fiber";
 import { Projectiles } from "../common/Projectiles";
 import { Goal } from "./Objects/Goal";
 import { GameProgress } from "../common/GameProgress";
+import { ErrorBoundary } from "react-error-boundary";
 
 export type Refs = Record<string, Group>;
 const mouseVec3 = new Vector3();
@@ -55,7 +56,9 @@ export const SpaceGame = () => {
     <group ref={ref} position={[0, 0, 0]}>
       <directionalLight position={[5, 5, 100]} intensity={1} />
 
-      <CloudSpace />
+      <ErrorBoundary fallback={null}>
+        <CloudSpace />
+      </ErrorBoundary>
 
       <GameProgress
         position={new Vector3(0, 3, 10)}
