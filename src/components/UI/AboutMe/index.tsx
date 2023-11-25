@@ -48,10 +48,12 @@ export const AboutMe = () => {
                 Sphinx Community
               </Link>
             </span>
-            &nbsp;is a Web3 sidekick social media platform that I built from the
-            ground up using React, Typescript, Golang and PostgreSQL. Here you
-            can meet Sphinx Chat users, join Sphinx tribes, earn badges, and
-            claim coding bounties.
+            <TextRevealer>
+              &nbsp;is a Web3 sidekick social media platform that I built from
+              the ground up using React, Typescript, Golang and PostgreSQL. Here
+              you can meet Sphinx Chat users, join Sphinx tribes, earn badges,
+              and claim coding bounties.
+            </TextRevealer>
           </Description>
         </FlexRowItem>
 
@@ -62,7 +64,7 @@ export const AboutMe = () => {
         </Cued>
       </FlexRow>
 
-      <FlexRow>
+      {/* <FlexRow>
         <Cued>
           <FlexRowItem>
             <Title>Creative Designs</Title>
@@ -88,57 +90,23 @@ export const AboutMe = () => {
             <Image src='/images/secondbrain2.jpg' />
           </MediaItem>
         </Cued>
-      </FlexRow>
+      </FlexRow> */}
 
       <FlexRow>
-        <Cued>
-          <FlexRowItem>
-            <Title>Professional Audio</Title>
-          </FlexRowItem>
-        </Cued>
-        <Cued speed={speed}>
-          <FlexRowItem>
-            <Description isMobile={isMobile}>
-              Here's my&nbsp;
-              <span>
-                <Link href='https://davidplell.bandcamp.com/' target='_blank'>
-                  music portfolio.
-                </Link>
-              </span>
-              <TextRevealer>
-                &nbsp;I started writing music and forming bands in 2007. Since
-                becoming an engineer, I really enjoy putting my knowledge of
-                audio production (eq, compression, etc.) to work when I use
-                audio libraries like the Web Audio API. Using audio analysis to
-                drive WebGL visuals is where it all comes together for me.
-              </TextRevealer>
-            </Description>
-          </FlexRowItem>
-        </Cued>
-        <Cued speed={speed}>
-          <MediaItem>
-            <Image src='/images/ableton.png' />
-          </MediaItem>
-        </Cued>
-      </FlexRow>
+        <FlexRowItem>
+          <Title>3D Modeling</Title>
+        </FlexRowItem>
 
-      <FlexRow>
-        <Cued>
-          <FlexRowItem>
-            <Title>3D Modeling</Title>
-          </FlexRowItem>
-        </Cued>
-        <Cued speed={speed}>
-          <FlexRowItem>
-            <Description isMobile={isMobile}>
-              <TextRevealer>
-                I started using Blender to create 3D models in January of 2023.
-                An elegant 3D model with some interactions can really level up
-                the scrolling experience. I love it!
-              </TextRevealer>
-            </Description>
-          </FlexRowItem>
-        </Cued>
+        <FlexRowItem>
+          <Description isMobile={isMobile}>
+            <TextRevealer>
+              I started using Blender to create 3D models in January of 2023. An
+              elegant 3D model with some interactions can really level up the
+              scrolling experience. I love it!
+            </TextRevealer>
+          </Description>
+        </FlexRowItem>
+
         <Cued speed={speed}>
           <MediaItem>
             <Image src='/images/donut.png' />
@@ -146,25 +114,52 @@ export const AboutMe = () => {
         </Cued>
       </FlexRow>
 
-      <FlexRow style={{ marginBottom: 200 }}>
-        <Cued>
-          <FlexRowItem>
-            <Title>Immersive Experiences</Title>
-          </FlexRowItem>
-        </Cued>
+      <FlexRow>
+        <FlexRowItem>
+          <Title>Professional Audio</Title>
+        </FlexRowItem>
+
+        <FlexRowItem>
+          <Description isMobile={isMobile}>
+            Here's my&nbsp;
+            <span>
+              <Link href='https://davidplell.bandcamp.com/' target='_blank'>
+                music portfolio.
+              </Link>
+            </span>
+            <TextRevealer>
+              &nbsp;I started writing music and forming bands in 2007. Since
+              becoming an engineer, I really enjoy putting my knowledge of audio
+              production (eq, compression, etc.) to work when I use audio
+              libraries like the Web Audio API. Using audio analysis to drive
+              WebGL visuals is where it all comes together for me.
+            </TextRevealer>
+          </Description>
+        </FlexRowItem>
+
         <Cued speed={speed}>
-          <FlexRowItem>
-            <Description isMobile={isMobile}>
-              <span>
-                <Link onClick={() => setGame(1)}>Try them out!</Link>
-              </span>
-              <TextRevealer>
-                &nbsp;I build games and other 3D experiences with React and
-                ThreeJS.
-              </TextRevealer>
-            </Description>
-          </FlexRowItem>
+          <MediaItem>
+            <Image src='/images/ableton.png' />
+          </MediaItem>
         </Cued>
+      </FlexRow>
+
+      <FlexRow style={{ marginBottom: 200 }}>
+        <FlexRowItem>
+          <Title>Immersive Experiences</Title>
+        </FlexRowItem>
+
+        <FlexRowItem>
+          <Description isMobile={isMobile}>
+            <span>
+              <Link onClick={() => setGame(1)}>Try them out!</Link>
+            </span>
+            <TextRevealer>
+              &nbsp;I build games and other 3D experiences with React and
+              ThreeJS.
+            </TextRevealer>
+          </Description>
+        </FlexRowItem>
       </FlexRow>
     </Overlay>
   );
