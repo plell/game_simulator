@@ -2,7 +2,14 @@ import { Canvas, useThree } from "@react-three/fiber";
 
 import { Physics } from "@react-three/rapier";
 
-import { Suspense, useEffect, useMemo, useRef, useState } from "react";
+import {
+  Suspense,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { Leva } from "leva";
 
 import { Browser } from "./components/UI/Browser";
@@ -111,7 +118,52 @@ const CameraController = () => {
   );
 };
 
-const App = () => {
+export const AppWrapper = () => {
+  const [showLoading, setShowLoading] = useState(true);
+  return (
+    <>
+      {showLoading && <Loader />}
+      <App setShowLoading={setShowLoading} />
+    </>
+  );
+};
+
+const Loader = () => {
+  const [visible, setVisible] = useState(true);
+
+  useEffect(() => {
+    const i = setInterval(() => {
+      setVisible((v) => !v);
+    }, 1000);
+
+    return () => {
+      clearInterval(i);
+    };
+  }, []);
+
+  return (
+    <Loading>
+      {visible && <TextRevealer>Loading Experience...</TextRevealer>}
+    </Loading>
+  );
+};
+
+const Loading = styled.div`
+  display: flex;
+  color: #fff;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  z-index: 6;
+`;
+
+type AppProps = {
+  setShowLoading: (b: boolean) => void;
+};
+
+const App = ({ setShowLoading }: AppProps) => {
   const game = useGame((s) => s.game);
   const dialogue = useGame((s) => s.dialogue);
   const dialogueIndex = useGame((s) => s.dialogueIndex);
@@ -124,6 +176,10 @@ const App = () => {
   );
 
   const [firstClick, setFirstClick] = useState(false);
+
+  useEffect(() => {
+    setShowLoading(false);
+  }, []);
 
   useEffect(() => {
     setFirstClick(false);
