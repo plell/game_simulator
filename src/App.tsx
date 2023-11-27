@@ -287,9 +287,9 @@ const App = ({ setShowLoading }: AppProps) => {
           }}
         >
           <Suspense fallback={null}>
-            {isDevelopment && <Perf position='top-left' />}
+            {isDevelopment && <Perf position='bottom-left' />}
 
-            <Preload all />
+            {/* <Preload all /> */}
 
             <CameraController />
 

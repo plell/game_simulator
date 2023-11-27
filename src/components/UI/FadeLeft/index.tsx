@@ -23,6 +23,7 @@ interface FadeLeftProps {
   noFade?: boolean;
   speed?: number;
   close?: () => void;
+  toggleVisibility?: boolean;
 }
 
 export const FadeLeft = (props: FadeLeftProps) => {
@@ -39,8 +40,9 @@ export const FadeLeft = (props: FadeLeftProps) => {
     speed,
     overlayClick,
     noFade,
+    toggleVisibility,
   } = props;
-  const [translation, setTranslation] = useState(drift ? drift : -40);
+  const [translation, setTranslation] = useState(drift ? drift : -20);
   const [opacity, setOpacity] = useState(0);
   const [shouldRender, setShouldRender] = useState(false);
 
@@ -50,7 +52,7 @@ export const FadeLeft = (props: FadeLeftProps) => {
   }
 
   const close = useCallback(() => {
-    setTranslation(drift ? drift : -40);
+    setTranslation(drift ? drift : -20);
     setOpacity(0);
   }, [drift]);
 
@@ -80,6 +82,10 @@ export const FadeLeft = (props: FadeLeftProps) => {
         await sleep(60);
 
         doAnimation(1);
+      } else if (toggleVisibility && !isMounted && shouldRender) {
+        doAnimation(0);
+
+        setShouldRender(false);
       }
     })();
   }, [dismountCallback, doAnimation, isMounted, props.speed]);
@@ -98,7 +104,7 @@ export const FadeLeft = (props: FadeLeftProps) => {
       style={{
         height: "inherit",
         ...style,
-        transition: `all ${speed || 1}s`,
+        transition: `all ${speed || 0.5}s`,
         transform: transformValue,
         opacity: isInvisible ? 0 : !noFade ? opacity : 1,
       }}

@@ -48,17 +48,15 @@ export const Browser = () => {
           <Description>{experienceProperties[game]?.description}</Description>
         </Title>
 
-        <Footer style={{ background: showAboutMe ? "#00000088" : "" }}>
-          {!isMobile && (
-            <Tag style={{ lineHeight: "40px" }}>David Plell's Portfolio</Tag>
-          )}
+        <Footer>
+          <div />
 
           <FlexRow>
             {!isMobile && (
               <>
                 <FlexRowItem>
                   <a href='https://github.com/plell' target='_blank'>
-                    <Image src={"images/github.png"} size={36} />
+                    <Image src={"images/github.png"} size={40} />
                   </a>
                 </FlexRowItem>
                 <ItemSpacer />
@@ -67,15 +65,14 @@ export const Browser = () => {
                     href='https://www.linkedin.com/in/davidplell/'
                     target='_blank'
                   >
-                    <Image src={"images/linkedin.png"} size={36} />
+                    <Image src={"images/linkedin.png"} size={40} />
                   </a>
                 </FlexRowItem>
-                <ItemSpacer />
               </>
             )}
-            <FlexRowItem>
+            {/* <FlexRowItem>
               <AudioPlayer />
-            </FlexRowItem>
+            </FlexRowItem> */}
           </FlexRow>
         </Footer>
 
@@ -135,10 +132,10 @@ const Footer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  bottom: 0px;
+  top: 0px;
   left: 0px;
-  min-width: calc(100% - 40px);
-  padding: 20px;
+  width: calc(100% - 100px);
+  padding: 30px 50px;
 `;
 
 const Title = styled.div`

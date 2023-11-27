@@ -4,9 +4,10 @@ import { MdArrowForward } from "react-icons/md";
 import { useIsMobile } from "../hooks";
 import useGame from "../../../Stores/useGame";
 import { Cued } from "../Cued";
-import { TextRevealer } from "../TextRevealer";
 
-const speed = 1;
+const speed = 0.8;
+
+const drift = 20;
 
 export const AboutMe = () => {
   const ref = useRef(null);
@@ -17,54 +18,54 @@ export const AboutMe = () => {
 
   return (
     <Overlay isMobile={isMobile} ref={ref}>
-      <TopFlexRow>
-        <FlexRowItem>
-          <BigTitle isMobile={isMobile}>Modern Web Experiences</BigTitle>
-        </FlexRowItem>
-        <FlexRowItem>
-          <TopDescription>by David Plell</TopDescription>
-        </FlexRowItem>
-      </TopFlexRow>
-      <Spacer />
-      <FlexRow style={{ marginBottom: 60 }}>
-        <FlexRowItem>
-          <LinkTitle onClick={() => setGame(1)}>
-            <MdArrowForward size={30} style={{ marginRight: 10 }} />
-            Continue to demos
-          </LinkTitle>
-        </FlexRowItem>
-      </FlexRow>
-      <Spacer />
+      <Wrap>
+        <TopFlexRow>
+          <FlexRowItem>
+            <BigTitle isMobile={isMobile}>Modern Web Experiences</BigTitle>
+          </FlexRowItem>
+          <FlexRowItem>
+            <Description style={{ margin: "10px 0 0 0" }}>
+              by David Plell
+            </Description>
+          </FlexRowItem>
+        </TopFlexRow>
 
-      <FlexRow>
-        <FlexRowItem>
-          <Title>Clean and Flexible UI</Title>
-        </FlexRowItem>
+        <FlexRow style={{ margin: "140px 0 70px" }}>
+          <FlexRowItem>
+            <LinkTitle onClick={() => setGame(1)}>
+              <MdArrowForward size={30} style={{ marginRight: 10 }} />
+              Continue to demos
+            </LinkTitle>
+          </FlexRowItem>
+        </FlexRow>
+        <Spacer />
 
-        <FlexRowItem>
-          <Description isMobile={isMobile}>
-            <span>
-              <Link href='https://community.sphinx.chat/p' target='_blank'>
-                Sphinx Community
-              </Link>
-            </span>
-            <TextRevealer>
-              &nbsp;is a Web3 sidekick social media platform that I built from
-              the ground up using React, Typescript, Golang and PostgreSQL. Here
-              you can meet Sphinx Chat users, join Sphinx tribes, earn badges,
-              and claim coding bounties.
-            </TextRevealer>
-          </Description>
-        </FlexRowItem>
+        <Cued speed={speed} drift={drift}>
+          <FlexRow>
+            <FlexRowItem>
+              <Title>Intuitive UI</Title>
+            </FlexRowItem>
 
-        <Cued speed={speed}>
-          <MediaItem>
-            <Image src='/images/sphinxCommunity.jpg' />
-          </MediaItem>
+            <FlexRowItem>
+              <Description isMobile={isMobile}>
+                <span>
+                  <Link href='https://community.sphinx.chat/p' target='_blank'>
+                    Sphinx Community
+                  </Link>
+                </span>
+                &nbsp;is a Web3 sidekick social media platform that I built from
+                the ground up using React, Typescript, Golang and PostgreSQL.
+                Here you can meet Sphinx Chat users, join Sphinx tribes, earn
+                badges, and claim coding bounties.
+              </Description>
+            </FlexRowItem>
+
+            <MediaItem>
+              <Image src='/images/sphinxCommunity.jpg' />
+            </MediaItem>
+          </FlexRow>
         </Cued>
-      </FlexRow>
-
-      {/* <FlexRow>
+        {/* <FlexRow>
         <Cued>
           <FlexRowItem>
             <Title>Creative Designs</Title>
@@ -92,78 +93,87 @@ export const AboutMe = () => {
         </Cued>
       </FlexRow> */}
 
-      <FlexRow>
-        <FlexRowItem>
-          <Title>3D Modeling</Title>
-        </FlexRowItem>
+        <Cued speed={speed} drift={drift}>
+          <FlexRow>
+            <FlexRowItem>
+              <Title>3D Modeling</Title>
+            </FlexRowItem>
 
-        <FlexRowItem>
-          <Description isMobile={isMobile}>
-            <TextRevealer>
-              I started using Blender to create 3D models in January of 2023. An
-              elegant 3D model with some interactions can really level up the
-              scrolling experience. I love it!
-            </TextRevealer>
-          </Description>
-        </FlexRowItem>
+            <FlexRowItem>
+              <Description isMobile={isMobile}>
+                I started using Blender to create 3D models in January of 2023.
+                An elegant 3D model with some interactions can really level up
+                the scrolling experience. I love it!
+              </Description>
+            </FlexRowItem>
 
-        <Cued speed={speed}>
-          <MediaItem>
-            <Image src='/images/donut.png' />
-          </MediaItem>
+            <MediaItem>
+              <Image src='/images/donut.png' />
+            </MediaItem>
+          </FlexRow>
         </Cued>
-      </FlexRow>
 
-      <FlexRow>
-        <FlexRowItem>
-          <Title>Professional Audio</Title>
-        </FlexRowItem>
+        <Cued speed={speed} drift={drift}>
+          <FlexRow>
+            <FlexRowItem>
+              <Title>Professional Audio</Title>
+            </FlexRowItem>
 
-        <FlexRowItem>
-          <Description isMobile={isMobile}>
-            Here's my&nbsp;
-            <span>
-              <Link href='https://davidplell.bandcamp.com/' target='_blank'>
-                music portfolio.
-              </Link>
-            </span>
-            <TextRevealer>
-              &nbsp;I started writing music and forming bands in 2007. Since
-              becoming an engineer, I really enjoy putting my knowledge of audio
-              production (eq, compression, etc.) to work when I use audio
-              libraries like the Web Audio API. Using audio analysis to drive
-              WebGL visuals is where it all comes together for me.
-            </TextRevealer>
-          </Description>
-        </FlexRowItem>
+            <FlexRowItem>
+              <Description isMobile={isMobile}>
+                Here's my&nbsp;
+                <span>
+                  <Link href='https://davidplell.bandcamp.com/' target='_blank'>
+                    music portfolio.
+                  </Link>
+                </span>
+                &nbsp;I started writing music and forming bands in 2007. Since
+                becoming an engineer, I really enjoy putting my knowledge of
+                audio production (eq, compression, etc.) to work when I use
+                audio libraries like the Web Audio API. Using audio analysis to
+                drive WebGL visuals is where it all comes together for me.
+              </Description>
+            </FlexRowItem>
 
-        <Cued speed={speed}>
-          <MediaItem>
-            <Image src='/images/ableton.png' />
-          </MediaItem>
+            <MediaItem>
+              <Image src='/images/ableton.png' />
+            </MediaItem>
+          </FlexRow>
         </Cued>
-      </FlexRow>
 
-      <FlexRow style={{ marginBottom: 200 }}>
-        <FlexRowItem>
-          <Title>Immersive Experiences</Title>
-        </FlexRowItem>
+        <Cued speed={speed} drift={drift}>
+          <FlexRow>
+            <FlexRowItem>
+              <Title>Immersive Experiences</Title>
+            </FlexRowItem>
 
-        <FlexRowItem>
-          <Description isMobile={isMobile}>
-            <span>
-              <Link onClick={() => setGame(1)}>Try them out!</Link>
-            </span>
-            <TextRevealer>
-              &nbsp;I build games and other 3D experiences with React and
-              ThreeJS.
-            </TextRevealer>
-          </Description>
-        </FlexRowItem>
-      </FlexRow>
+            <FlexRowItem>
+              <Description isMobile={isMobile}>
+                <span>
+                  <Link onClick={() => setGame(1)}>Try them out!</Link>
+                </span>
+                &nbsp;I build games and other 3D experiences with React and
+                ThreeJS.
+              </Description>
+            </FlexRowItem>
+          </FlexRow>
+        </Cued>
+        <Spacer />
+        <Spacer />
+        <Spacer />
+        <Spacer />
+        <Spacer />
+        <Spacer />
+        <Spacer />
+        <Spacer />
+      </Wrap>
     </Overlay>
   );
 };
+
+const Wrap = styled.div`
+  max-width: 1400px;
+`;
 
 const Spacer = styled.div`
   min-height: 60px;
@@ -179,7 +189,7 @@ const BigTitle = styled.div<BTProps>`
 
 const TopDescription = styled.div`
   font-size: 28px;
-  font-weight: 300;
+
   margin-top: 10px;
 `;
 
@@ -221,11 +231,10 @@ const Link = styled.a`
 const Description = styled.div<DescriptionProps>`
   font-size: 28px;
   font-weight: 300;
-  line-height: 39px;
-  margin: 40px 0 60px;
+  line-height: 46px;
+  margin: 50px 0 70px 0;
   width: 100%;
   color: #f1f1f1;
-  padding: 20px;
 `;
 
 type OverlayProps = {
@@ -245,7 +254,7 @@ const Overlay = styled.div<OverlayProps>`
 
   display: flex;
   flex-direction: column;
-  //   justify-content: flex-start;
+
   align-items: center;
 
   color: #fff;
@@ -293,7 +302,7 @@ const Image = styled.img<ImageProps>`
   background-image: ${({ src }) => `url(${src})`};
   background-size: contain;
   background-repeat: no-repeat;
-  width: 100%;
+  width: calc(100% - 10px);
   max-width: 1000px;
   height: auto;
   border-radius: 5px;
