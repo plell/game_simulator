@@ -40,5 +40,24 @@
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
+
+    <div class="center">
+      <div id="loader-row">
+        <div class="dom-loader"></div>
+        <div class="dom-loader"></div>
+        <div class="dom-loader"></div>
+      </div>
+    </div>
+    
+
+    <script>
+      document.onreadystatechange = function () {
+          if (document.readyState === "complete") {
+            document.querySelector("#root").style.transition = "opacity 1s"
+            document.querySelector("#root").style.opacity = "1"
+            document.querySelector("#loader-row").style.opacity = "0";
+          } 
+      };
+  </script>
   </body>
 </html>

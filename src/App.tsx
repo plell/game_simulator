@@ -122,7 +122,7 @@ export const AppWrapper = () => {
   const [showLoading, setShowLoading] = useState(true);
   return (
     <>
-      {showLoading && <Loader />}
+      {/* {showLoading && <Loader />} */}
       <App setShowLoading={setShowLoading} />
     </>
   );
