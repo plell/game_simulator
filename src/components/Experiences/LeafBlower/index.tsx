@@ -195,6 +195,19 @@ export const LeafBlower = () => {
   dispMap.wrapT = RepeatWrapping;
   dispMap.repeat = repeatTile;
 
+  const hitSound = useMemo(() => new Audio("/audio/hit.mp3"), []);
+
+  const playSound = (force: number) => {
+    if (force > 0.4) {
+      console.log("force", force);
+      const vol = Math.max(0, Math.min(force, 0.4));
+      console.log("vol", vol);
+      hitSound.volume = vol;
+      hitSound.currentTime = 0;
+      hitSound.play();
+    }
+  };
+
   const atmosphere = useMemo(() => {
     return environmentParamsByLevel[level] || {};
   }, [level]);
@@ -272,6 +285,10 @@ export const LeafBlower = () => {
           gravityScale={3}
           instances={leafInstances}
           ref={instancedRigidBodiesRef}
+          // onCollisionEnter={playSound}
+          // onContactForce={(payload) => {
+          //   playSound(payload.totalForceMagnitude / 10000);
+          // }}
         >
           <instancedMesh
             castShadow
@@ -365,12 +382,12 @@ const Sensor = ({
           position-y={20}
           visible={showText}
         >
-          <Text fontSize={6} material={textMaterial}>
-            Clear
+          <Text fontSize={4} material={textMaterial}>
+            CLEAR
           </Text>
           <mesh
             rotation-z={Math.PI}
-            position-y={-6}
+            position-y={-5}
             scale={0.1}
             geometry={arrowGeometry}
             material={textMaterial}
