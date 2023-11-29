@@ -162,10 +162,6 @@ export const AboutMe = () => {
         <Spacer />
         <Spacer />
         <Spacer />
-        <Spacer />
-        <Spacer />
-        <Spacer />
-        <Spacer />
       </Wrap>
     </Overlay>
   );

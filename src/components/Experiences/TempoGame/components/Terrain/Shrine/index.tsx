@@ -3,7 +3,6 @@ import useGame from "../../../Stores/useGame";
 import { useEffect, useRef } from "react";
 import { Mesh, SphereGeometry } from "three";
 import { useFrame } from "@react-three/fiber";
-import { Shader } from "../../../../Psychedelic/Shader";
 import { Planet } from "../../../../Earth";
 
 const shrineGeo = new SphereGeometry();
@@ -32,5 +31,5 @@ export const Shrine = () => {
     return null;
   }
 
-  return <Planet />;
+  return <Planet key={shrine?.color} />;
 };

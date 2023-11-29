@@ -11,6 +11,7 @@ import {
   Group,
   MathUtils,
   Mesh,
+  MeshBasicMaterial,
   MeshStandardMaterial,
   PointLight,
   RepeatWrapping,
@@ -29,11 +30,15 @@ import {
   RapierRigidBody,
   RigidBody,
 } from "@react-three/rapier";
-import { Sky, Stars, useTexture } from "@react-three/drei";
+import { Sky, Stars, useTexture, Text, Float } from "@react-three/drei";
 import { useControls } from "leva";
 import { useObjectIntersectsMany } from "../hooks/useObjectsIntersect";
 import { GameProgress } from "../common/GameProgress";
-import { LevelProps, environmentParamsByLevel } from "./constants";
+import {
+  LevelProps,
+  arrowGeometry,
+  environmentParamsByLevel,
+} from "./constants";
 
 const mouseVec3 = new Vector3();
 const pointLightVec3 = new Vector3();
@@ -279,6 +284,7 @@ export const LeafBlower = () => {
         </InstancedRigidBodies>
 
         <Sensor
+          showText={level === firstLevel}
           innerRef={sensorRef}
           levelProperties={levelProperties}
           intersectingObjectCountRef={intersectingObjectCountRef}
@@ -293,15 +299,6 @@ export const LeafBlower = () => {
               opacity={0.8}
             />
           </mesh>
-          {/* <mesh>
-            <sphereGeometry args={[radius, 20]} />
-            <meshBasicMaterial
-              wireframe
-              color={mouseDown ? "white" : "gold"}
-              transparent
-              opacity={0.8}
-            />
-          </mesh> */}
         </group>
 
         <mesh
@@ -333,12 +330,16 @@ export const LeafBlower = () => {
 };
 
 type SensorProps = {
+  showText: boolean;
   innerRef: MutableRefObject<Mesh | null>;
   levelProperties: LevelProps;
   intersectingObjectCountRef: MutableRefObject<number>;
 };
 
+const textMaterial = new MeshBasicMaterial({ transparent: true, opacity: 0.7 });
+
 const Sensor = ({
+  showText,
   innerRef,
   levelProperties,
   intersectingObjectCountRef,
@@ -357,6 +358,25 @@ const Sensor = ({
 
   return (
     <group position={levelProperties.position}>
+      {showText && (
+        <Float
+          floatingRange={[-2, 2]}
+          speed={7}
+          position-y={20}
+          visible={showText}
+        >
+          <Text fontSize={6} material={textMaterial}>
+            Clear
+          </Text>
+          <mesh
+            rotation-z={Math.PI}
+            position-y={-6}
+            scale={0.1}
+            geometry={arrowGeometry}
+            material={textMaterial}
+          />
+        </Float>
+      )}
       <mesh
         geometry={levelProperties.boundaryGeometry}
         rotation-x={levelProperties.boundaryRotation}
@@ -370,9 +390,11 @@ const Sensor = ({
         />
       </mesh>
 
-      <mesh ref={innerRef} geometry={levelProperties.geometry}>
-        <meshBasicMaterial transparent opacity={0} wireframe />
-      </mesh>
+      <mesh
+        ref={innerRef}
+        geometry={levelProperties.geometry}
+        visible={false}
+      />
     </group>
   );
 };

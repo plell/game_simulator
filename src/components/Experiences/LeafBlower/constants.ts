@@ -1,3 +1,4 @@
+import { ExtrudeGeometry, Shape } from 'three'
 
 
 export type LevelProps = {
@@ -172,3 +173,32 @@ export const environmentParamsByLevel = {
         
     }
 }
+
+const arrowShape = new Shape();
+
+const topY = 35
+const bottomY = -10
+const tipBase = 18
+const farX = 18
+const nearX = 10
+
+arrowShape.moveTo(0, topY)
+    .lineTo(farX, tipBase)
+    .lineTo(nearX, tipBase)
+    .lineTo(nearX, bottomY)
+    .lineTo(-nearX, bottomY)
+    .lineTo(-nearX, tipBase)
+    .lineTo(-farX, tipBase)
+    .lineTo(0, topY)
+
+
+const extrudeSettings = { 
+	depth: 8, 
+	bevelEnabled: true, 
+	bevelSegments: 2, 
+	steps: 2, 
+	bevelSize: 1, 
+	bevelThickness: 1 
+};
+
+export const arrowGeometry = new ExtrudeGeometry( arrowShape, extrudeSettings );
