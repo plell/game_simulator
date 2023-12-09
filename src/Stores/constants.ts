@@ -2,15 +2,14 @@ import { Vector3 } from "three";
 // import { TempoGame } from "../components/Experiences/TempoGame";
 import { Earth } from "../components/Experiences/Earth";
 import { SpaceGame } from "../components/Experiences/SpaceGame";
-import { CrocGame } from "../components/Experiences/CrocGame";
+
 import { LeafBlower } from "../components/Experiences/LeafBlower";
-import { RaceGame } from "../components/Experiences/RaceGame";
-import Interface from "../components/Experiences/RaceGame/Interface";
+
 import { Donut } from "../components/Experiences/Donut";
 import { Psychedelic } from "../components/Experiences/Psychedelic";
-import { Climb } from "../components/Experiences/Climb";
-import { AudioShader } from "../components/Experiences/AudioShader";
+
 import { TempoGame } from "../components/Experiences/TempoGame";
+import { Dominos } from "../components/Experiences/Dominos";
 // import { WhackASoul } from "../components/Experiences/WhackASoul";
 
 const { origin } = window.location
@@ -158,8 +157,18 @@ export const experienceProperties: ExperienceProps[] = [
     cameraControls: false,
     game: SpaceGame
   },
-
-  
-  
+  {
+    cameraPosition: new Vector3(0, 110, 170),
+    cameraTarget: new Vector3(0, -20, 0),
+    cameraNear: 10,
+    cameraFar: 1000,
+    gamePosition: new Vector3(0, 0, 0),
+    title: '',
+    description: '',
+    instructions: 'Drag to draw a line',
+    backgroundColor:'#fff',
+    cameraControls: false,
+    game: Dominos
+  },
  
 ]
