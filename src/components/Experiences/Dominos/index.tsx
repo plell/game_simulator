@@ -17,6 +17,7 @@ import {
 } from "three";
 import useGame from "../../../Stores/useGame";
 import { initDominos } from "./constants";
+import { useFrame } from "@react-three/fiber";
 
 const radius = 800;
 const dominoDistance = 5;
@@ -154,7 +155,7 @@ export const Dominos = () => {
 
   useEffect(() => {
     if (!mouseDown) {
-      if (points.length) {
+      if (points.length > 1) {
         setLoadedPoints(points);
       } else {
         setLoadedPoints(initDominos);
@@ -163,6 +164,17 @@ export const Dominos = () => {
       setPoints([]);
     }
   }, [mouseDown]);
+
+  useFrame(() => {
+    if (instancedRigidBodiesRef?.current) {
+      // instancedRigidBodiesRef.current.map((d) => {
+      // console.log("d.rotation()", d.rotation().z);
+      // if (Math.abs(d.rotation().x) > 1 && !d.isSleeping) {
+      //   d.sleep();
+      // }
+      // });
+    }
+  });
 
   return (
     <group>
@@ -205,6 +217,7 @@ export const Dominos = () => {
       <InstancedRigidBodies
         key={dominoInstances.length}
         gravityScale={40}
+        restitution={0}
         // friction={0.1}
         // restitution={0}
         instances={dominoInstances}
@@ -225,7 +238,7 @@ export const Dominos = () => {
         </instancedMesh>
       </InstancedRigidBodies>
 
-      <RigidBody type={"fixed"} restitution={0}>
+      <RigidBody type={"fixed"} restitution={0} friction={10}>
         <mesh
           rotation-x={Math.PI * -0.5}
           receiveShadow

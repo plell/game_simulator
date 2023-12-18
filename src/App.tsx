@@ -188,11 +188,15 @@ const App = ({ setShowLoading }: AppProps) => {
   useEffect(() => {
     window.addEventListener("mousedown", handleMouseDown);
     window.addEventListener("mouseup", handleMouseUp);
+    window.addEventListener("pointerdown", handleMouseDown);
+    window.addEventListener("pointerup", handleMouseUp);
     window.addEventListener("touchstart", handleMouseDown);
-    window.addEventListener("touchend", handleMouseDown);
+    window.addEventListener("touchend", handleMouseUp);
     return () => {
       window.removeEventListener("mousedown", handleMouseDown);
       window.removeEventListener("mouseup", handleMouseUp);
+      window.addEventListener("pointerdown", handleMouseDown);
+      window.addEventListener("pointerup", handleMouseUp);
       window.removeEventListener("touchstart", handleMouseDown);
       window.removeEventListener("touchend", handleMouseUp);
     };
