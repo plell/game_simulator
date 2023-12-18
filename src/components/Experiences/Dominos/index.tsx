@@ -17,7 +17,7 @@ import {
 } from "three";
 import useGame from "../../../Stores/useGame";
 import { initDominos } from "./constants";
-import { useFrame } from "@react-three/fiber";
+import { ThreeEvent, useFrame } from "@react-three/fiber";
 
 const radius = 800;
 const dominoDistance = 5;
@@ -141,7 +141,7 @@ export const Dominos = () => {
     }
   }, [instancedRigidBodiesRef.current]);
 
-  const doPoints = (e: Event) => {
+  const doPoints = (e: ThreeEvent<PointerEvent>) => {
     if (mouseDown) {
       setPoints((prevPoints) => {
         const lastPoint = prevPoints[prevPoints.length - 1];
