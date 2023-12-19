@@ -178,6 +178,14 @@ const App = ({ setShowLoading }: AppProps) => {
   const [firstClick, setFirstClick] = useState(false);
 
   useEffect(() => {
+    try {
+      fetch(
+        "https://raw.githubusercontent.com/pmndrs/drei-assets/9225a9f1fbd449d9411125c2f419b843d0308c9f/cloud.png"
+      );
+    } catch (e) {
+      console.log(e);
+    }
+
     setShowLoading(false);
   }, []);
 
@@ -186,21 +194,14 @@ const App = ({ setShowLoading }: AppProps) => {
   }, [game]);
 
   useEffect(() => {
-    window.addEventListener("mousedown", handleMouseDown);
-    window.addEventListener("mouseup", handleMouseUp);
     window.addEventListener("pointerdown", handleMouseDown);
     window.addEventListener("pointerup", handleMouseUp);
-    window.addEventListener("touchstart", handleMouseDown);
-    window.addEventListener("touchend", handleMouseUp);
+
     return () => {
-      window.removeEventListener("mousedown", handleMouseDown);
-      window.removeEventListener("mouseup", handleMouseUp);
-      window.addEventListener("pointerdown", handleMouseDown);
-      window.addEventListener("pointerup", handleMouseUp);
-      window.removeEventListener("touchstart", handleMouseDown);
-      window.removeEventListener("touchend", handleMouseUp);
+      window.removeEventListener("pointerdown", handleMouseDown);
+      window.removeEventListener("pointerup", handleMouseUp);
     };
-  });
+  }, []);
 
   const handleMouseDown = () => {
     if (!firstClick) {
