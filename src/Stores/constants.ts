@@ -80,16 +80,17 @@ export const DEAD_ZONE_Y = 5000
 export const experienceProperties: ExperienceProps[] = [
   
   {
-    cameraPosition: new Vector3(0, 0, 29),
-    cameraTarget: new Vector3(0, 0, 0),
-    gamePosition: new Vector3(0, 0, 0),
+    cameraPosition: new Vector3(0, 110, 170),
+    cameraTarget: new Vector3(0, -20, 0),
     cameraNear: 10,
-    cameraFar: 2500,
+    cameraFar: 1000,
+    gamePosition: new Vector3(0, 0, 0),
     title: '',
     description: '',
-    cameraControls: true,
-    game: Earth,
-    showAboutMe: true,
+    instructions: 'Drag to draw a line',
+    backgroundColor:'#fff',
+    cameraControls: false,
+    game: Dominos
   },
   
    {
@@ -157,18 +158,6 @@ export const experienceProperties: ExperienceProps[] = [
     cameraControls: false,
     game: SpaceGame
   },
-  {
-    cameraPosition: new Vector3(0, 110, 170),
-    cameraTarget: new Vector3(0, -20, 0),
-    cameraNear: 10,
-    cameraFar: 1000,
-    gamePosition: new Vector3(0, 0, 0),
-    title: '',
-    description: '',
-    instructions: 'Drag to draw a line',
-    backgroundColor:'#fff',
-    cameraControls: false,
-    game: Dominos
-  },
+  
  
 ]
