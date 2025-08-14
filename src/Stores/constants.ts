@@ -120,17 +120,17 @@ export const experienceProperties: ExperienceProps[] = [
     cameraControls: false,
     game: LeafBlower
   },
-  {
-    cameraPosition: new Vector3(0, 0, 33),
-    cameraTarget: new Vector3(0, 0, 0),
-    cameraNear: 10,
-    cameraFar: 2500,
-    gamePosition: new Vector3(0, 0, 0),
-    title: '',
-    description: '',
-    cameraControls: false,
-    game: TempoGame
-  },
+  // {
+  //   cameraPosition: new Vector3(0, 0, 33),
+  //   cameraTarget: new Vector3(0, 0, 0),
+  //   cameraNear: 10,
+  //   cameraFar: 2500,
+  //   gamePosition: new Vector3(0, 0, 0),
+  //   title: '',
+  //   description: '',
+  //   cameraControls: false,
+  //   game: TempoGame
+  // },
   {
     cameraPosition: new Vector3(0, 0, 170),
     cameraTarget: new Vector3(0, 0, 0),
